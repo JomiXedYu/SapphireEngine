@@ -1,6 +1,4 @@
-﻿# CMakeList.txt: SapphireEngine 的 CMake 项目，在此处包括源代码并定义
-# 项目特定的逻辑。
-#
+﻿
 cmake_minimum_required (VERSION 3.8)
 
 project ("SapphireEngineTest")
@@ -14,7 +12,9 @@ include_directories("./src")
 
 aux_source_directory(./ DIR_SRCS)
 
-add_executable (SapphireEngineTest ${DIR_SRCS})
+add_executable (${PROJECT_NAME} ${DIR_SRCS})
 
 target_link_libraries(${PROJECT_NAME} Include_Src)
 target_link_libraries(${PROJECT_NAME} SapphireEngine)
+target_link_libraries(${PROJECT_NAME} GLAD)
+target_link_directories(${PROJECT_NAME} PUBLIC src)

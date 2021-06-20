@@ -1,2 +1,2 @@
-
-add_subdirectory("./glad" "./glfw")
+#ThirdParty
+add_subdirectory("./glad")

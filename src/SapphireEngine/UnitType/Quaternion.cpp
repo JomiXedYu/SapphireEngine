@@ -1,13 +1,16 @@
+#include "..\..\..\include\SapphireEngine\UnitType\Quaternion.h"
 #include <SapphireEngine/UnitType/Quaternion.h>
 
-#include <cmath>
 #include <SapphireEngine/UnitType/Vector3.h>
+#include <SapphireEngine/UnitType/Matrix.h>
+#include <SapphireEngine/Math.h>
+#include <format>
 
-namespace SapphireEngine 
+namespace SapphireEngine
 {
     Quaternion::Quaternion() : x(0), y(0), z(0), w(0)
     {
-        
+
     }
 
     Quaternion::Quaternion(float x, float y, float z, float w)
@@ -15,9 +18,14 @@ namespace SapphireEngine
     {
     }
 
-    inline static float clamp(const float& x, const float& min, const float& max) 
+    string Quaternion::ToString() const
     {
-        return std::min(std::max(x, 0.0f), 1.0f);
+        return std::format("{{x: {}, y: {}, z: {}, w: {}}}", x, y, z, w);
+    }
+
+    inline static float clamp(const float& x, const float& min, const float& max)
+    {
+        return std::min(std::max(x, min), max);
     }
 
     inline static float roll(const Quaternion& q)
@@ -35,18 +43,19 @@ namespace SapphireEngine
         return std::asin(clamp(-2.0f * (q.x * q.z - q.w * q.y), -1.0f, 1.0f));
     }
 
-    Vector3 Quaternion::get_euler() const
+    Vector3 Quaternion::ToEuler() const
     {
-        return Vector3(pitch(*this), yaw(*this), roll(*this));
+        using namespace Math;
+        return Vector3{ Degrees(pitch(*this)), Degrees(yaw(*this)), Degrees(roll(*this)) };
     }
 
-    void Quaternion::set_euler(const Vector3& euler_angle)
+    void Quaternion::SetEuler(const Vector3& euler_angle)
     {
-        Vector3 c = euler_angle * 0.5f;
-        c = Vector3(std::cos(c.x), std::cos(c.y), std::cos(c.z));
+        Vector3 in = Math::Radians(euler_angle) * 0.5f;
 
-        Vector3 s = euler_angle * 0.5f;
-        s = Vector3(std::sin(s.x), std::sin(s.y), std::sin(s.z));
+        Vector3 c = Vector3{ std::cos(in.x), std::cos(in.y), std::cos(in.z) };
+
+        Vector3 s = Vector3{ std::sin(in.x), std::sin(in.y), std::sin(in.z) };
 
         this->w = c.x * c.y * c.z + s.x * s.y * s.z;
         this->x = s.x * c.y * c.z - c.x * s.y * s.z;
@@ -54,25 +63,53 @@ namespace SapphireEngine
         this->z = c.x * c.y * s.z - s.x * s.y * c.z;
     }
 
-    void Quaternion::add_euler_x(const float& value)
+    Matrix Quaternion::ToMatrix4() const
     {
-        Vector3 euler = this->get_euler();
+        Matrix Result = Matrix::One();
+        const Quaternion& q = *this;
+        float qxx(q.x * q.x);
+        float qyy(q.y * q.y);
+        float qzz(q.z * q.z);
+        float qxz(q.x * q.z);
+        float qxy(q.x * q.y);
+        float qyz(q.y * q.z);
+        float qwx(q.w * q.x);
+        float qwy(q.w * q.y);
+        float qwz(q.w * q.z);
+
+        Result[0][0] = float(1) - float(2) * (qyy + qzz);
+        Result[0][1] = float(2) * (qxy + qwz);
+        Result[0][2] = float(2) * (qxz - qwy);
+
+        Result[1][0] = float(2) * (qxy - qwz);
+        Result[1][1] = float(1) - float(2) * (qxx + qzz);
+        Result[1][2] = float(2) * (qyz + qwx);
+
+        Result[2][0] = float(2) * (qxz + qwy);
+        Result[2][1] = float(2) * (qyz - qwx);
+        Result[2][2] = float(1) - float(2) * (qxx + qyy);
+        return Result;
+    }
+
+    void Quaternion::AddEulerX(const float& value)
+    {
+        Vector3 euler = this->ToEuler();
         euler.x += value;
-        this->set_euler(euler);
+        this->SetEuler(euler);
     }
 
-    void Quaternion::add_euler_y(const float& value)
+    void Quaternion::AddEulerY(const float& value)
     {
-        Vector3 euler = this->get_euler();
+        Vector3 euler = this->ToEuler();
         euler.y += value;
-        this->set_euler(euler);
+        this->SetEuler(euler);
     }
 
-    void Quaternion::add_euler_z(const float& value)
+    void Quaternion::AddEulerZ(const float& value)
     {
-        Vector3 euler = this->get_euler();
+        Vector3 euler = this->ToEuler();
         euler.z += value;
-        this->set_euler(euler);
+        this->SetEuler(euler);
     }
 
 }

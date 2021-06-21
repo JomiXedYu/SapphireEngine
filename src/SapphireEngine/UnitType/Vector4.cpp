@@ -1,6 +1,7 @@
 #include <SapphireEngine/UnitType/Vector4.h>
-#include <SapphireEngine/EngineException.h>
+#include <exception>
 #include <format>
+#include <CoreLib/DebugTool.h>
 
 namespace SapphireEngine 
 {
@@ -29,7 +30,7 @@ namespace SapphireEngine
             case 1: return this->y;
             case 2: return this->z;
             case 3: return this->w;
-            default: throw EngineException("数组下标超出上限");
+            default: throw std::out_of_range(DEBUG_INFO("out of range"));
         }
     }
 

@@ -1,8 +1,10 @@
 #include <SapphireEngine/UnitType/Vector3.h>
 #include <cmath>
 #include <format>
+#include <exception>
+#include <CoreLib/DebugTool.h>
 
-namespace SapphireEngine 
+namespace SapphireEngine
 {
     const float* Vector3::get_value_ptr() const
     {
@@ -79,6 +81,17 @@ namespace SapphireEngine
     Vector3 Vector3::Forward()
     {
         return Vector3(0, 0, 1);
+    }
+
+    float& Vector3::operator[](const int& index)
+    {
+        switch (index)
+        {
+            case 0: return x;
+            case 1: return y;
+            case 2: return z;
+            default: throw std::out_of_range(DEBUG_INFO("out of range"));
+        }
     }
 
     Vector3& Vector3::operator+=(const Vector3& target)

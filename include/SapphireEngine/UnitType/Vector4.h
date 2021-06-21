@@ -14,6 +14,7 @@ namespace SapphireEngine
         float w;
     public:
         const float* get_value_ptr() const;
+        static constexpr const int value_count = 4;
     public:
         Vector4();
         Vector4(float x, float y, float z, float w);

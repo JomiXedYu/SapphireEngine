@@ -3,9 +3,9 @@
 
 #include <string>
 
-namespace SapphireEngine 
+namespace SapphireEngine
 {
-    struct Vector3 
+    struct Vector3
     {
     public:
         float x;
@@ -13,9 +13,10 @@ namespace SapphireEngine
         float z;
     public:
         const float* get_value_ptr() const;
+        static constexpr const int value_count = 3;
     public:
         Vector3();
-        Vector3(float x, float y, float z);
+        Vector3(float x, float y, float z = 0.0f);
         std::string ToString() const;
     public:
         float Distance(const Vector3& target) const;
@@ -31,6 +32,7 @@ namespace SapphireEngine
         static Vector3 Right();
         static Vector3 Forward();
     public:
+        float& operator[](const int& index);
         Vector3& operator +=(const Vector3& target);
         Vector3& operator -=(const Vector3& target);
         Vector3& operator *=(const float& scalar);

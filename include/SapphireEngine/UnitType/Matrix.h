@@ -8,7 +8,7 @@ namespace SapphireEngine
 {
     struct Vector3;
 
-    struct Matrix 
+    struct Matrix
     {
     public:
         Vector4 value[4];

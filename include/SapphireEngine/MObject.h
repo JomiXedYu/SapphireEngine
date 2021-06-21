@@ -14,6 +14,7 @@ namespace SapphireEngine
         std::vector<MObject*> managed_list_;
     public:
         void AddManagedChild(MObject* child);
+        void RemoveManagedChild(MObject* child);
         void SetManagedParent(MObject* parent);
     public:
         MObject() {}

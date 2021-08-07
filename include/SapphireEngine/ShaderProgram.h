@@ -21,8 +21,7 @@ namespace SapphireEngine
     public:
         ShaderProgram();
         virtual ~ShaderProgram() override;
-    private:
-        bool CheckShaderProgram();
+
     public:
         void UseProgram();
         void AttachShader(const Shader& shaderId);

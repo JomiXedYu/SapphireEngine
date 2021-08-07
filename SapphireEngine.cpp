@@ -25,7 +25,7 @@ using namespace SapphireEngine::InputDevice;
 void run() {
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        Logger::Info("Failed to initialize glad");
+        Logger::PrintInfo("Failed to initialize glad");
         return;
     }
     glViewport(0, 0, (int)Screen::get_size().x, (int)Screen::get_size().y);
@@ -233,7 +233,8 @@ void run() {
     float timedelta = 0;
     float prevdelta = 0;
     //渲染循环
-    while (!Application::IsQuit()) {
+    while (!Application::IsQuit())
+    {
         prevdelta = Time::TimeCount();
 
         glEnable(GL_DEPTH_TEST);
@@ -259,18 +260,22 @@ void run() {
         camera.position += camera.Forward() * vert * 0.03f;
         camera.position += camera.Right() * -hori * 0.03f;
 
-        if (Input::GetKey(KeyCode::Space)) {
-            //camera.position += Vector3::Up() * 0.03f;
+        if (Input::GetKey(KeyCode::Space))
+        {
             camera.position += Vector3::Up() * timedelta * 10;
         }
-        else if (Input::GetKey(KeyCode::LeftControl)) {
+        else if (Input::GetKey(KeyCode::LeftControl))
+        {
             camera.position -= Vector3::Up() * timedelta * 10;
         }
-
-        if (Input::GetMouseButton(1)) {
-            camera.rotation.add_euler_y(Input::GetAxis("mouseX") * timedelta * 100);
-            camera.rotation.add_euler_x(-Input::GetAxis("mouseY") * timedelta * 100);
+        if (Input::GetMouseButton(1))
+        {
+            camera.rotation.AddEulerY(Input::GetAxis("mouseX") * timedelta * 100);
+            camera.rotation.AddEulerX(-Input::GetAxis("mouseY") * timedelta * 100);
         }
+
+        Logger::Info() << camera.position.ToString();
+        Logger::Info() << camera.GetViewMat().ToString();
 
         trans = camera.GetProjectionMat() * camera.GetViewMat();
 
@@ -320,7 +325,7 @@ void run() {
         Matrix lightModel;
         lightModel = Matrix::Translate(lightModel, Vector3(1.5f, 2.0f, 1.0f));
 
-        
+
         lightShaderProg.UseProgram();
         lightShaderProg.SetUniformMatrix4fv("projection", camera.GetProjectionMat().get_value_ptr());
         lightShaderProg.SetUniformMatrix4fv("view", camera.GetViewMat().get_value_ptr());

@@ -5,12 +5,14 @@
 
 namespace SapphireEngine 
 {
-    enum class CameraMode {
+    enum class CameraMode 
+    {
         Perspective,
         Orthographic
     };
 
-    struct RenderCamera {
+    struct RenderCamera 
+    {
     public:
         float fov;
         float near;
@@ -26,6 +28,7 @@ namespace SapphireEngine
         Vector3 Forward();
         Vector3 Right();
     public:
+        Matrix GetModelMat();
         Matrix GetViewMat();
         Matrix GetProjectionMat();
     };

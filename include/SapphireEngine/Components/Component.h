@@ -27,8 +27,11 @@ namespace SapphireEngine
         virtual void OnDestory() {}
     public:
         Component() {}
-        Component(SapphireEngine::Node* node);
+        Component(Node* node);
     };
+
+    template<typename T>
+    concept baseof_component_concept = std::is_base_of<Component, T>::value;
 }
 
 

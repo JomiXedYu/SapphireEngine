@@ -36,9 +36,9 @@ namespace SapphireEngine
     }
 
 
-    const float* Matrix::get_value_ptr()
+    const float* Matrix::get_value_ptr() const
     {
-        return &this->value[0][0];
+        return std::addressof(this->value[0].x);
     }
 
     Matrix Matrix::One()

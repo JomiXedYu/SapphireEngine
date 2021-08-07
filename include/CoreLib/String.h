@@ -1,9 +1,9 @@
 /*
 * @Moudule     : String
 * @Date        : 2021/05/24
-* @Author      : Jx
-* @Require     : C++14
-* @Description : This file is part of JxCode.CoreLib : https://github.com/Jayshonyves
+* @Author      : JomiXedYu
+* @Description : This file is part of JxCode.CoreLib : https://github.com/JxmiXedYu/JxCode.CoreLib
+* @StdRequired : c++17
 */
 
 #ifndef CORELIB_STRING_H
@@ -11,7 +11,6 @@
 
 #include <vector>
 #include <string>
-#include <sstream>
 #include <cstdint>
 
 //Encoding: UTF-8
@@ -22,7 +21,6 @@
 namespace JxCoreLib
 {
     using string = std::string;
-    using StringStream = std::stringstream;
 
     struct Char final
     {

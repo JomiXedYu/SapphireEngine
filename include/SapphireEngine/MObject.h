@@ -1,7 +1,6 @@
 #ifndef SAPPHIREENGINE_MOBJECT_H
 #define SAPPHIREENGINE_MOBJECT_H
 #include <CoreLib/CoreLib.h>
-#include <vector>
 
 namespace SapphireEngine
 {
@@ -11,14 +10,8 @@ namespace SapphireEngine
         CORELIB_DEF_TYPE(SapphireEngine::MObject, Object);
     protected:
         uint32_t instance_id_ = 0;
-        std::vector<MObject*> managed_list_;
-    public:
-        void AddManagedChild(MObject* child);
-        void RemoveManagedChild(MObject* child);
-        void SetManagedParent(MObject* parent);
     public:
         MObject() {}
-        virtual ~MObject() override;
     public:
         bool operator==(const MObject& r)
         {

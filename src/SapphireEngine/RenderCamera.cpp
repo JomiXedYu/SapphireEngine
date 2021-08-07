@@ -1,9 +1,10 @@
+#include "..\..\include\SapphireEngine\RenderCamera.h"
 #include <SapphireEngine/RenderCamera.h>
 #include <SapphireEngine/Screen.h>
 #include <SapphireEngine/Math.h>
 #include <SapphireEngine/UnitType/_include.h>
 
-namespace SapphireEngine 
+namespace SapphireEngine
 {
     RenderCamera::RenderCamera()
     {
@@ -16,13 +17,13 @@ namespace SapphireEngine
 
     Vector3 RenderCamera::Forward()
     {
-        auto rotation = this->rotation.get_euler();
+        auto rotation = this->rotation.ToEuler();
 
-        float yx = cos(Math::Rad(rotation.y + 90)) * 1.0f;
-        float yz = sin(Math::Rad(rotation.y + 90)) * 1.0f;
+        float yx = cos(Math::Radians(rotation.y + 90)) * 1.0f;
+        float yz = sin(Math::Radians(rotation.y + 90)) * 1.0f;
         if (rotation.x > 89.0f) rotation.x = 89.0f;
         if (rotation.x < -89.0f) rotation.x = -89.0f;
-        float xy = sin(Math::Rad(rotation.x)) * 1.0f;
+        float xy = sin(Math::Radians(rotation.x)) * 1.0f;
         return Vector3(yx, xy, yz);
     }
 
@@ -31,28 +32,37 @@ namespace SapphireEngine
         return Vector3::Cross(this->Forward(), Vector3::Up());
     }
 
+    Matrix RenderCamera::GetModelMat()
+    {
+        return Matrix::Translate(Matrix::One(), this->position);
+    }
+
     Matrix RenderCamera::GetViewMat()
     {
-        return Matrix::LookAt(
-            this->position,
-            this->position + this->Forward(),
-            Vector3::Up()
-        );
+        //return Matrix::LookAt(
+        //    this->position,
+        //    this->position + this->Forward(),
+        //    Vector3::Up()
+        //);
+
+        return Matrix::Translate(Matrix::One(), this->position)/* * this->rotation.ToMatrix4()*/;
     }
 
     Matrix RenderCamera::GetProjectionMat()
     {
         const Vector2& size = this->size;
         Matrix ret;
-        if (this->cameraMode == CameraMode::Perspective) {
+        if (this->cameraMode == CameraMode::Perspective)
+        {
             ret = Matrix::Perspective(
-                Math::Rad(this->fov),
+                Math::Radians(this->fov),
                 size.x / size.y,
                 this->near,
                 this->far
             );
         }
-        else {
+        else
+        {
             ret = Matrix::Ortho(
                 0.0f,
                 size.x,

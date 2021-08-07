@@ -21,10 +21,10 @@ namespace SapphireEngine
         glDeleteProgram(this->id_);
     }
 
-    bool ShaderProgram::CheckShaderProgram()
+    static bool _CheckShaderProgram(int id)
     {
         int isSuccess;
-        glGetProgramiv(this->id_, GL_LINK_STATUS, &isSuccess);
+        glGetProgramiv(id, GL_LINK_STATUS, &isSuccess);
         return isSuccess;
     }
 
@@ -41,7 +41,7 @@ namespace SapphireEngine
     void ShaderProgram::Link()
     {
         glLinkProgram(this->id_);
-        if (!this->CheckShaderProgram()) {
+        if (!_CheckShaderProgram(this->id_)) {
             int success;
             char infoLog[512];
             glGetProgramiv(this->id_, GL_LINK_STATUS, &success);
@@ -71,17 +71,17 @@ namespace SapphireEngine
 
     void ShaderProgram::SetUniformMatrix4fv(const string& name, const Matrix& mat)
     {
-        SetUniformMatrix4fv(name, const_cast<Matrix&>(mat).get_value_ptr());
+        SetUniformMatrix4fv(name, mat.get_value_ptr());
     }
 
     void ShaderProgram::SetUniformVector3(const string& name, const Vector3& value)
     {
-        glUniform3fv(this->GetUniformLocaltion(name), 1, const_cast<Vector3&>(value).get_value_ptr());
+        glUniform3fv(this->GetUniformLocaltion(name), 1, value.get_value_ptr());
     }
 
     void ShaderProgram::SetUniformColor(const string& name, const Color& value)
     {
-        glUniform4fv(this->GetUniformLocaltion(name), 1, const_cast<Color&>(value).get_value_ptr());
+        glUniform4fv(this->GetUniformLocaltion(name), 1, value.get_value_ptr());
     }
 
 

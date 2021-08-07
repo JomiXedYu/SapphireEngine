@@ -22,7 +22,7 @@ namespace SapphireEngine
         Matrix(const float& x);
         Matrix(const Vector4& x, const Vector4& y, const Vector4& z, const Vector4& w);
     public:
-        const float* get_value_ptr();
+        const float* get_value_ptr() const;
     public:
         Matrix operator*(Matrix c);
         Vector4& operator[](const int& index);

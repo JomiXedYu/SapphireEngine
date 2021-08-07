@@ -11,7 +11,6 @@ namespace SapphireEngine
     public:
         static Shader CreateVetexShader(const string& shaderName, const string& shaderSource);
         static Shader CreateFragmentShader(const string& shaderName, const string& fragSource);
-
     private:
         uint32_t id_;
         string name_;

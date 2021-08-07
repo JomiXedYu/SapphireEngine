@@ -5,6 +5,7 @@
 #include <SapphireEngine/Components/Component.h>
 #include <vector>
 #include <list>
+#include <type_traits>
 
 namespace SapphireEngine
 {
@@ -43,10 +44,27 @@ namespace SapphireEngine
 
     public:
 
-        Component* AddComponent(Type* type);
+        [[nodiscard]] Component* AddComponent(Type* type);
+        template<typename T> requires baseof_component_concept<T> && newable_concept<T>
+        [[nodiscard]] inline Component* AddComponent()
+        {
+            return this->AddComponent(typeof<T>());
+        }
+
         void RemoveComponent(Type* type);
+        template<baseof_component_concept T>
+        inline void RemoveComponent()
+        {
+            this->RemoveComponent(typeof<T>());
+        }
 
         Component* GetComponent(Type* type) const;
+        template<baseof_component_concept T>
+        inline Component* GetComponent()
+        {
+            return this->GetComponent(typeof<T>());
+        }
+
         std::vector<Component*> GetComponents();
 
         std::vector<Node*> GetChildren();

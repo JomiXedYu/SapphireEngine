@@ -43,7 +43,7 @@ namespace SapphireEngine
     Vector3 RenderCamera::Forward()
     {
         auto rotation = this->rotationEuler;
-
+        rotation.y -= 90.0f;
         float x = cos(Math::Radians(rotation.y)) * cos(Math::Radians(rotation.x));
         float y = sin(Math::Radians(rotation.x));
         float z = sin(Math::Radians(rotation.y)) * cos(Math::Radians(rotation.x));

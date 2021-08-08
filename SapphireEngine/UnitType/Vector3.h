@@ -28,9 +28,13 @@ namespace SapphireEngine
         static float Dot(const Vector3& target1, const Vector3& target2);
         static Vector3 Normalize(const Vector3& target);
     public:
-        static Vector3 Up();
-        static Vector3 Right();
-        static Vector3 Forward();
+        static Vector3 Up() { return Vector3{ 0, 1, 0 }; }
+        static Vector3 Right() { return Vector3{ 1, 0, 0 }; }
+        static Vector3 Forward() {
+            //RIGHT HANDLE
+            return Vector3(0, 0, -1);
+        }
+        static Vector3 Zero() { return Vector3{ 0, 0, 0 }; }
     public:
         float& operator[](const int& index);
         Vector3& operator +=(const Vector3& target);

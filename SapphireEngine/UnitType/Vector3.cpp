@@ -67,30 +67,14 @@ namespace SapphireEngine
         return Normalize(*this);
     }
 
-    Vector3 Vector3::Up()
-    {
-        return Vector3(0, 1, 0);
-    }
-
-    Vector3 Vector3::Right()
-    {
-        //RIGHT HANDLE
-        return Vector3(-1, 0, 0);
-    }
-
-    Vector3 Vector3::Forward()
-    {
-        return Vector3(0, 0, 1);
-    }
-
     float& Vector3::operator[](const int& index)
     {
         switch (index)
         {
-            case 0: return x;
-            case 1: return y;
-            case 2: return z;
-            default: throw std::out_of_range(DEBUG_INFO("out of range"));
+        case 0: return x;
+        case 1: return y;
+        case 2: return z;
+        default: throw std::out_of_range(DEBUG_INFO("out of range"));
         }
     }
 

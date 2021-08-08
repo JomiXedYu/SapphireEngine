@@ -59,7 +59,7 @@ void run() {
          0.5f, -0.5f,  0.5f,	1.0f, 1.0f, 1.0f, 1.0f,		1.0f, 0.0f,    0.0f, 0.0f, 1.0f,
          0.5f,  0.5f,  0.5f,	1.0f, 1.0f, 1.0f, 1.0f,		1.0f, 1.0f,    0.0f, 0.0f, 1.0f,
          0.5f,  0.5f,  0.5f,	1.0f, 1.0f, 1.0f, 1.0f,		1.0f, 1.0f,    0.0f, 0.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,	1.0f, 1.0f, 1.0f, 1.0f,		0.0f, 1.0f,    0.0f, 0.0f, 1.0f,
+        -0.5f,  0.5f,  0.8f,	1.0f, 1.0f, 1.0f, 1.0f,		0.0f, 1.0f,    0.0f, 0.0f, 1.0f,
         -0.5f, -0.5f,  0.5f,	1.0f, 1.0f, 1.0f, 1.0f,		0.0f, 0.0f,    0.0f, 0.0f, 1.0f,
 
         -0.5f,  0.5f,  0.5f,	1.0f, 1.0f, 1.0f, 1.0f,		1.0f, 0.0f,    -1.0f, 0.0f, 0.0f,
@@ -229,8 +229,11 @@ void run() {
     camera.fov = 45.0f;
     camera.near = 0.1f;
     camera.far = 100.0f;
-    camera.position = { 0,0,3 };
+    camera.position = Vector3(0, 0, 3);
+    camera.rotationEuler = Vector3::Zero();
     //camera.backgroundColor = Color::Blue();
+
+    Vector3 modelPos;
 
     //渲染循环
     while (!Application::IsQuit())
@@ -255,15 +258,13 @@ void run() {
         //4x4变换矩阵 变成变换矩阵，用变换矩阵乘向量
         Matrix trans = Matrix::One();
 
-        Vector3 cameraPos = Vector3(0.0f, 0.0f, 3.0f);
-        Vector3 cameraFront = Vector3(0.0f, 0.0f, -1.0f);
-        Vector3 cameraUp = Vector3(0.0f, 1.0f, 0.0f);
+
 
         float hori = Input::GetAxis("horizontal");
         float vert = Input::GetAxis("vertical");
 
         camera.position += camera.Forward() * vert * 0.1f;
-        camera.position += camera.Right() * -hori * 0.1f;
+        camera.position += camera.Right() * hori * 0.1f;
 
         if (Input::GetKey(KeyCode::Space))
         {
@@ -282,7 +283,7 @@ void run() {
 
         trans = camera.GetProjectionMat() * camera.GetViewMat();
 
-        Matrix model(1);
+        Matrix model = Matrix::Translate(Matrix::One(), modelPos);
 
         auto projMat = camera.GetProjectionMat();
         auto viewMat = camera.GetViewMat();

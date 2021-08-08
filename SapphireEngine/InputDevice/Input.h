@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <map>
+#include <string>
 
 #include <CoreLib/String.h>
 #include <SapphireEngine/UnitType/Vector2.h>
@@ -21,7 +22,7 @@ namespace SapphireEngine::InputDevice
         bool GetKeyDown(KeyCode code);
         bool GetKeyUp(KeyCode code);
         bool GetMouseButton(const int& i);
-        float GetAxis(const string& name);
+        float GetAxis(const std::string& name);
 
         void SetLockMouse(bool value);
         bool GetLockMouse();

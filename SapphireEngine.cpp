@@ -274,8 +274,8 @@ void run() {
             camera.rotation.AddEulerX(-Input::GetAxis("mouseY") * timedelta * 100);
         }
 
-        Logger::Info() << camera.position.ToString();
-        Logger::Info() << camera.GetViewMat().ToString();
+        //Logger::Info() << camera.position.ToString();
+        //Logger::Info() << camera.GetViewMat().ToString();
 
         trans = camera.GetProjectionMat() * camera.GetViewMat();
 

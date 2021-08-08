@@ -5,7 +5,8 @@
 #include <vector>
 #include <iostream>
 
-#pragma comment(lib, "ThirdParty/glfw/libvc2019/glfw3.lib")
+//#pragma comment(lib, "ThirdParty/glfw/libvc2019/glfw3.lib")
+//#pragma comment(lib, "glfw3.lib")
 
 using namespace std;
 

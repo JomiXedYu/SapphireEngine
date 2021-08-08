@@ -1,4 +1,3 @@
-#include "..\..\..\include\SapphireEngine\UnitType\Quaternion.h"
 #include <SapphireEngine/UnitType/Quaternion.h>
 
 #include <SapphireEngine/UnitType/Vector3.h>

@@ -1,4 +1,3 @@
-#include "..\..\include\SapphireEngine\RenderCamera.h"
 #include <SapphireEngine/RenderCamera.h>
 #include <SapphireEngine/Screen.h>
 #include <SapphireEngine/Math.h>

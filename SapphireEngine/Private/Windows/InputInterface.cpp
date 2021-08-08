@@ -2,7 +2,8 @@
 #include <ThirdParty/glfw/include/GLFW/glfw3.h>
 //#include <Windows.h>
 
-#pragma comment(lib, "ThirdParty/glfw/libvc2019/glfw3.lib")
+//#pragma comment(lib, "ThirdParty/glfw/libvc2019/glfw3.lib")
+//#pragma comment(lib, "glfw3.lib")
 
 namespace SapphireEngine::Private
 {

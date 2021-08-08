@@ -1,22 +1,21 @@
 #ifndef SAPPHIREENGINE_INPUTDEVICE_AXISDEVICEBASE_H
 #define SAPPHIREENGINE_INPUTDEVICE_AXISDEVICEBASE_H
 
-#include <CoreLib/String.h>
+#include <string>
 
 namespace SapphireEngine::InputDevice
 {
-    using namespace JxCoreLib;
     class AxisDeviceBase
     {
     protected:
-        string name_;
+        std::string name_;
         float attenuation_;
     public:
         
         float get_attenuation() const { return this->attenuation_; }
-        const string& get_name() const { return this->name_; }
+        const std::string& get_name() const { return this->name_; }
     public:
-        AxisDeviceBase(const string& name, float attenuation) 
+        AxisDeviceBase(const std::string& name, float attenuation)
             : name_(name), attenuation_(attenuation)
         {
         }

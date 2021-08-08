@@ -12,7 +12,7 @@ namespace SapphireEngine
     public:
         static uint32_t FrameCount();
         static float TimeCount();
-
+        static float DeltaTime();
     };
 
 }

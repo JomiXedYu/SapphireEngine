@@ -45,6 +45,7 @@ namespace SapphireEngine
     Vector3 operator/(const float& f, const Vector3& v3);
     Vector3 operator*(const Vector3& v3, const float& f);
     Vector3 operator*(const float& f, const Vector3& v3);
+    Vector3 operator*(const Vector3& l, const Vector3& r);
 }
 
 

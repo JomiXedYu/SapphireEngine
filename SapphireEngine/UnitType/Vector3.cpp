@@ -156,4 +156,9 @@ namespace SapphireEngine
         return Vector3(v3.x * f, v3.y * f, v3.z * f);
     }
 
+    Vector3 operator*(const Vector3& l, const Vector3& r)
+    {
+        return Vector3(l.x * r.x, l.y * r.y, l.z * r.z);
+    }
+
 }

@@ -20,7 +20,7 @@ namespace SapphireEngine
         Vector2 size;
         CameraMode cameraMode;
         Vector3 position;
-        Quaternion rotation;
+        Vector3 rotationEuler;
         Color backgroundColor;
     public:
         RenderCamera();
@@ -31,6 +31,10 @@ namespace SapphireEngine
         Matrix GetModelMat();
         Matrix GetViewMat();
         Matrix GetProjectionMat();
+        static Matrix LookAtRH(
+            Vector3 const& eye,
+            Vector3 const& center,
+            Vector3 const& up);
     };
 }
 

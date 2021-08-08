@@ -30,7 +30,9 @@ namespace SapphireEngine::Private
         void GetResolution(int* out_width, int* out_height);
         void SetResolution(int width, int height);
 
-        float GetTime();
+        double GetTime();
+        float GetDeltaTime();
+
         uint32_t GetFrameCount();
 
         void PollEvents();

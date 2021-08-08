@@ -229,13 +229,14 @@ void run() {
     camera.fov = 45.0f;
     camera.near = 0.1f;
     camera.far = 100.0f;
+    camera.position = { 0,0,3 };
     //camera.backgroundColor = Color::Blue();
-    float timedelta = 0;
-    float prevdelta = 0;
+
     //渲染循环
     while (!Application::IsQuit())
     {
-        prevdelta = Time::TimeCount();
+        Logger::Info() << Time::DeltaTime();
+        float timedelta = Time::DeltaTime();
 
         glEnable(GL_DEPTH_TEST);
         //glDepthFunc(GL_LEQUAL);
@@ -254,11 +255,15 @@ void run() {
         //4x4变换矩阵 变成变换矩阵，用变换矩阵乘向量
         Matrix trans = Matrix::One();
 
+        Vector3 cameraPos = Vector3(0.0f, 0.0f, 3.0f);
+        Vector3 cameraFront = Vector3(0.0f, 0.0f, -1.0f);
+        Vector3 cameraUp = Vector3(0.0f, 1.0f, 0.0f);
+
         float hori = Input::GetAxis("horizontal");
         float vert = Input::GetAxis("vertical");
 
-        camera.position += camera.Forward() * vert * 0.03f;
-        camera.position += camera.Right() * -hori * 0.03f;
+        camera.position += camera.Forward() * vert * 0.1f;
+        camera.position += camera.Right() * -hori * 0.1f;
 
         if (Input::GetKey(KeyCode::Space))
         {
@@ -270,25 +275,20 @@ void run() {
         }
         if (Input::GetMouseButton(1))
         {
-            camera.rotation.AddEulerY(Input::GetAxis("mouseX") * timedelta * 100);
-            camera.rotation.AddEulerX(-Input::GetAxis("mouseY") * timedelta * 100);
+            camera.rotationEuler.y += Input::GetAxis("mouseX") * timedelta * 10;
+            camera.rotationEuler.x += -Input::GetAxis("mouseY") * timedelta * 10;
         }
 
-        //Logger::Info() << camera.position.ToString();
-        //Logger::Info() << camera.GetViewMat().ToString();
 
         trans = camera.GetProjectionMat() * camera.GetViewMat();
 
         Matrix model(1);
-        Matrix proj
-        (
-            2.4, 0.0, 0.0, 0.0,
-            0.0, 2.4, 0.0, 0.0,
-            0.0, 0.0, -1.0, -0.2,
-            0.0, 0.0, -1.0, 0
-        );
-        shaderProg.SetUniformMatrix4fv("projection", camera.GetProjectionMat().get_value_ptr());
-        shaderProg.SetUniformMatrix4fv("view", camera.GetViewMat().get_value_ptr());
+
+        auto projMat = camera.GetProjectionMat();
+        auto viewMat = camera.GetViewMat();
+        Logger::PrintInfo(viewMat.ToString());
+        shaderProg.SetUniformMatrix4fv("projection", projMat.get_value_ptr());
+        shaderProg.SetUniformMatrix4fv("view", viewMat.get_value_ptr());
         shaderProg.SetUniformMatrix4fv("model", model);
 
         shaderProg.SetUniformColor("lightColor", Color::Yellow());
@@ -338,7 +338,6 @@ void run() {
         SystemInterface::PollEvents();
         Input::PollEvents();
 
-        timedelta = Time::TimeCount() - prevdelta;
     }
 
 }

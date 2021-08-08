@@ -84,6 +84,7 @@ namespace SapphireEngine
     std::string Matrix::ToString() const
     {
         std::stringstream ss;
+        ss << "\n";
         for (int r = 0; r < 4; r++)
         {
             ss << "|";

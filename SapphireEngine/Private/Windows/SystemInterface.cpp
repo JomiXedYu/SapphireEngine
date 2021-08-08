@@ -12,7 +12,12 @@ using namespace std;
 
 namespace SapphireEngine::Private
 {
+    static uint32_t _frameCount = 0;
+    static double lastTime = 0;
+    static float deltaTime = 0;
+
     GLFWwindow* _glfw_window_instance;
+
     bool SystemInterface::InitializeWindow(int width, int height)
     {
         glfwInit();
@@ -43,12 +48,16 @@ namespace SapphireEngine::Private
     {
 
     }
-    float SystemInterface::GetTime()
+
+    double SystemInterface::GetTime()
     {
-        return (float)glfwGetTime();
+        return glfwGetTime();
+    }
+    float SystemInterface::GetDeltaTime()
+    {
+        return deltaTime;
     }
 
-    static uint32_t _frameCount = 0;
     uint32_t SystemInterface::GetFrameCount()
     {
         return _frameCount;
@@ -75,6 +84,10 @@ namespace SapphireEngine::Private
         glfwSwapBuffers(_glfw_window_instance);
         _frameCount++;
 
+        double curTime = GetTime();
+        deltaTime = curTime - lastTime;
+        lastTime = curTime;
+
         if (!isQuit) {
             if (glfwWindowShouldClose(_glfw_window_instance)) {
                 //退出检测
@@ -93,7 +106,8 @@ namespace SapphireEngine::Private
     void SystemInterface::RequestQuitEvents()
     {
         //检测是否有中断退出事件
-        if (requestQuitCallBackPtr()) {
+        if (requestQuitCallBackPtr())
+        {
             Quit();
         }
 

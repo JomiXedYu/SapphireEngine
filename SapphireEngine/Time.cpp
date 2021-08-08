@@ -15,4 +15,9 @@ namespace SapphireEngine
         return SystemInterface::GetTime();
     }
 
+    float Time::DeltaTime()
+    {
+        return SystemInterface::GetDeltaTime();
+    }
+
 }

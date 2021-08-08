@@ -1,5 +1,5 @@
 #ifndef _SAPPHIREENGINE_UNITTYPE__INCLUDE_H
-#define SAPPHIREENGINE_UNITTYPE__INCLUDE_H
+#define _SAPPHIREENGINE_UNITTYPE__INCLUDE_H
 
 #include "Color.h"
 #include "Vector2.h"

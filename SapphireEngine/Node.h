@@ -1,5 +1,5 @@
 #ifndef _SAPPHIREENGINE_NODE_H
-#define SAPPHIREENGINE_NODE_H
+#define _SAPPHIREENGINE_NODE_H
 
 #include <SapphireEngine/MObject.h>
 #include <SapphireEngine/Components/Component.h>

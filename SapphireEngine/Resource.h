@@ -1,5 +1,5 @@
 #ifndef _SAPPHIREENGINE_RESOURCE_H
-#define SAPPHIREENGINE_RESOURCE_H
+#define _SAPPHIREENGINE_RESOURCE_H
 
 #include <CoreLib/String.h>
 

@@ -1,5 +1,5 @@
 #ifndef _SAPPHIREENGINE_UNITTYPE_MATRIX_H
-#define SAPPHIREENGINE_UNITTYPE_MATRIX_H
+#define _SAPPHIREENGINE_UNITTYPE_MATRIX_H
 
 #include <string>
 #include "Vector4.h"

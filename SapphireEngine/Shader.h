@@ -1,5 +1,5 @@
 #ifndef _SAPPHIREENGINE_SHADER_H
-#define SAPPHIREENGINE_SHADER_H
+#define _SAPPHIREENGINE_SHADER_H
 
 #include <SapphireEngine/MObject.h>
 

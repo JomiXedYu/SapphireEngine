@@ -1,5 +1,5 @@
 #ifndef _SAPPHIREENGINE_TIME_H
-#define SAPPHIREENGINE_TIME_H
+#define _SAPPHIREENGINE_TIME_H
 
 #include <cstdint>
 

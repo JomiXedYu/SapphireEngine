@@ -1,5 +1,5 @@
 #ifndef _SAPPHIREENGINE_UNITTYPE_COLOR_H
-#define SAPPHIREENGINE_UNITTYPE_COLOR_H
+#define _SAPPHIREENGINE_UNITTYPE_COLOR_H
 #include <string>
 
 namespace SapphireEngine 

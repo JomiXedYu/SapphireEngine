@@ -1,5 +1,5 @@
 #ifndef _SAPPHIREENGINE_SCENE_H
-#define SAPPHIREENGINE_SCENE_H
+#define _SAPPHIREENGINE_SCENE_H
 
 #include <vector>
 

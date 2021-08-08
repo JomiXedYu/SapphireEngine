@@ -1,4 +1,4 @@
-#ifndef SAPPHIREENGINE_SHADER_H
+#ifndef _SAPPHIREENGINE_SHADER_H
 #define SAPPHIREENGINE_SHADER_H
 
 #include <SapphireEngine/MObject.h>

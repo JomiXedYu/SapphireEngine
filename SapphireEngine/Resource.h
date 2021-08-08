@@ -1,4 +1,4 @@
-#ifndef SAPPHIREENGINE_RESOURCE_H
+#ifndef _SAPPHIREENGINE_RESOURCE_H
 #define SAPPHIREENGINE_RESOURCE_H
 
 #include <CoreLib/String.h>

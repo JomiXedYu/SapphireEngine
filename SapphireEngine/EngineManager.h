@@ -1,5 +1,5 @@
-#ifndef SAPPHIREENGINE_ENGINEMANAGER_H
-#define SAPPHIREENGINE_ENGINEMANAGER_H
+#ifndef _SAPPHIREENGINE_ENGINEMANAGER_H
+#define _SAPPHIREENGINE_ENGINEMANAGER_H
 
 #include <SapphireEngine/Private/BaseInterface.h>
 #include <SapphireEngine/Screen.h>

@@ -1,4 +1,4 @@
-#ifndef SAPPHIREENGINE_SCENE_H
+#ifndef _SAPPHIREENGINE_SCENE_H
 #define SAPPHIREENGINE_SCENE_H
 
 #include <vector>

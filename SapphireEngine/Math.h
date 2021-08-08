@@ -1,5 +1,5 @@
-#ifndef SAPPHIREENGINE_MATH_H
-#define SAPPHIREENGINE_MATH_H
+#ifndef _SAPPHIREENGINE_MATH_H
+#define _SAPPHIREENGINE_MATH_H
 #include <cmath>
 #include "UnitType/Vector2.h"
 #include "UnitType/Vector3.h"

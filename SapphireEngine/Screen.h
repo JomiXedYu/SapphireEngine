@@ -1,4 +1,4 @@
-#ifndef SAPPHIREENGINE_SCREEN_H
+#ifndef _SAPPHIREENGINE_SCREEN_H
 #define SAPPHIREENGINE_SCREEN_H
 
 #include <SapphireEngine/UnitType/Vector2.h>

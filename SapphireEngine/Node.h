@@ -1,4 +1,4 @@
-#ifndef SAPPHIREENGINE_NODE_H
+#ifndef _SAPPHIREENGINE_NODE_H
 #define SAPPHIREENGINE_NODE_H
 
 #include <SapphireEngine/MObject.h>

@@ -1,5 +1,5 @@
-#ifndef SAPPHIREENGINE_APPLICATION_H
-#define SAPPHIREENGINE_APPLICATION_H
+#ifndef _SAPPHIREENGINE_APPLICATION_H
+#define _SAPPHIREENGINE_APPLICATION_H
 
 #include <CoreLib/Events.hpp>
 #include <CoreLib/String.h>

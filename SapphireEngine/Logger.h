@@ -1,5 +1,5 @@
-#ifndef SAPPHIREENGINE_LOGGER_H
-#define SAPPHIREENGINE_LOGGER_H
+#ifndef _SAPPHIREENGINE_LOGGER_H
+#define _SAPPHIREENGINE_LOGGER_H
 
 #include <CoreLib/String.h>
 #include <iostream>

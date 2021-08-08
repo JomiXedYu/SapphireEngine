@@ -1,5 +1,5 @@
-#ifndef SAPPHIREENGINE_ASSETS_MESH_H
-#define SAPPHIREENGINE_ASSETS_MESH_H
+#ifndef _SAPPHIREENGINE_ASSETS_MESH_H
+#define _SAPPHIREENGINE_ASSETS_MESH_H
 
 #include <SapphireEngine/UnitType/Vector3.h>
 #include <SapphireEngine/MObject.h>

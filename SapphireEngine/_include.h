@@ -1,5 +1,5 @@
-#ifndef SAPPHIREENGINE__INCLUDE_H
-#define SAPPHIREENGINE__INCLUDE_H
+#ifndef _SAPPHIREENGINE__INCLUDE_H
+#define _SAPPHIREENGINE__INCLUDE_H
 
 #include "Assets/_include.h"
 #include "Components/_include.h"

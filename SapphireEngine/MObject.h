@@ -1,5 +1,5 @@
-#ifndef SAPPHIREENGINE_MOBJECT_H
-#define SAPPHIREENGINE_MOBJECT_H
+#ifndef _SAPPHIREENGINE_MOBJECT_H
+#define _SAPPHIREENGINE_MOBJECT_H
 #include <CoreLib/CoreLib.h>
 
 namespace SapphireEngine

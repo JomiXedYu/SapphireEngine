@@ -48,12 +48,6 @@ namespace SapphireEngine
         float y = sin(Math::Radians(rotation.x));
         float z = sin(Math::Radians(rotation.y)) * cos(Math::Radians(rotation.x));
         return Vector3::Normalize({ x,y,z });
-        //float yx = cos(Math::Radians(rotation.y + 90)) * 1.0f;
-        //float yz = sin(Math::Radians(rotation.y + 90)) * 1.0f;
-        //if (rotation.x > 89.0f) rotation.x = 89.0f;
-        //if (rotation.x < -89.0f) rotation.x = -89.0f;
-        //float xy = sin(Math::Radians(rotation.x)) * 1.0f;
-        //return Vector3(yx, xy, yz);
     }
 
     Vector3 RenderCamera::Right()
@@ -68,14 +62,11 @@ namespace SapphireEngine
 
     Matrix RenderCamera::GetViewMat()
     {
-
         return Matrix::LookAt(
             this->position,
             this->position + this->Forward(),
             Vector3::Up()
         );
-
-        return Matrix::Translate(Matrix::One(), this->position)/* * this->rotation.ToMatrix4()*/;
     }
 
     Matrix RenderCamera::GetProjectionMat()

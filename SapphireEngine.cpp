@@ -59,7 +59,7 @@ void run() {
          0.5f, -0.5f,  0.5f,	1.0f, 1.0f, 1.0f, 1.0f,		1.0f, 0.0f,    0.0f, 0.0f, 1.0f,
          0.5f,  0.5f,  0.5f,	1.0f, 1.0f, 1.0f, 1.0f,		1.0f, 1.0f,    0.0f, 0.0f, 1.0f,
          0.5f,  0.5f,  0.5f,	1.0f, 1.0f, 1.0f, 1.0f,		1.0f, 1.0f,    0.0f, 0.0f, 1.0f,
-        -0.5f,  0.5f,  0.8f,	1.0f, 1.0f, 1.0f, 1.0f,		0.0f, 1.0f,    0.0f, 0.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,	1.0f, 1.0f, 1.0f, 1.0f,		0.0f, 1.0f,    0.0f, 0.0f, 1.0f,
         -0.5f, -0.5f,  0.5f,	1.0f, 1.0f, 1.0f, 1.0f,		0.0f, 0.0f,    0.0f, 0.0f, 1.0f,
 
         -0.5f,  0.5f,  0.5f,	1.0f, 1.0f, 1.0f, 1.0f,		1.0f, 0.0f,    -1.0f, 0.0f, 0.0f,
@@ -139,11 +139,11 @@ void run() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+    string dataPath = "E:/SapphireEngine/_data";
+    string texturePath = dataPath + "/texture";
+    string shaderPath = dataPath + "/shader";
 
-    string texturePath = Application::DataFolder() + "\\texture";
-    string shaderPath = Application::DataFolder() + "\\shader";
-
-    Bitmap* bp = Resource::LoadBitmap(texturePath + "\\p.jpg");
+    Bitmap* bp = Resource::LoadBitmap(texturePath + "/p.jpg");
 
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, bp->get_width(), bp->get_height(), 0, GL_RGB, GL_UNSIGNED_BYTE, bp->GetNativeData());
@@ -197,16 +197,16 @@ void run() {
 #pragma region 着色器
 
     //创建顶点着色器
-    String shaderSource = File::ReadAllText(shaderPath + "\\StandardVertexShader.glsl");
+    String shaderSource = File::ReadAllText(shaderPath + "/Standard.vert");
     Shader vertexShader = Shader::CreateVetexShader("StandardVertexShader", shaderSource);
     cout << "顶点着色器创建完毕" << endl;
     //创建片段着色器
-    String fragsrc = File::ReadAllText(shaderPath + "\\DefaultFragmentShader.glsl");
-    Shader fragmentShader = Shader::CreateFragmentShader("DefaultFragmentShader", fragsrc);
+    String fragsrc = File::ReadAllText(shaderPath + "/Standard.frag");
+    Shader fragmentShader = Shader::CreateFragmentShader("StandardFragmentShader", fragsrc);
     cout << "片元着色器创建完毕" << endl;
 
     ShaderProgram lightShaderProg;
-    Shader lightShader = Shader::CreateFragmentShader("LightShader", File::ReadAllText(shaderPath + "\\LightFragmentShader.glsl"));
+    Shader lightShader = Shader::CreateFragmentShader("LightShader", File::ReadAllText(shaderPath + "/Light.frag"));
     lightShaderProg.AttachShader(vertexShader);
     lightShaderProg.AttachShader(lightShader);
     lightShaderProg.Link();
@@ -238,7 +238,6 @@ void run() {
     //渲染循环
     while (!Application::IsQuit())
     {
-        Logger::Info() << Time::DeltaTime();
         float timedelta = Time::DeltaTime();
 
         glEnable(GL_DEPTH_TEST);
@@ -257,8 +256,6 @@ void run() {
 
         //4x4变换矩阵 变成变换矩阵，用变换矩阵乘向量
         Matrix trans = Matrix::One();
-
-
 
         float hori = Input::GetAxis("horizontal");
         float vert = Input::GetAxis("vertical");
@@ -287,7 +284,7 @@ void run() {
 
         auto projMat = camera.GetProjectionMat();
         auto viewMat = camera.GetViewMat();
-        Logger::PrintInfo(viewMat.ToString());
+
         shaderProg.SetUniformMatrix4fv("projection", projMat.get_value_ptr());
         shaderProg.SetUniformMatrix4fv("view", viewMat.get_value_ptr());
         shaderProg.SetUniformMatrix4fv("model", model);
@@ -323,13 +320,13 @@ void run() {
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
 
-        Matrix lightModel;
+        Matrix lightModel = Matrix::One();
         lightModel = Matrix::Translate(lightModel, Vector3(1.5f, 2.0f, 1.0f));
 
 
         lightShaderProg.UseProgram();
-        lightShaderProg.SetUniformMatrix4fv("projection", camera.GetProjectionMat().get_value_ptr());
-        lightShaderProg.SetUniformMatrix4fv("view", camera.GetViewMat().get_value_ptr());
+        lightShaderProg.SetUniformMatrix4fv("projection", projMat.get_value_ptr());
+        lightShaderProg.SetUniformMatrix4fv("view", viewMat.get_value_ptr());
         lightShaderProg.SetUniformMatrix4fv("model", lightModel);
 
         glBindVertexArray(lightVAO);

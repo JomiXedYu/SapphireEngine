@@ -58,7 +58,7 @@ namespace SapphireEngine
 
     string Application::DataFolder()
     {
-        static string data = AppPath() + "\\_data";
+        static string data = AppPath() + "/_data";
         return data;
     }
 

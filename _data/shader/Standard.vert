@@ -21,8 +21,8 @@ void main() {
 
 	vertexColor = aColor;
 	texCoord = aTexCoord;
-	// normal = mat3(transpose(inverse(view * model))) * aNormal;
-	normal = aNormal;
+	normal = mat3(transpose(inverse(model))) * aNormal;
+	//normal = aNormal;
 	// fragPos = vec3(model * vec4(aPos, 1.0)); 
-	fragPos = vec3(view * model * vec4(aPos, 1.0));
+    fragPos = vec3(model * vec4(aPos, 1.0));
 }

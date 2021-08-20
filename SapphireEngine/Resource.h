@@ -1,16 +1,18 @@
 #ifndef _SAPPHIREENGINE_RESOURCE_H
 #define _SAPPHIREENGINE_RESOURCE_H
 
-#include <string>
+#include <SapphireEngine/MObject.h>
 
 namespace SapphireEngine
 {
     class Bitmap;
+    class Texture2D;
 
     namespace Resource
     {
-        Bitmap* LoadBitmap(const std::string& name);
-    };
+        Bitmap* LoadBitmap(const string& name);
+        Texture2D* LoadTexture2D(const string& name);
+    }
 
 }
 

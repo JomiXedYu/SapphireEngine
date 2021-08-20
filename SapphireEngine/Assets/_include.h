@@ -3,5 +3,6 @@
 
 #include "Bitmap.h"
 #include "Mesh.h"
+#include "Texture2D.h"
 
 #endif // !SAPPHIREENGINE_ASSETS_INCLUDE_H

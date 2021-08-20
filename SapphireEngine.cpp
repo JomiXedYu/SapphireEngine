@@ -130,31 +130,29 @@ void run() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    uint32_t texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    //uint32_t texture;
+    //glGenTextures(1, &texture);
+    //glBindTexture(GL_TEXTURE_2D, texture);
 
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    ////glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    ////glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     string dataPath = "E:/SapphireEngine/_data";
     string texturePath = dataPath + "/texture";
     string shaderPath = dataPath + "/shader";
 
-    Bitmap* bp = Resource::LoadBitmap(texturePath + "/p.jpg");
+    //Bitmap* bp = Resource::LoadBitmap(texturePath + "/p.jpg");
 
-    
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, bp->get_width(), bp->get_height(), 0, GL_RGB, GL_UNSIGNED_BYTE, bp->GetNativeData());
-    glGenerateMipmap(GL_TEXTURE_2D);
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, bp->get_width(), bp->get_height(), 0, GL_RGB, GL_UNSIGNED_BYTE, bp->GetNativeData());
+    //glGenerateMipmap(GL_TEXTURE_2D);
 
     //delete(bp); bp = nullptr;
 
-    glBindTexture(GL_TEXTURE_2D, 0);
+    //glBindTexture(GL_TEXTURE_2D, 0);
 
-
+    Texture2D* texture2d = Resource::LoadTexture2D(texturePath + "/p.jpg");
 
     //Light
     uint32_t lightVAO;
@@ -308,7 +306,7 @@ void run() {
         shaderProg.SetUniformInt("diffuse2d", 0);
         glActiveTexture(GL_TEXTURE0);
         //绑定贴图至0位置
-        glBindTexture(GL_TEXTURE_2D, texture);
+        glBindTexture(GL_TEXTURE_2D, texture2d->get_id());
         //glActiveTexture(GL_TEXTURE1);
         //glBindTexture(GL_TEXTURE_2D, texture2);
 

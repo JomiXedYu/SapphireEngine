@@ -3,14 +3,6 @@
 
 namespace SapphireEngine 
 {
-    int32_t Bitmap::get_width() const
-    {
-        return this->width_;
-    }
-    int32_t Bitmap::get_height() const
-    {
-        return this->height_;
-    }
     const uint8_t* Bitmap::GetNativeData() const
     {
         return this->data_;

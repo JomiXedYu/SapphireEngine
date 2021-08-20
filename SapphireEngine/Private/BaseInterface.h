@@ -2,6 +2,7 @@
 #define _SAPPHIREENGINE_PRIVATE_BASEINTERFACE_H
 
 #include <string>
+#include <cstdint>
 
 namespace SapphireEngine::Private
 {
@@ -21,6 +22,8 @@ namespace SapphireEngine::Private
     {
         unsigned char* LoadBitmap(const std::string& name, int* out_width, int* out_height);
         void FreeBitmap(unsigned char* data);
+
+        uint32_t LoadTexture2D(const std::string& name);
     }
     namespace SystemInterface
     {

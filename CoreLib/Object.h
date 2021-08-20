@@ -6,12 +6,12 @@
 * @StdRequired : c++20
 */
 
-#ifndef CORELIB_OBJECT_H
-#define CORELIB_OBJECT_H
+#ifndef _CORELIB_OBJECT_H
+#define _CORELIB_OBJECT_H
 
 #include <vector>
 #include <type_traits>
-#include "String.h"
+#include "UString.h"
 
 namespace JxCoreLib
 {
@@ -35,7 +35,7 @@ namespace JxCoreLib
     public:
         void SetManagedParent(Object* parent);
     public:
-        virtual Type* get_type() const;
+        virtual Type* GetType() const;
         friend class Type;
     public:
         Object() {}
@@ -45,13 +45,22 @@ namespace JxCoreLib
     };
 
     template<typename T>
-    concept baseof_object_concept = std::is_base_of<Object, T>::value;
+    concept baseof_object_concept =
+        std::is_base_of<Object, typename std::remove_pointer<T>::type>::value;
+
+    template<typename T>
+    concept baseof_object_pointer_concept =
+        baseof_object_concept<T>
+        && std::is_pointer<T>::value;
 
     template<typename T>
     concept newable_concept = requires { new T; };
+
+    template<typename T>
+    concept non_newable_concept = !requires { new T; };
 }
 namespace std
 {
     string to_string(JxCoreLib::Object* obj);
 }
-#endif // !CORELIB_OBJECT_H
+#endif // !_CORELIB_OBJECT_H

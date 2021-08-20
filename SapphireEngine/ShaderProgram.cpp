@@ -64,6 +64,11 @@ namespace SapphireEngine
         glUniform1i(this->GetUniformLocaltion(name), i);
     }
 
+    void ShaderProgram::SetUniformFloat(const string& name, const float& f)
+    {
+        glUniform1f(this->GetUniformLocaltion(name), f);
+    }
+
     void ShaderProgram::SetUniformMatrix4fv(const string& name, const float* value)
     {
         glUniformMatrix4fv(this->GetUniformLocaltion(name), 1, GL_FALSE, value);
@@ -82,6 +87,11 @@ namespace SapphireEngine
     void ShaderProgram::SetUniformColor(const string& name, const Color& value)
     {
         glUniform4fv(this->GetUniformLocaltion(name), 1, value.get_value_ptr());
+    }
+
+    void ShaderProgram::SetUniformColor(const string& name, const Vector3& value)
+    {
+        SetUniformColor(name, Color(value.x, value.y, value.z));
     }
 
 

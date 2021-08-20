@@ -1,10 +1,10 @@
 #ifndef _SAPPHIREENGINE_PRIVATE_BASEINTERFACE_H
 #define _SAPPHIREENGINE_PRIVATE_BASEINTERFACE_H
 
-#include <CoreLib/String.h>
+#include <string>
+
 namespace SapphireEngine::Private
 {
-    using namespace JxCoreLib;
 
     namespace InputInterface
     {
@@ -19,13 +19,12 @@ namespace SapphireEngine::Private
     }
     namespace ResourceInterface
     {
-        using namespace JxCoreLib;
-        unsigned char* LoadBitmap(const string& name, int* out_width, int* out_height);
+        unsigned char* LoadBitmap(const std::string& name, int* out_width, int* out_height);
         void FreeBitmap(unsigned char* data);
     }
     namespace SystemInterface
     {
-        bool InitializeWindow(int width, int height);
+        bool InitializeWindow(const std::string& title, int width, int height);
         void TerminateWindow();
         void GetResolution(int* out_width, int* out_height);
         void SetResolution(int width, int height);

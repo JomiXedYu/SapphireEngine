@@ -46,7 +46,6 @@ namespace SapphireEngine
         return target1.x * target2.x + target1.y * target2.y + target1.z * target2.z;
     }
 
-    //每个分量除以向量长度得到单位向量
     Vector3 Vector3::Normalize(const Vector3& target)
     {
         return target / sqrtf(Dot(target, target));

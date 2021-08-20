@@ -3,11 +3,11 @@
 
 namespace SapphireEngine 
 {
-    int Bitmap::get_width() const
+    int32_t Bitmap::get_width() const
     {
         return this->width_;
     }
-    int Bitmap::get_height() const
+    int32_t Bitmap::get_height() const
     {
         return this->height_;
     }
@@ -16,12 +16,19 @@ namespace SapphireEngine
         return this->data_;
     }
 
-    Bitmap::Bitmap() : MObject(), data_(nullptr), width_(0), height_(0) {}
-
-    Bitmap::Bitmap(unsigned char *data, int width, int height) : MObject(),
-        data_(data), width_(width), height_(height)
+    void Bitmap::SetData(uint8_t* data, int32_t width, int32_t height)
     {
+        if (this->is_sealed_)
+        {
+            return;
+        }
+        this->data_ = data;
+        this->width_ = width;
+        this->height_ = height;
+        this->is_sealed_ = true;
     }
+
+    Bitmap::Bitmap() : MObject(), data_(nullptr), width_(0), height_(0), is_sealed_(false) {}
 
     Bitmap::~Bitmap()
     {

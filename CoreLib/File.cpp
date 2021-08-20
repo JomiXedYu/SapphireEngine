@@ -12,7 +12,7 @@ namespace JxCoreLib
         std::stringstream ss;
         ifs.open(path);
         if (!ifs.is_open()) {
-            throw std::invalid_argument("Unable to open file: " + path);
+            throw std::invalid_argument("Unable to open file");
         }
         ss << ifs.rdbuf() << std::endl;
         ifs.close();

@@ -1,11 +1,11 @@
 #ifndef _SAPPHIREENGINE_UNITTYPE_QUATERNION_H
 #define _SAPPHIREENGINE_UNITTYPE_QUATERNION_H
 
-#include <CoreLib/String.h>
+#include <string>
 
 namespace SapphireEngine 
 {
-	using namespace JxCoreLib;
+
 	struct Vector3;
 	struct Matrix;
 
@@ -19,7 +19,7 @@ namespace SapphireEngine
 	public:
 		Quaternion();
 		Quaternion(float x, float y, float z, float w);
-		string ToString() const;
+		std::string ToString() const;
 	public:
 		Vector3 ToEuler() const;
 		void SetEuler(const Vector3& euler_angle);

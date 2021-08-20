@@ -6,8 +6,8 @@
 * @StdRequired : c++20
 */
 
-#ifndef CORELIB_EXCEPTION_H
-#define CORELIB_EXCEPTION_H
+#ifndef _CORELIB_EXCEPTION_H
+#define _CORELIB_EXCEPTION_H
 
 #include <stdexcept>
 #include "Object.h"
@@ -21,7 +21,7 @@ namespace JxCoreLib
 {
     class ExceptionBase : public std::exception, public Object
     {
-        CORELIB_DEF_META(JxCoreLib::ExceptionBase, Object);
+        CORELIB_DEF_TYPE(JxCoreLib::ExceptionBase, Object);
         CORELIB_DECL_DYNCINST();
     protected:
         string message_;
@@ -34,7 +34,7 @@ namespace JxCoreLib
             return this->message_;
         }
         virtual const char* what() const override {
-            this->whatcache_ = string(this->get_type()->get_name() + _T(": ") + this->message_);
+            this->whatcache_ = string(this->GetType()->get_name() + ": " + this->message_);
             return this->whatcache_.c_str();
         }
         virtual string ToString() const override {
@@ -44,7 +44,7 @@ namespace JxCoreLib
 
     class RangeOutException : public ExceptionBase
     {
-        CORELIB_DEF_META(JxCoreLib::RangeOutException, ExceptionBase);
+        CORELIB_DEF_TYPE(JxCoreLib::RangeOutException, ExceptionBase);
         CORELIB_DECL_DYNCINST();
     public:
         DEF_EXCEPTION_CTOR(RangeOutException)
@@ -52,7 +52,7 @@ namespace JxCoreLib
 
     class ArgumentException : public ExceptionBase
     {
-        CORELIB_DEF_META(JxCoreLib::ArgumentException, ExceptionBase);
+        CORELIB_DEF_TYPE(JxCoreLib::ArgumentException, ExceptionBase);
         CORELIB_DECL_DYNCINST();
     public:
         DEF_EXCEPTION_CTOR(ArgumentException)
@@ -60,7 +60,7 @@ namespace JxCoreLib
 
     class ArgumentNullException : public ArgumentException
     {
-        CORELIB_DEF_META(JxCoreLib::ArgumentNullException, ArgumentException);
+        CORELIB_DEF_TYPE(JxCoreLib::ArgumentNullException, ArgumentException);
         CORELIB_DECL_DYNCINST();
     public:
         DEF_EXCEPTION_CTOR(ArgumentNullException);
@@ -68,7 +68,7 @@ namespace JxCoreLib
 
     class NotImplementException : public ArgumentException
     {
-        CORELIB_DEF_META(JxCoreLib::NotImplementException, ArgumentException);
+        CORELIB_DEF_TYPE(JxCoreLib::NotImplementException, ArgumentException);
         CORELIB_DECL_DYNCINST();
     public:
         DEF_EXCEPTION_CTOR(NotImplementException);
@@ -76,10 +76,10 @@ namespace JxCoreLib
 
     class NullPointerException : public ExceptionBase
     {
-        CORELIB_DEF_META(JxCoreLib::NullPointerException, ExceptionBase);
+        CORELIB_DEF_TYPE(JxCoreLib::NullPointerException, ExceptionBase);
         CORELIB_DECL_DYNCINST();
     public:
         DEF_EXCEPTION_CTOR(NullPointerException);
     };
 }
-#endif // !CORELIB_EXCEPTION_H
+#endif // !_CORELIB_EXCEPTION_H

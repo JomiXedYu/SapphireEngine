@@ -9,20 +9,22 @@ namespace SapphireEngine
     {
         CORELIB_DEF_TYPE(SapphireEngine::Bitmap, MObject)
     private:
-        unsigned char* data_;
-        int width_;
-        int height_;
+        uint8_t* data_;
+        int32_t width_;
+        int32_t height_;
+        bool is_sealed_;
     public:
-        int get_width() const;
-        int get_height() const;
+        int32_t get_width() const;
+        int32_t get_height() const;
     public:
         const uint8_t* GetNativeData() const;
 
-    private:
-        Bitmap();
     public:
-        Bitmap(unsigned char* data, int width, int height);
+        void SetData(uint8_t* data, int32_t width, int32_t height);
+    public:
+        Bitmap();
         ~Bitmap();
+
     };
 
 }

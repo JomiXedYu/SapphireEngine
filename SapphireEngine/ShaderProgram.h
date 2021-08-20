@@ -29,10 +29,12 @@ namespace SapphireEngine
 
         int32_t GetUniformLocaltion(const string& name);
         void SetUniformInt(const string& name, const int32_t& i);
+        void SetUniformFloat(const string& name, const float& f);
         void SetUniformMatrix4fv(const string& name, const float* value);
         void SetUniformMatrix4fv(const string& name, const Matrix& mat);
         void SetUniformVector3(const string& name, const Vector3& value);
         void SetUniformColor(const string& name, const Color& value);
+        void SetUniformColor(const string& name, const Vector3& value);
     };
 }
 

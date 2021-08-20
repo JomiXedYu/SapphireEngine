@@ -1,6 +1,6 @@
+#include "Object.h"
 #include <vector>
 #include <map>
-#include "Object.h"
 #include "Type.h"
 
 namespace JxCoreLib
@@ -15,12 +15,12 @@ namespace JxCoreLib
     {
         static int id = -1;
         if (id == -1) {
-            id = Type::Register(CreateInstance, nullptr, _T("JxCoreLib::Object"), typeid(Object), sizeof(Object));
+            id = Type::Register(CreateInstance, nullptr, "JxCoreLib::Object", typeid(Object), sizeof(Object));
         }
         return Type::GetType(id);
     }
 
-    Type* Object::get_type() const
+    Type* Object::GetType() const
     {
         return __meta_type();
     }
@@ -104,7 +104,7 @@ namespace JxCoreLib
 
     string Object::ToString() const
     {
-        return this->get_type()->get_name();
+        return this->GetType()->get_name();
     }
 
 }

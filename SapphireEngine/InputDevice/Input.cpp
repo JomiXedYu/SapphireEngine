@@ -6,6 +6,8 @@
 namespace SapphireEngine::InputDevice
 {
     using namespace Private;
+    using namespace std;
+
     std::vector<AxisDeviceBase*> axisDevices;
 
     bool Input::GetKey(KeyCode code)

@@ -30,7 +30,7 @@ namespace SapphireEngine
         glCompileShader(shader);
 
         if (!_CheckShaderCompile(shader)) {
-            throw ShaderCompileException(shaderName + _T("  ") + _GetShaderCompileErrorInfo(shader));
+            throw ShaderCompileException(shaderName + "  " + _GetShaderCompileErrorInfo(shader));
         }
 
         return shader;
@@ -60,9 +60,19 @@ namespace SapphireEngine
     {
     }
 
+    Shader::~Shader()
+    {
+        this->DeleteShader();
+    }
+
     void Shader::DeleteShader()
     {
+        if (this->disposed)
+        {
+            return;
+        }
         glDeleteShader(this->id_);
+        this->disposed = true;
     }
 
 }

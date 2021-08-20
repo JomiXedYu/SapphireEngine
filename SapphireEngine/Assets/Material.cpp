@@ -1,0 +1,1 @@
+#include <SapphireEngine/Assets/Material.h>

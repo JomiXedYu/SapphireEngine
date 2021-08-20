@@ -13,7 +13,7 @@
 
 
 #include <format>
-#include <CoreLib/Exception.h>
+#include <CoreLib/CommonException.h>
 #include <SapphireEngine/_include.h>
 
 using namespace std;
@@ -145,11 +145,12 @@ void run() {
 
     Bitmap* bp = Resource::LoadBitmap(texturePath + "/p.jpg");
 
+    
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, bp->get_width(), bp->get_height(), 0, GL_RGB, GL_UNSIGNED_BYTE, bp->GetNativeData());
     glGenerateMipmap(GL_TEXTURE_2D);
 
-    delete(bp); bp = nullptr;
+    //delete(bp); bp = nullptr;
 
     glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -293,9 +294,18 @@ void run() {
         shaderProg.SetUniformVector3("lightPos", Vector3(1.5f, 2.0f, 1.0f));
         shaderProg.SetUniformVector3("viewPos", camera.position);
 
+        shaderProg.SetUniformVector3("material.ambient", { 1.0f, 0.5f, 0.31f });
+        shaderProg.SetUniformVector3("material.diffuse", { 1.0f, 0.5f, 0.31f });
+        shaderProg.SetUniformVector3("material.specular", { 0.5f, 0.5f, 0.5f });
+        shaderProg.SetUniformFloat("material.shininess", 32.0f);
+
+        shaderProg.SetUniformVector3("light.ambient", { 0.2f, 0.2f, 0.2f });
+        shaderProg.SetUniformVector3("light.diffuse", { 0.5f, 0.5f, 0.5f });
+        shaderProg.SetUniformVector3("light.specular", { 1.f, 1.f, 1.f });
+
         //shaderProg.setUniformInt("ourTexture2", 1);
         //激活0位置的纹理单元
-        shaderProg.SetUniformInt("ourTexture", 0);
+        shaderProg.SetUniformInt("diffuse2d", 0);
         glActiveTexture(GL_TEXTURE0);
         //绑定贴图至0位置
         glBindTexture(GL_TEXTURE_2D, texture);
@@ -329,6 +339,8 @@ void run() {
         lightShaderProg.SetUniformMatrix4fv("view", viewMat.get_value_ptr());
         lightShaderProg.SetUniformMatrix4fv("model", lightModel);
 
+
+
         glBindVertexArray(lightVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
@@ -340,20 +352,22 @@ void run() {
 
 }
 
-int main() {
+int main() 
+{
+    EngineDefaultLauncher launcher;
+    launcher.Initialize();
 
-    SapphireEngine::EngineManager::Init();
-
-    try {
+    try
+    {
         run();
     }
-    catch (std::exception& e) {
+    catch (std::exception& e)
+    {
         cout << "stdException" << endl;
         cout << e.what() << endl;
     }
 
-    SapphireEngine::EngineManager::Term();
-
+    launcher.Terminate();
 
     return 0;
 }

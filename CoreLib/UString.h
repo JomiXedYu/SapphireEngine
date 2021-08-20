@@ -6,21 +6,20 @@
 * @StdRequired : c++17
 */
 
-#ifndef CORELIB_STRING_H
-#define CORELIB_STRING_H
+#ifndef _CORELIB_STRING_H
+#define _CORELIB_STRING_H
 
 #include <vector>
 #include <string>
+#include <cstring>
 #include <cstdint>
 
 //Encoding: UTF-8
 
-#define _T(str) str
-#define NAMEOF(NAME) #NAME
-
 namespace JxCoreLib
 {
     using string = std::string;
+    using refsting = const std::string&;
 
     struct Char final
     {
@@ -175,4 +174,4 @@ namespace JxCoreLib
 }
 
 
-#endif // !CORELIB_STRING_H
+#endif // !_CORELIB_STRING_H

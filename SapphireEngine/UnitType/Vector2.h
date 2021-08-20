@@ -91,7 +91,7 @@ namespace SapphireEngine
 }
 namespace std
 {
-    string to_string(const SapphireEngine::Vector2& vec)
+    inline string to_string(const SapphireEngine::Vector2& vec)
     {
         return vec.ToString();
     }

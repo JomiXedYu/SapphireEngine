@@ -6,32 +6,27 @@
 * @StdRequired : c++17
 */
 
-#ifndef CORELIB_REFLECTION_H
-#define CORELIB_REFLECTION_H
+#ifndef _CORELIB_REFLECTION_H
+#define _CORELIB_REFLECTION_H
 
 #include "Object.h"
 #include "Type.h"
-#include "Exception.h"
 
 #include <functional>
-#include <map>
-#include <memory>
+#include <any>
 
-#define CORELIB_REFL_PUBLIC true
-#define CORELIB_REFL_NONPUBLIC false
-
-
-#define CORELIB_REFL_DECL_FIELD(IS_PUBLIC, NAME) \
+#define CORELIB_REFL_DECL_FIELD(NAME) \
     static inline struct __corelib_refl_##NAME \
     { \
+        template<typename T> using _Detected = decltype(std::declval<T&>().NAME); \
         __corelib_refl_##NAME() \
         { \
-            using _Ty = decltype(NAME); \
+            using _Ty = decltype(std::declval<__corelib_curclass&>().NAME); \
             using _Fuldecay = fulldecay<_Ty>::type; \
-            using _CTy = typeof_corelib<std::remove_cv<_Ty>::type>::type; \
-            using _TyOncePtr = typeof_corelib<_Fuldecay>::type*; \
+            using _CTy = get_cltype<std::remove_cv<_Ty>::type>::type; \
+            using _TyOncePtr = get_cltype<_Fuldecay>::type*; \
             ReflectionBuilder::CreateFieldInfo<__corelib_curclass, _Ty>( \
-                #NAME, false, IS_PUBLIC, \
+                #NAME, false, JxCoreLib::is_detected<_Detected, __corelib_curclass>::value, \
                 [](Object* p) -> Object* { \
                     return get_object_pointer<_Fuldecay>::get(((__corelib_curclass*)p)->NAME); \
                 }, \
@@ -43,17 +38,18 @@
         } \
     } __corelib_refl_##NAME##_;
 
-#define COERLIB_REFL_DECL_FIELD_STATIC(IS_PUBLIC, NAME) \
+#define COERLIB_REFL_DECL_FIELD_STATIC(NAME) \
     static inline struct __corelib_refl_##NAME \
     { \
+        template<typename T> using _Detected = decltype(std::declval<T&>().NAME); \
         __corelib_refl_##NAME() \
         { \
             using _Ty = decltype(NAME); \
             using _Fuldecay = fulldecay<_Ty>::type; \
-            using _CTy = typeof_corelib<std::remove_cv<_Ty>::type>::type; \
-            using _TyOncePtr = typeof_corelib<_Fuldecay>::type*; \
+            using _CTy = get_cltype<std::remove_cv<_Ty>::type>::type; \
+            using _TyOncePtr = get_cltype<_Fuldecay>::type*; \
             ReflectionBuilder::CreateFieldInfo<__corelib_curclass, _Ty>( \
-                #NAME, true, IS_PUBLIC, \
+                #NAME, true, JxCoreLib::is_detected<_Detected, __corelib_curclass>::value, \
                 [](Object* p) -> Object* { \
                     return get_object_pointer<_Fuldecay>::get(__corelib_curclass::NAME); \
                 }, \
@@ -69,14 +65,14 @@ namespace JxCoreLib
 {
     class TypeInfo : public Object
     {
-        CORELIB_DEF_TYPE_NOTIMPL_DYNCINST(JxCoreLib::TypeInfo, Object);
+        CORELIB_DEF_TYPE(JxCoreLib::TypeInfo, Object);
     public:
         TypeInfo(const TypeInfo&) = delete;
         TypeInfo(TypeInfo&&) = delete;
     };
     class MemberInfo : public Object
     {
-        CORELIB_DEF_TYPE_NOTIMPL_DYNCINST(JxCoreLib::MemberInfo, TypeInfo);
+        CORELIB_DEF_TYPE(JxCoreLib::MemberInfo, TypeInfo);
     protected:
         string name_;
         bool is_static_;
@@ -93,7 +89,7 @@ namespace JxCoreLib
 
     class FieldInfo final : public MemberInfo
     {
-        CORELIB_DEF_TYPE_NOTIMPL_DYNCINST(JxCoreLib::FieldInfo, MemberInfo);
+        CORELIB_DEF_TYPE(JxCoreLib::FieldInfo, MemberInfo);
     public:
         struct FieldTypeInfo
         {
@@ -130,7 +126,7 @@ namespace JxCoreLib
         template<typename TValue, typename TType>
         static inline bool _Assign(TValue* t, Object* inst, FieldInfo* info)
         {
-            if (info->get_field_type() == typeof<TType>())
+            if (info->get_field_type() == cltypeof<TType>())
             {
                 *t = static_cast<TType*>(info->GetValue(inst))->value;
                 return true;
@@ -158,7 +154,7 @@ namespace JxCoreLib
     };
     class ParameterInfo : public TypeInfo
     {
-        CORELIB_DEF_TYPE_NOTIMPL_DYNCINST(JxCoreLib::ParameterInfo, TypeInfo);
+        CORELIB_DEF_TYPE(JxCoreLib::ParameterInfo, TypeInfo);
     protected:
         Type* param_type_;
         bool is_pointer_;
@@ -185,7 +181,7 @@ namespace JxCoreLib
     //TODO
     class MethodInfo final : public MemberInfo
     {
-        CORELIB_DEF_TYPE_NOTIMPL_DYNCINST(JxCoreLib::MethodInfo, MemberInfo);
+        CORELIB_DEF_TYPE(JxCoreLib::MethodInfo, MemberInfo);
     protected:
         std::vector<ParameterInfo*> param_types_;
         ParameterInfo* ret_type_;
@@ -224,12 +220,12 @@ namespace JxCoreLib
             info.is_reference = std::is_reference<TField>::value;
             info.is_volatile = std::is_volatile<TField>::value;
 
-            Type* field_type = typeof<fulldecay<TField>::type>();
+            Type* field_type = cltypeof<fulldecay<TField>::type>();
 
-            typeof<T>()->_AddMemberInfo(new FieldInfo{ name, is_static, is_public, info, field_type, getter, setter });
+            cltypeof<T>()->_AddMemberInfo(new FieldInfo{ name, is_static, is_public, info, field_type, getter, setter });
         }
     };
 }
 
 
-#endif // !CORELIB_REFLECTION_H
+#endif // !_CORELIB_REFLECTION_H

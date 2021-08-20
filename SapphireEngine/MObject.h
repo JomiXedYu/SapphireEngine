@@ -1,6 +1,7 @@
 #ifndef _SAPPHIREENGINE_MOBJECT_H
 #define _SAPPHIREENGINE_MOBJECT_H
 #include <CoreLib/CoreLib.h>
+#include <cstdint>
 
 namespace SapphireEngine
 {

@@ -1,8 +1,10 @@
-#include <SapphireEngine/Application.h>
+Ôªø#include <SapphireEngine/Application.h>
 #include <SapphireEngine/Screen.h>
 #include <SapphireEngine/Private/BaseInterface.h>
 #include <vector>
 #include <filesystem>
+#include <CoreLib/UString.h>
+
 
 namespace SapphireEngine 
 {
@@ -17,19 +19,19 @@ namespace SapphireEngine
 
     static bool RequestQuit()
     {
-        //«Î«Ûπÿ±’≥Ã–Ú
+        //ËØ∑Ê±ÇÂÖ≥Èó≠Á®ãÂ∫è
         return Application::RequestQuitEvents.IsValidReturnInvoke();
     }
     static void quitting()
     {
         SystemInterface::Log("Application is quitting");
-        //Õ®÷™≥Ã–Úº¥Ω´πÿ±’
+        //ÈÄöÁü•Á®ãÂ∫èÂç≥Â∞ÜÂÖ≥Èó≠
         Application::QuittingEvents.Invoke();
     }
-    void Application::Initialize(const Vector2& size)
+    void Application::Initialize(const std::string& title, const Vector2& size)
     {
         Screen::set_size(size);
-        SystemInterface::InitializeWindow((int)Screen::get_size().x, (int)Screen::get_size().y);
+        SystemInterface::InitializeWindow(title, (int)Screen::get_size().x, (int)Screen::get_size().y);
 
         SystemInterface::SetRequestQuitCallBack(RequestQuit);
         SystemInterface::SetQuitCallBack(quitting);
@@ -52,8 +54,7 @@ namespace SapphireEngine
     
     string Application::AppPath()
     {
-        static string cur_app_path = StringUtil::StringCast(std::filesystem::current_path().generic_u8string());
-        return cur_app_path;
+        return StringUtil::StringCast(std::filesystem::current_path().generic_u8string());
     }
 
     string Application::DataFolder()

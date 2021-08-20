@@ -1,8 +1,9 @@
 #include "Type.h"
+
 #include <vector>
 #include <iostream>
 
-#include "CoreLib.h"
+#include "CommonException.h"
 #include "Reflection.h"
 
 namespace JxCoreLib
@@ -16,7 +17,7 @@ namespace JxCoreLib
 
     bool Type::IsInstanceOfType(Object* object)
     {
-        return object->get_type()->IsSubclassOf(this);
+        return object->GetType()->IsSubclassOf(this);
     }
 
     bool Type::IsSubclassOf(Type* type)
@@ -97,12 +98,12 @@ namespace JxCoreLib
     {
         static int id = -1;
         if (id == -1) {
-            id = Type::Register(nullptr, typeof<Object>(), _T("JxCoreLib::Type"), typeid(Type), sizeof(Type));
+            id = Type::Register(nullptr, cltypeof<Object>(), "JxCoreLib::Type", typeid(Type), sizeof(Type));
         }
         return Type::GetType(id);
     }
 
-    Type* Type::get_type() const
+    Type* Type::GetType() const
     {
         return __meta_type();
     }
@@ -130,19 +131,19 @@ namespace JxCoreLib
     bool Type::is_primitive_type() const
     {
         return
-            this == typeof<String>() ||
-            this == typeof<CharType>() ||
-            this == typeof<Integer8>() ||
-            this == typeof<UInteger8>() ||
-            this == typeof<Integer16>() ||
-            this == typeof<UInteger16>() ||
-            this == typeof<Integer32>() ||
-            this == typeof<UInteger32>() ||
-            this == typeof<Integer64>() ||
-            this == typeof<UInteger64>() ||
-            this == typeof<Single32>() ||
-            this == typeof<Double64>() ||
-            this == typeof<Boolean>();
+            this == cltypeof<String>() ||
+            this == cltypeof<CharType>() ||
+            this == cltypeof<Integer8>() ||
+            this == cltypeof<UInteger8>() ||
+            this == cltypeof<Integer16>() ||
+            this == cltypeof<UInteger16>() ||
+            this == cltypeof<Integer32>() ||
+            this == cltypeof<UInteger32>() ||
+            this == cltypeof<Integer64>() ||
+            this == cltypeof<UInteger64>() ||
+            this == cltypeof<Single32>() ||
+            this == cltypeof<Double64>() ||
+            this == cltypeof<Boolean>();
     }
 
 
@@ -165,6 +166,7 @@ namespace JxCoreLib
     int Type::Register(c_inst_ptr_t dyncreate, Type* base, const string& name, const std::type_info& info, int structure_size)
     {
         int id = _Type_Get_Index();
+
         Type* type = new Type(id, name, nullptr, dyncreate, info, structure_size);
 
         static bool is_init = false;
@@ -173,7 +175,7 @@ namespace JxCoreLib
         if (is_init)
         {
             if (base == nullptr) {
-                base = typeof<Object>();
+                base = cltypeof<Object>();
             }
             type->base_ = base;
         }
@@ -184,11 +186,6 @@ namespace JxCoreLib
 
         g_types->push_back(type);
         return id;
-    }
-
-    Object* ParameterPackage::DynCreateInstance(const ParameterPackage& params)
-    {
-        CORELIB_IMPL_DYNCINST_NOTIMPL_FUNCBODY();
     }
 
 
@@ -222,7 +219,7 @@ namespace JxCoreLib
         v.reserve(this->member_infos_.size());
         for (auto& item : this->member_infos_)
         {
-            if ((item.second->get_type()->IsSubclassOf(typeof<FieldInfo>()))
+            if ((item.second->GetType()->IsSubclassOf(cltypeof<FieldInfo>()))
                 && (item.second->is_public() == is_public)
                 && (item.second->is_static() == is_static)
                 )
@@ -240,7 +237,7 @@ namespace JxCoreLib
             return nullptr;
         }
         MemberInfo* info = this->member_infos_.at(name);
-        if (!info->get_type()->IsSubclassOf(typeof<FieldInfo>()))
+        if (!info->GetType()->IsSubclassOf(cltypeof<FieldInfo>()))
         {
             return nullptr;
         }
@@ -253,7 +250,7 @@ namespace JxCoreLib
         v.reserve(this->member_infos_.size());
         for (auto& item : this->member_infos_)
         {
-            if ((item.second->get_type()->IsSubclassOf(typeof<MethodInfo>()))
+            if ((item.second->GetType()->IsSubclassOf(cltypeof<MethodInfo>()))
                 && (item.second->is_public() == is_public)
                 && (item.second->is_static() == is_static)
                 )
@@ -271,7 +268,7 @@ namespace JxCoreLib
             return nullptr;
         }
         MemberInfo* info = this->member_infos_.at(name);
-        if (!info->get_type()->IsSubclassOf(typeof<MethodInfo>()))
+        if (!info->GetType()->IsSubclassOf(cltypeof<MethodInfo>()))
         {
             return nullptr;
         }

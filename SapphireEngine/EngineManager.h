@@ -11,11 +11,19 @@
 
 namespace SapphireEngine
 {
-    namespace EngineManager
+    class EngineLauncher
     {
-        static void Init()
+    public:
+        virtual void Initialize() = 0;
+        virtual void Terminate() = 0;
+    };
+
+    class EngineDefaultLauncher : public EngineLauncher
+    {
+    public:
+        void Initialize() override
         {
-            Application::Initialize(Vector2(800.0f, 800.0f));
+            Application::Initialize("test", Vector2(800.0f, 800.0f));
 
             using namespace SapphireEngine::InputDevice;
             Input::AddDeivce(new KeyAxisDevice("horizontal", 0.08f, KeyCode::D, KeyCode::A));
@@ -23,12 +31,13 @@ namespace SapphireEngine
             Input::AddDeivce(new MouseAxisDevice("mouseX", 0.0f, MouseAxisCode::MouseX));
             Input::AddDeivce(new MouseAxisDevice("mouseY", 0.0f, MouseAxisCode::MouseY));
         }
-        static void Term()
+        void Terminate() override
         {
             Application::Terminate();
             InputDevice::Input::Terminate();
         }
     };
+
 }
 
 #endif // !SAPPHIREENGINE_ENGINEMANAGER_H

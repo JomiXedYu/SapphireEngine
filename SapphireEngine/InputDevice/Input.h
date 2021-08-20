@@ -5,7 +5,6 @@
 #include <map>
 #include <string>
 
-#include <CoreLib/String.h>
 #include <SapphireEngine/UnitType/Vector2.h>
 
 #include "AxisDeviceBase.h"

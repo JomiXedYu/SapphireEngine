@@ -49,7 +49,7 @@ namespace SapphireEngine
 
     Component* Node::AddComponent(Type* type)
     {
-        Component* com = (Component*)type->get_type()->CreateInstance();
+        Component* com = (Component*)type->GetType()->CreateInstance();
         this->components_.push_back(com);
         return com;
     }
@@ -57,7 +57,7 @@ namespace SapphireEngine
     {
         for (auto it = this->components_.begin(); it != this->components_.end(); it++)
         {
-            if ((*it)->get_type() == type) {
+            if ((*it)->GetType() == type) {
                 this->components_.erase(it);
                 break;
             }
@@ -67,7 +67,7 @@ namespace SapphireEngine
     Component* Node::GetComponent(Type* type) const
     {
         for (auto& item : this->components_) {
-            if (item->get_type() == type) {
+            if (item->GetType() == type) {
                 return item;
             }
         }

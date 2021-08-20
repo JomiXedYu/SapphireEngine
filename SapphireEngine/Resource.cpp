@@ -5,12 +5,14 @@
 namespace SapphireEngine 
 {
     using namespace Private;
+    using namespace std;
 
     Bitmap* Resource::LoadBitmap(const string& name)
     {
         int width, height;
         unsigned char* data = ResourceInterface::LoadBitmap(name, &width, &height);
-        Bitmap* bitmap = new Bitmap(data, width, height);
+        Bitmap* bitmap = new Bitmap();
+        bitmap->SetData(data, width, height);
         return bitmap;
     }
 }

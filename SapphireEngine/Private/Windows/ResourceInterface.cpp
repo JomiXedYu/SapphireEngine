@@ -2,9 +2,11 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <ThirdParty/stb_image.h>
+#include <string>
 
 namespace SapphireEngine::Private
 {
+    using namespace std;
     unsigned char* ResourceInterface::LoadBitmap(const string& name, int* out_width, int* out_height)
     {
         stbi_set_flip_vertically_on_load(true);

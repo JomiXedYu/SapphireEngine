@@ -1,12 +1,9 @@
-#include <SapphireEngine/Private/BaseInterface.h>
+ï»¿#include <SapphireEngine/Private/BaseInterface.h>
 
 #include <ThirdParty/glfw/include/GLFW/glfw3.h>
 
 #include <vector>
 #include <iostream>
-
-//#pragma comment(lib, "ThirdParty/glfw/libvc2019/glfw3.lib")
-//#pragma comment(lib, "glfw3.lib")
 
 using namespace std;
 
@@ -18,14 +15,14 @@ namespace SapphireEngine::Private
 
     GLFWwindow* _glfw_window_instance;
 
-    bool SystemInterface::InitializeWindow(int width, int height)
+    bool SystemInterface::InitializeWindow(const std::string& title, int width, int height)
     {
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        _glfw_window_instance = glfwCreateWindow(width, height, "TestOpenGL", nullptr, nullptr);
+        _glfw_window_instance = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
         if (_glfw_window_instance == nullptr) {
             return false;
         }
@@ -90,9 +87,9 @@ namespace SapphireEngine::Private
 
         if (!isQuit) {
             if (glfwWindowShouldClose(_glfw_window_instance)) {
-                //ÍË³ö¼ì²â
+                //é€€å‡ºæ£€æµ‹
                 if (requestQuitCallBackPtr()) {
-                    //ÍË³ö
+                    //é€€å‡º
                     Quit();
                 }
                 else {
@@ -105,7 +102,7 @@ namespace SapphireEngine::Private
 
     void SystemInterface::RequestQuitEvents()
     {
-        //¼ì²âÊÇ·ñÓĞÖĞ¶ÏÍË³öÊÂ¼ş
+        //æ£€æµ‹æ˜¯å¦æœ‰ä¸­æ–­é€€å‡ºäº‹ä»¶
         if (requestQuitCallBackPtr())
         {
             Quit();

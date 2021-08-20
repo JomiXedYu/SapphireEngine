@@ -32,13 +32,6 @@ void run() {
     //设置窗口回调
     //glfwSetFramebufferSizeCallback(window, frameBuffer_Changed);
 
-    //顶点， 颜色， UV
-    //float vertices[] = {
-    //	-0.5f,  0.5f, 0.0f,    1.0f, 1.0f, 1.0f, 1.0f,    0.0f, 1.0f,  //左上
-    //	 0.5f,  0.5f, 0.0f,    1.0f, 1.0f, 1.0f, 1.0f,    1.0f, 1.0f,  //右上
-    //	 0.5f, -0.5f, 0.0f,    1.0f, 1.0f, 1.0f, 1.0f,    1.0f, 0.0f,  //右下
-    //	-0.5f, -0.5f, 0.0f,    1.0f, 1.0f, 1.0f, 1.0f,    0.0f, 0.0f,  //左下
-    //};
     float plane[] = {
         -4.0f, -0.5f, -4.0f,     1.0f, 1.0f, 1.0f, 1.0f,		0.0f, 0.0f,    0.0f, 1.0f, 0.0f,
         -4.0f, -0.5f, 4.0f,      1.0f, 1.0f, 1.0f, 1.0f,		1.0f, 0.0f,    0.0f, 1.0f, 0.0f,
@@ -130,29 +123,14 @@ void run() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    //uint32_t texture;
-    //glGenTextures(1, &texture);
-    //glBindTexture(GL_TEXTURE_2D, texture);
-
-    ////glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    ////glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
     string dataPath = "E:/SapphireEngine/_data";
     string texturePath = dataPath + "/texture";
     string shaderPath = dataPath + "/shader";
 
     //Bitmap* bp = Resource::LoadBitmap(texturePath + "/p.jpg");
 
-    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, bp->get_width(), bp->get_height(), 0, GL_RGB, GL_UNSIGNED_BYTE, bp->GetNativeData());
-    //glGenerateMipmap(GL_TEXTURE_2D);
-
-    //delete(bp); bp = nullptr;
-
-    //glBindTexture(GL_TEXTURE_2D, 0);
-
     Texture2D* texture2d = Resource::LoadTexture2D(texturePath + "/p.jpg");
+    Texture2D* spec2d = Resource::LoadTexture2D(texturePath + "/specular.png");
 
     //Light
     uint32_t lightVAO;
@@ -196,16 +174,16 @@ void run() {
 #pragma region 着色器
 
     //创建顶点着色器
-    String shaderSource = File::ReadAllText(shaderPath + "/Standard.vert");
+    String shaderSource = FileUtil::ReadAllText(shaderPath + "/Standard.vert");
     Shader vertexShader = Shader::CreateVetexShader("StandardVertexShader", shaderSource);
     cout << "顶点着色器创建完毕" << endl;
     //创建片段着色器
-    String fragsrc = File::ReadAllText(shaderPath + "/Standard.frag");
+    String fragsrc = FileUtil::ReadAllText(shaderPath + "/Standard.frag");
     Shader fragmentShader = Shader::CreateFragmentShader("StandardFragmentShader", fragsrc);
     cout << "片元着色器创建完毕" << endl;
 
     ShaderProgram lightShaderProg;
-    Shader lightShader = Shader::CreateFragmentShader("LightShader", File::ReadAllText(shaderPath + "/Light.frag"));
+    Shader lightShader = Shader::CreateFragmentShader("LightShader", FileUtil::ReadAllText(shaderPath + "/Light.frag"));
     lightShaderProg.AttachShader(vertexShader);
     lightShaderProg.AttachShader(lightShader);
     lightShaderProg.Link();
@@ -294,8 +272,9 @@ void run() {
 
         shaderProg.SetUniformVector3("material.ambient", { 1.0f, 0.5f, 0.31f });
         shaderProg.SetUniformVector3("material.diffuse", { 1.0f, 0.5f, 0.31f });
-        shaderProg.SetUniformVector3("material.specular", { 0.5f, 0.5f, 0.5f });
+
         shaderProg.SetUniformFloat("material.shininess", 32.0f);
+        //shaderProg.SetUniformTexture2D("specular2d");
 
         shaderProg.SetUniformVector3("light.ambient", { 0.2f, 0.2f, 0.2f });
         shaderProg.SetUniformVector3("light.diffuse", { 0.5f, 0.5f, 0.5f });
@@ -305,10 +284,11 @@ void run() {
         //激活0位置的纹理单元
         shaderProg.SetUniformInt("diffuse2d", 0);
         glActiveTexture(GL_TEXTURE0);
-        //绑定贴图至0位置
         glBindTexture(GL_TEXTURE_2D, texture2d->get_id());
-        //glActiveTexture(GL_TEXTURE1);
-        //glBindTexture(GL_TEXTURE_2D, texture2);
+
+        shaderProg.SetUniformInt("specular2d", 1);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, spec2d->get_id());
 
         glBindVertexArray(VAO);
 

@@ -1,6 +1,7 @@
 #include <SapphireEngine/ShaderProgram.h>
 #include <ThirdParty/glad/glad.h>
 #include <SapphireEngine/UnitType/_include.h>
+#include <SapphireEngine/Assets/Texture2D.h>
 
 namespace SapphireEngine 
 {
@@ -53,6 +54,11 @@ namespace SapphireEngine
         }
     }
 
+    void ShaderProgram::AddTexture(Texture2D* tex)
+    {
+        this->textures_.push_back(tex);
+    }
+
     int32_t ShaderProgram::GetUniformLocaltion(const string& name)
     {
         //std::string str = StringUtility::WstringToString(name);
@@ -92,6 +98,25 @@ namespace SapphireEngine
     void ShaderProgram::SetUniformColor(const string& name, const Vector3& value)
     {
         SetUniformColor(name, Color(value.x, value.y, value.z));
+    }
+
+    void ShaderProgram::SetUniformTexture2D(const string& name)
+    {
+        Texture2D* tex = nullptr;
+        int i = 0;
+        for (auto& item : this->textures_)
+        {
+            if (item->get_name() == name)
+            {
+                tex = item;
+                break;
+            }
+            ++i;
+        }
+
+        this->SetUniformInt(name, i);
+        glActiveTexture(GL_TEXTURE1 + i);
+        glBindTexture(GL_TEXTURE_2D, tex->get_id());
     }
 
 

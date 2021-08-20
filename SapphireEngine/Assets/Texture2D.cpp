@@ -1,7 +1,7 @@
 #include <SapphireEngine/Assets/Texture2D.h>
 
 #include <ThirdParty/glad/glad.h>
-
+#include <CoreLib/File.h>
 
 namespace SapphireEngine
 {
@@ -19,6 +19,7 @@ namespace SapphireEngine
             return;
         }
 
+
         glGenTextures(1, &this->id_);
         glBindTexture(GL_TEXTURE_2D, this->id_);
 
@@ -30,7 +31,7 @@ namespace SapphireEngine
 
         glBindTexture(GL_TEXTURE_2D, 0);
 
-        this->name_ = name;
+        this->name_ = PathUtil::GetFilenameWithoutExt(name);
         this->bitmap_ = bitmap;
         this->is_sealed = true;
     }

@@ -8,7 +8,7 @@ namespace SapphireEngine
         return this->data_;
     }
 
-    void Bitmap::SetData(uint8_t* data, int32_t width, int32_t height)
+    void Bitmap::SetData(uint8_t* data, int32_t width, int32_t height, int32_t channel_count)
     {
         if (this->is_sealed_)
         {
@@ -17,10 +17,11 @@ namespace SapphireEngine
         this->data_ = data;
         this->width_ = width;
         this->height_ = height;
+        this->channel_ = channel_count;
         this->is_sealed_ = true;
     }
 
-    Bitmap::Bitmap() : MObject(), data_(nullptr), width_(0), height_(0), is_sealed_(false) {}
+    Bitmap::Bitmap() : MObject(), data_(nullptr), width_(0), height_(0), channel_(0), is_sealed_(false) {}
 
     Bitmap::~Bitmap()
     {

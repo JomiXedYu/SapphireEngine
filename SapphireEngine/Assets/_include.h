@@ -4,5 +4,6 @@
 #include "Bitmap.h"
 #include "Mesh.h"
 #include "Texture2D.h"
+#include "Material.h"
 
 #endif // !SAPPHIREENGINE_ASSETS_INCLUDE_H

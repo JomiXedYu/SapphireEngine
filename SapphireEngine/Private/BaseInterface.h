@@ -20,7 +20,7 @@ namespace SapphireEngine::Private
     }
     namespace ResourceInterface
     {
-        unsigned char* LoadBitmap(const std::string& name, int* out_width, int* out_height);
+        unsigned char* LoadBitmap(const std::string& name, int* out_width, int* out_height, int* out_channel);
         void FreeBitmap(unsigned char* data);
 
         uint32_t LoadTexture2D(const std::string& name);

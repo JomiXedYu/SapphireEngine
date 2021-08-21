@@ -25,7 +25,25 @@ namespace SapphireEngine
     }
     void Node::set_parent(Node* _parent)
     {
+        if (this->parent_ == nullptr)
+        {
+            if (_parent != nullptr)
+            {
+                _parent->childs_.push_back(this);
+            } 
+        }
+        else
+        {
+            auto it = std::find(this->parent_->childs_.begin(), this->parent_->childs_.end(), this);
+            this->parent_->childs_.erase(it);
+
+            if (_parent != nullptr)
+            {
+                _parent->childs_.push_back(this);
+            }
+        }
         this->parent_ = _parent;
+
     }
     Transform* Node::get_transform() const
     {
@@ -37,20 +55,19 @@ namespace SapphireEngine
         return this->childs_.size();
     }
 
-    Node::Node() : parent_(nullptr), transform_(nullptr), is_active_(false)
-    {
-    }
-
     Node::Node(string name, Node* parent, bool is_active)
-        : name_(name), parent_(parent), is_active_(is_active),
-        transform_(nullptr)
+        : name_(name), is_active_(is_active)
     {
+        this->set_parent(parent);
     }
 
     Component* Node::AddComponent(Type* type)
     {
-        Component* com = (Component*)type->GetType()->CreateInstance();
+        Component* com = (Component*)type->CreateInstance();
+        com->node_ = this;
         this->components_.push_back(com);
+        com->SetManagedParent(this);
+        com->OnInitialize();
         return com;
     }
     void Node::RemoveComponent(Type* type)
@@ -58,6 +75,7 @@ namespace SapphireEngine
         for (auto it = this->components_.begin(); it != this->components_.end(); it++)
         {
             if ((*it)->GetType() == type) {
+                (*it)->set_enabled(false);
                 this->components_.erase(it);
                 break;
             }
@@ -93,6 +111,17 @@ namespace SapphireEngine
     Node* Node::GetChildAt(int index)
     {
         return this->childs_[index];
+    }
+    void Node::Update()
+    {
+        for (auto& com : this->components_)
+        {
+            com->SendMessage(MessageType::Update);
+        }
+        for (auto& item : this->childs_)
+        {
+            item->Update();
+        }
     }
 }
 

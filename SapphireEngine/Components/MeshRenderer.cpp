@@ -17,12 +17,12 @@ namespace SapphireEngine
             // 获取纹理序号（diffuse_textureN 中的 N）
             string number;
             string name = this->mesh_->textures[i]->get_type();
-            if (name == "texture_diffuse")
+            if (name == "mat_diffuse_tex")
                 number = std::to_string(diffuseNr++);
-            else if (name == "texture_specular")
+            else if (name == "mat_specular_tex")
                 number = std::to_string(specularNr++);
 
-            program->SetUniformFloat(("material." + name + number).c_str(), i);
+            program->SetUniformFloat((name + number).c_str(), i);
             glBindTexture(GL_TEXTURE_2D, this->mesh_->textures[i]->get_id());
         }
         glActiveTexture(GL_TEXTURE0);

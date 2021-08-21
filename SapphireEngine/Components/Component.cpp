@@ -4,9 +4,8 @@
 namespace SapphireEngine
 {
     Component::Component(SapphireEngine::Node* node)
-        : MObject(), enabled_(false), node_(node)
     {
-
+        this->node_ = node;
     }
 
 }

@@ -41,7 +41,7 @@ namespace SapphireEngine
 
         void SetUniformTexture2D(const string& name, const string& tex_name);
 
-    private:
+    protected:
         uint32_t id_;
         std::vector<Texture2D*> textures_;
     };

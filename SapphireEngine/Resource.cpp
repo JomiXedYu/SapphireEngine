@@ -1,12 +1,12 @@
 ﻿#include <SapphireEngine/Resource.h>
 #include <SapphireEngine/Private/BaseInterface.h>
-
+#include <CoreLib/File.h>
 #include <map>
 
-#include <SapphireEngine/Assets/Bitmap.h>
-#include <SapphireEngine/Assets/Texture2D.h>
 #include <SapphireEngine/Node.h>
-#include <SapphireEngine/Assets/Mesh.h>
+
+#include <SapphireEngine/Assets/_include.h>
+#include <SapphireEngine/Components/MeshRenderer.h>
 
 #include <ThirdParty/assimp/Importer.hpp>
 #include <ThirdParty/assimp/scene.h>
@@ -21,10 +21,10 @@ namespace SapphireEngine
 
     static Bitmap* LoadBitmap(const string& name)
     {
-        int width, height;
-        unsigned char* data = ResourceInterface::LoadBitmap(name, &width, &height);
+        int width, height, channel;
+        unsigned char* data = ResourceInterface::LoadBitmap(name, &width, &height, &channel);
         Bitmap* bitmap = new Bitmap();
-        bitmap->SetData(data, width, height);
+        bitmap->SetData(data, width, height, channel);
         return bitmap;
     }
     static void LoadTexture2D(const string& name)
@@ -34,15 +34,15 @@ namespace SapphireEngine
         cache[name] = tex;
     }
 
-    static vector<Texture2D> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName)
+    static vector<Texture2D*> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName, const string& dir)
     {
-        vector<Texture2D> textures;
+        vector<Texture2D*> textures;
         for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
         {
             aiString str;
             mat->GetTexture(type, i, &str);
-            Texture2D texture;
-            texture.SetData(str.C_Str(), typeName, LoadBitmap(str.C_Str()));
+            Texture2D* texture = new Texture2D;
+            texture->SetData(str.C_Str(), typeName, LoadBitmap(dir + "/" + str.C_Str()));
             //texture.id = TextureFromFile(str.C_Str(), directory);
             //texture.type = typeName;
             //texture.path = str;
@@ -50,13 +50,14 @@ namespace SapphireEngine
         }
         return textures;
     }
-    /*
-    static Mesh* processMesh(aiMesh* mesh, const aiScene* scene)
+    
+    static Mesh* processMesh(aiMesh* mesh, const aiScene* scene, const string& dir)
     {
         vector<Vertex> vertices;
         vector<unsigned int> indices;
         vector<Texture2D*> textures;
 
+        vertices.reserve(mesh->mNumVertices);
         for (unsigned int i = 0; i < mesh->mNumVertices; i++)
         {
             Vertex vertex;
@@ -72,6 +73,7 @@ namespace SapphireEngine
             vertices.push_back(vertex);
         }
         //index
+        indices.reserve(mesh->mNumFaces);
         for (unsigned int i = 0; i < mesh->mNumFaces; i++)
         {
             aiFace face = mesh->mFaces[i];
@@ -84,11 +86,11 @@ namespace SapphireEngine
         if (mesh->mMaterialIndex >= 0)
         {
             aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-            vector<Texture2D> diffuseMaps = loadMaterialTextures(material,
-                aiTextureType_DIFFUSE, "texture_diffuse");
+            vector<Texture2D*> diffuseMaps = loadMaterialTextures(material,
+                aiTextureType_DIFFUSE, "mat_diffuse_tex", dir);
             textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-            vector<Texture2D> specularMaps = loadMaterialTextures(material,
-                aiTextureType_SPECULAR, "texture_specular");
+            vector<Texture2D*> specularMaps = loadMaterialTextures(material,
+                aiTextureType_SPECULAR, "mat_specular_tex", dir);
             textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
         }
 
@@ -96,22 +98,26 @@ namespace SapphireEngine
         nmesh->SetData(vertices, indices, textures);
         return nmesh;
     }
-    static void processNode(aiNode* node, const aiScene* scene, vector<Mesh*>* meshes)
+    static void processNode(aiNode* node, const aiScene* scene, Node* pnode, const string& dir)
     {
         for (unsigned int i = 0; i < node->mNumMeshes; i++)
         {
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-            meshes->push_back(processMesh(mesh, scene));
+
+            Node* n = new Node(mesh->mName.C_Str(), pnode, true);
+            n->AddComponent<MeshRenderer>()->set_mesh(processMesh(mesh, scene, dir));
+
+            //meshes->push_back(processMesh(mesh, scene));
         }
         for (unsigned int i = 0; i < node->mNumChildren; i++)
         {
-            processNode(node->mChildren[i], scene, meshes);
+            processNode(node->mChildren[i], scene, pnode, dir);
         }
     }
-    static Node* LoadModel(const string& name)
+    static Node* LoadModel(const string& path)
     {
         Assimp::Importer importer;
-        const aiScene* scene = importer.ReadFile(name, aiProcess_Triangulate | aiProcess_FlipUVs);
+        const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
         {
@@ -119,13 +125,18 @@ namespace SapphireEngine
             //cout << "ERROR::ASSIMP::" << importer.GetErrorString() << endl;
             return nullptr;
         }
-        auto directory = name.substr(0, name.find_last_of('/'));
+        string directory = path.substr(0, path.find_last_of('/'));
 
+        
+
+        Node* node = new Node(PathUtil::GetFilenameWithoutExt(path));
+        
         vector<Mesh*> meshes;
-        processNode(scene->mRootNode, scene, &meshes);
-        return nullptr;
+        processNode(scene->mRootNode, scene, node, directory);
+
+        return node;
     }
-    */
+    
 
 
     MObject* Resource::Load(const string& name, Type* type)
@@ -141,7 +152,7 @@ namespace SapphireEngine
         }
         if (type->IsSubclassOf(cltypeof<Node>()))
         {
-            //LoadModel(name);
+            cache[name] = LoadModel(name);
         }
 
         return cache[name];

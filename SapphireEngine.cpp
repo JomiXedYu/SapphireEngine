@@ -15,6 +15,7 @@
 #include <format>
 #include <CoreLib/CommonException.h>
 #include <SapphireEngine/_include.h>
+#include <SapphireEngine/Components/MeshRenderer.h>
 
 using namespace std;
 using namespace SapphireEngine;
@@ -185,6 +186,10 @@ void run() {
     Texture2D* texture2d = Resource::Load<Texture2D>(texturePath + "/p.jpg");
     Texture2D* spec2d = Resource::Load<Texture2D>(texturePath + "/specular.jpg");
 
+    Node* youtong = Resource::Load<Node>(dataPath + "/model/youtong.fbx");
+    
+    Scene* scene = new Scene();
+    scene->AddNode(youtong);
     
     //创建着色器程序
     ShaderProgram shaderProg;
@@ -261,18 +266,22 @@ void run() {
         auto projMat = camera.GetProjectionMat();
         auto viewMat = camera.GetViewMat();
 
+        
+
         shaderProg.SetUniformMatrix4fv("projection", projMat.get_value_ptr());
         shaderProg.SetUniformMatrix4fv("view", viewMat.get_value_ptr());
         shaderProg.SetUniformMatrix4fv("model", model);
+
+        //youtong->GetChildAt(0)->GetComponent<MeshRenderer>()->OnDraw(&shaderProg);
 
         shaderProg.SetUniformColor("lightColor", Color::Yellow());
         shaderProg.SetUniformVector3("lightPos", Vector3(1.5f, 2.0f, 1.0f));
         shaderProg.SetUniformVector3("viewPos", camera.position);
 
-        shaderProg.SetUniformVector3("material.ambient", { 1.0f, 0.5f, 0.31f });
-        shaderProg.SetUniformVector3("material.diffuse", { 1.0f, 0.5f, 0.31f });
+        shaderProg.SetUniformVector3("mat_ambient", { 1.0f, 0.5f, 0.31f });
+        shaderProg.SetUniformVector3("mat_diffuse", { 1.0f, 0.5f, 0.31f });
 
-        shaderProg.SetUniformFloat("material.shininess", 32.0f);
+        shaderProg.SetUniformFloat("mat_shininess", 32.0f);
         //shaderProg.SetUniformTexture2D("specular2d");
 
         shaderProg.SetUniformVector3("light.ambient", { 0.2f, 0.2f, 0.2f });
@@ -323,6 +332,7 @@ void run() {
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
 
+        scene->OnUpdate();
         SystemInterface::PollEvents();
         Input::PollEvents();
 

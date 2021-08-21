@@ -12,13 +12,15 @@ namespace SapphireEngine
 
     class MeshRenderer : public Component
     {
+        CORELIB_DEF_TYPE(SapphireEngine::MeshRenderer, Component)
     public:
         Mesh* get_mesh() { return mesh_; }
         void set_mesh(Mesh* mesh) { mesh_ = mesh; }
     public:
         void OnDraw(ShaderProgram*);
+        MeshRenderer() {}
     private:
-        Mesh* mesh_;
+        Mesh* mesh_ = nullptr;
         std::vector<Material*> materials_;
     };
 }

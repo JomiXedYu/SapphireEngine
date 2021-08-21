@@ -7,11 +7,10 @@
 namespace SapphireEngine::Private
 {
     using namespace std;
-    unsigned char* ResourceInterface::LoadBitmap(const string& name, int* out_width, int* out_height)
+    unsigned char* ResourceInterface::LoadBitmap(const string& name, int* out_width, int* out_height, int* out_channel)
     {
         stbi_set_flip_vertically_on_load(true);
-        int nrChannels;
-        return stbi_load(name.c_str(), out_width, out_height, &nrChannels, 0);
+        return stbi_load(name.c_str(), out_width, out_height, out_channel, 0);
     }
 
     void ResourceInterface::FreeBitmap(unsigned char* data)

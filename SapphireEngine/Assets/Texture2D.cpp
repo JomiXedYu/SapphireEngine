@@ -12,7 +12,7 @@ namespace SapphireEngine
     Texture2D::~Texture2D()
     {
     }
-    void Texture2D::SetData(const string& name, Bitmap* bitmap)
+    void Texture2D::SetData(const string& name, const string& type, Bitmap* bitmap)
     {
         if (this->is_sealed)
         {
@@ -32,6 +32,7 @@ namespace SapphireEngine
         glBindTexture(GL_TEXTURE_2D, 0);
 
         this->name_ = PathUtil::GetFilenameWithoutExt(name);
+        this->type_ = type;
         this->bitmap_ = bitmap;
         this->is_sealed = true;
     }

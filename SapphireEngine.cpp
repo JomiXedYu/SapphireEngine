@@ -129,8 +129,7 @@ void run() {
 
     //Bitmap* bp = Resource::LoadBitmap(texturePath + "/p.jpg");
 
-    Texture2D* texture2d = Resource::LoadTexture2D(texturePath + "/p.jpg");
-    Texture2D* spec2d = Resource::LoadTexture2D(texturePath + "/specular.png");
+
 
     //Light
     uint32_t lightVAO;
@@ -173,14 +172,8 @@ void run() {
 
 #pragma region 着色器
 
-    //创建顶点着色器
-    String shaderSource = FileUtil::ReadAllText(shaderPath + "/Standard.vert");
-    Shader vertexShader = Shader::CreateVetexShader("StandardVertexShader", shaderSource);
-    cout << "顶点着色器创建完毕" << endl;
-    //创建片段着色器
-    String fragsrc = FileUtil::ReadAllText(shaderPath + "/Standard.frag");
-    Shader fragmentShader = Shader::CreateFragmentShader("StandardFragmentShader", fragsrc);
-    cout << "片元着色器创建完毕" << endl;
+    Shader vertexShader = Shader::CreateVetexShader("StandardVertexShader", FileUtil::ReadAllText(shaderPath + "/Standard.vert"));
+    Shader fragmentShader = Shader::CreateFragmentShader("StandardFragmentShader", FileUtil::ReadAllText(shaderPath + "/Standard.frag"));
 
     ShaderProgram lightShaderProg;
     Shader lightShader = Shader::CreateFragmentShader("LightShader", FileUtil::ReadAllText(shaderPath + "/Light.frag"));
@@ -188,12 +181,18 @@ void run() {
     lightShaderProg.AttachShader(lightShader);
     lightShaderProg.Link();
 
+
+    Texture2D* texture2d = Resource::Load<Texture2D>(texturePath + "/p.jpg");
+    Texture2D* spec2d = Resource::Load<Texture2D>(texturePath + "/specular.jpg");
+
+    
     //创建着色器程序
     ShaderProgram shaderProg;
     shaderProg.AttachShader(vertexShader);
     shaderProg.AttachShader(fragmentShader);
     shaderProg.Link();
-
+    shaderProg.AddTexture(texture2d);
+    shaderProg.AddTexture(spec2d);
     shaderProg.UseProgram();
 
     vertexShader.DeleteShader();
@@ -282,13 +281,14 @@ void run() {
 
         //shaderProg.setUniformInt("ourTexture2", 1);
         //激活0位置的纹理单元
-        shaderProg.SetUniformInt("diffuse2d", 0);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture2d->get_id());
-
-        shaderProg.SetUniformInt("specular2d", 1);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, spec2d->get_id());
+        //shaderProg.SetUniformInt("diffuse2d", 0);
+        //glActiveTexture(GL_TEXTURE0);
+        //glBindTexture(GL_TEXTURE_2D, texture2d->get_id());
+        shaderProg.SetUniformTexture2D("diffuse2d", "p");
+        shaderProg.SetUniformTexture2D("specular2d", "specular");
+        //shaderProg.SetUniformInt("specular2d", 1);
+        //glActiveTexture(GL_TEXTURE1);
+        //glBindTexture(GL_TEXTURE_2D, spec2d->get_id());
 
         glBindVertexArray(VAO);
 

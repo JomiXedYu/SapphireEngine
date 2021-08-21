@@ -8,6 +8,8 @@ namespace SapphireEngine
 {
     class Node;
 
+
+
     class Component : public MObject
     {
         CORELIB_DEF_TYPE(SapphireEngine::Component, MObject);
@@ -18,13 +20,14 @@ namespace SapphireEngine
         bool get_enabled() const { return enabled_; }
         void set_enabled(bool value) { enabled_ = value; }
         Node* get_node() { return node_; }
-    protected:
+    public:
         virtual void OnInitialize() {}
         virtual void OnStart() {}
         virtual void OnEnabled() {}
         virtual void OnDisabled() {}
         virtual void OnUpdate(const float& dt) {}
         virtual void OnDestory() {}
+        virtual void OnDraw() {}
     public:
         Component() {}
         Component(Node* node);

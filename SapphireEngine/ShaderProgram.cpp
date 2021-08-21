@@ -61,7 +61,6 @@ namespace SapphireEngine
 
     int32_t ShaderProgram::GetUniformLocaltion(const string& name)
     {
-        //std::string str = StringUtility::WstringToString(name);
         return glGetUniformLocation(this->id_, name.data());
     }
 
@@ -100,22 +99,25 @@ namespace SapphireEngine
         SetUniformColor(name, Color(value.x, value.y, value.z));
     }
 
-    void ShaderProgram::SetUniformTexture2D(const string& name)
+    void ShaderProgram::SetUniformTexture2D(const string& name, const string& tex_name)
     {
         Texture2D* tex = nullptr;
         int i = 0;
         for (auto& item : this->textures_)
         {
-            if (item->get_name() == name)
+            if (item->get_name() == tex_name)
             {
                 tex = item;
                 break;
             }
             ++i;
         }
-
+        if (tex == nullptr)
+        {
+            throw 0;
+        }
         this->SetUniformInt(name, i);
-        glActiveTexture(GL_TEXTURE1 + i);
+        glActiveTexture(GL_TEXTURE0 + i);
         glBindTexture(GL_TEXTURE_2D, tex->get_id());
     }
 

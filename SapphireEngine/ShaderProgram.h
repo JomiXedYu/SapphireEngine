@@ -39,7 +39,7 @@ namespace SapphireEngine
         void SetUniformColor(const string& name, const Color& value);
         void SetUniformColor(const string& name, const Vector3& value);
 
-        void SetUniformTexture2D(const string& name);
+        void SetUniformTexture2D(const string& name, const string& tex_name);
 
     private:
         uint32_t id_;

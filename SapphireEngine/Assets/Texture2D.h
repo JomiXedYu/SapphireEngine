@@ -16,13 +16,15 @@ namespace SapphireEngine
     public:
         uint32_t get_id() const { return id_; }
         const string& get_name() const { return name_; }
-
+        const string& get_type() const { return type_; }
+        void set_type(const string& type) { type_ = type; }
     public:
-        void SetData(const string& name, Bitmap* bitmap);
+        void SetData(const string& name, const string& type, Bitmap* bitmap);
 
     private:
         uint32_t id_ = 0;
         string name_;
+        string type_;
         Bitmap* bitmap_ = nullptr;
         bool is_sealed = false;
     };

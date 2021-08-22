@@ -31,8 +31,8 @@ namespace SapphireEngine
         std::string get_hex32() const;
     public:
         Color();
-        Color(float r, float g, float b, float a);
-        Color(float r, float g, float b);
+        Color(float r, float g, float b, float a = 1.0f);
+        Color(int R, int G, int B, int A = 255);
     public:
         std::string get_rgba_string() const;
         std::string get_RGBA_string() const;

@@ -12,8 +12,12 @@ namespace SapphireEngine
     {
     }
 
-    Color::Color(float r, float g, float b) : r_(r), g_(g), b_(b), a_(1.0f)
+    Color::Color(int R, int G, int B, int A)
     {
+        this->set_R(R);
+        this->set_G(G);
+        this->set_B(B);
+        this->set_A(A);
     }
 
 
@@ -100,92 +104,80 @@ namespace SapphireEngine
         return this->a_;
     }
 
-    inline static float Range(const float& value)
+    static inline float _Range(const float& value)
     {
-        if (value < 0.0f) {
-            return 0.0f;
-        }
-        else if (value > 1.0f) {
-            return 1.0f;
-        }
-        return value;
+        return ::std::max(0.0f, ::std::min(1.0f, value));
     }
 
     void Color::set_r(float value)
     {
-        this->r_ = Range(value);
+        this->r_ = _Range(value);
     }
 
     void Color::set_g(float value)
     {
-        this->g_ = Range(value);
+        this->g_ = _Range(value);
     }
 
     void Color::set_b(float value)
     {
-        this->b_ = Range(value);
+        this->b_ = _Range(value);
     }
 
     void Color::set_a(float value)
     {
-        this->a_ = Range(value);
+        this->a_ = _Range(value);
     }
 
 
     int Color::R() const
     {
-        return (int)(this->r_ * 255.0f);
+        return Math::Round(this->r_ * 255.0f);
     }
 
     int Color::G() const
     {
-        return (int)(this->g_ * 255.0f);
+        return Math::Round(this->g_ * 255.0f);
     }
 
     int Color::B() const
     {
-        return (int)(this->b_ * 255.0f);
+        return Math::Round(this->b_ * 255.0f);
     }
 
     int Color::A() const
     {
-        return (int)(this->a_ * 255.0f);
+        return Math::Round(this->a_ * 255.0f);
     }
 
-    inline float ConvIntToFloat(const int& value)
+    static inline float _ConvIntToFloat(const int& value)
     {
-        return Math::Round((float)value / 255.0f);
+        return (float)value / 255.0f;
     }
 
-    inline static int Range(const int& value)
+    static inline int _Range(const int& value)
     {
-        if (value < 0) {
-            return 0;
-        }
-        else if (value > 255) {
-            return 255;
-        }
-        return value;
+        return ::std::max(0, ::std::min(255, value));
     }
 
     void Color::set_R(int value)
     {
-        this->r_ = ConvIntToFloat(Range(value));
+        this->r_ = _ConvIntToFloat(_Range(value));
     }
 
     void Color::set_G(int value)
     {
-        this->g_ = ConvIntToFloat(Range(value));
+        this->g_ = _ConvIntToFloat(_Range(value));
     }
 
     void Color::set_B(int value)
     {
-        this->b_ = ConvIntToFloat(Range(value));
+        this->b_ = _ConvIntToFloat(_Range(value));
     }
 
     void Color::set_A(int value)
     {
-        this->a_ = ConvIntToFloat(Range(value));
+        this->a_ = _ConvIntToFloat(_Range(value));
     }
 
     std::string Color::get_hex24() const

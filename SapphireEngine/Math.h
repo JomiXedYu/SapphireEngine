@@ -48,6 +48,17 @@ namespace SapphireEngine::Math
     {
         return ::round(value);
     }
+
+    template<typename Vec>
+    float Dot(const Vec& l, const Vec& r)
+    {
+        float result = 0;
+        for (size_t i = 0; i < Vec::value_count; i++)
+        {
+            result += l[i] * r[i];
+        } 
+        return result;
+    }
 }
 
 #endif // !SAPPHIREENGINE_MATH_H

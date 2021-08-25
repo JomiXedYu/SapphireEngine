@@ -20,9 +20,9 @@ namespace SapphireEngine
         uint32_t get_id() const;
 
     public:
-        ShaderProgram();
+        explicit ShaderProgram(const string& name);
         virtual ~ShaderProgram() override;
-
+        virtual string ToString() const override;
     public:
         void UseProgram();
         void AttachShader(const Shader& shaderId);
@@ -42,9 +42,13 @@ namespace SapphireEngine
         void SetUniformTexture2D(const string& name, const string& tex_name);
 
     protected:
+        string name_;
         uint32_t id_;
         std::vector<Texture2D*> textures_;
     };
+
+
+
 }
 
 #endif // !SAPPHIREENGINE_SHADERPROGRAM_H

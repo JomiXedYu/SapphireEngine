@@ -23,12 +23,15 @@ namespace SapphireEngine
         Matrix(const Vector4& x, const Vector4& y, const Vector4& z, const Vector4& w);
     public:
         const float* get_value_ptr() const;
+
     public:
         Matrix operator*(Matrix c);
         Vector4& operator[](const int& index);
         const Vector4& operator[](const int& index) const;
     public:
         std::string ToString() const;
+        Vector4 GetRow(int32_t line) const;
+        Vector4 GetColumn(int32_t line) const;
 
         //static
     public:
@@ -42,6 +45,21 @@ namespace SapphireEngine
         static Matrix One();
 
     };
+
+    inline Vector4 Matrix::GetRow(int32_t line) const
+    {
+        Vector4 vec;
+        for (size_t i = 0; i < 4; i++)
+        {
+            vec[i] = this->value[i][0];
+        }
+        return vec;
+    }
+
+    inline Vector4 Matrix::GetColumn(int32_t line) const
+    {
+        return this->value[line];
+    }
 
 }
 

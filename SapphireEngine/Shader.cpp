@@ -2,7 +2,6 @@
 
 #include <ThirdParty/glad/glad.h>
 #include <iostream>
-#include <SapphireEngine/EngineException.h>
 
 namespace SapphireEngine 
 {

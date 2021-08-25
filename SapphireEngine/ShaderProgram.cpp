@@ -12,14 +12,20 @@ namespace SapphireEngine
         return this->id_;
     }
 
-    ShaderProgram::ShaderProgram()
+    ShaderProgram::ShaderProgram(const string& name)
     {
+        this->name_ = name;
         this->id_ = glCreateProgram();
     }
 
     ShaderProgram::~ShaderProgram()
     {
         glDeleteProgram(this->id_);
+    }
+
+    string ShaderProgram::ToString() const
+    {
+        return this->name_;
     }
 
     static bool _CheckShaderProgram(int id)
@@ -48,8 +54,8 @@ namespace SapphireEngine
             glGetProgramiv(this->id_, GL_LINK_STATUS, &success);
             if (!success) {
                 glGetProgramInfoLog(this->id_, 512, NULL, infoLog);
-
-                //throw ;
+                throw ShaderCompileException(this->ToString() + infoLog);
+                
             }
         }
     }

@@ -2,7 +2,6 @@
 #define _SAPPHIREENGINE_NODE_H
 
 #include <SapphireEngine/MObject.h>
-#include <SapphireEngine/Components/Component.h>
 #include <vector>
 #include <list>
 #include <type_traits>
@@ -12,6 +11,20 @@ namespace SapphireEngine
     using namespace JxCoreLib;
 
     class Transform;
+    class Component;
+
+    using MessageType_t = uint32_t;
+    namespace MessageType
+    {
+        constexpr inline MessageType_t Initialize = 1;
+        constexpr inline MessageType_t Destory = 2;
+        constexpr inline MessageType_t Update = 3;
+
+        constexpr inline MessageType_t Custom = 1000;
+    }
+
+    template<typename T>
+    concept baseof_component_concept = std::is_base_of<Component, T>::value;
 
     class Node : public MObject
     {
@@ -37,7 +50,11 @@ namespace SapphireEngine
         Node(string name = "Node", Node* parent = nullptr, bool is_active = true);
 
     public:
-
+        virtual void SendMessage(MessageType_t msg);
+        virtual void OnInitialize();
+        virtual void OnDestory();
+        virtual void OnUpdate();
+    public:
         Component* AddComponent(Type* type);
         template<typename T>
         requires baseof_component_concept<T>&& newable_concept<T>

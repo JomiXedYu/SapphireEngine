@@ -2,6 +2,7 @@
 #define _SAPPHIREENGINE_SHADER_H
 
 #include <SapphireEngine/MObject.h>
+#include <SapphireEngine/EngineException.h>
 
 namespace SapphireEngine
 {
@@ -24,6 +25,14 @@ namespace SapphireEngine
     public:
         void DeleteShader();
     };
+
+    class ShaderCompileException : public EngineException
+    {
+        CORELIB_DEF_TYPE(SapphireEngine::ShaderCompileException, EngineException);
+    public:
+        DEF_EXCEPTION_CTOR(ShaderCompileException);
+    };
+
 
 }
 

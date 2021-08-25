@@ -10,7 +10,8 @@ namespace SapphireEngine
     {
         unsigned int diffuseNr = 1;
         unsigned int specularNr = 1;
-        
+        unsigned int normalNr = 1;
+        program->UseProgram();
         for (unsigned int i = 0; i < this->mesh_->textures.size(); i++)
         {
             glActiveTexture(GL_TEXTURE0 + i); // 在绑定之前激活相应的纹理单元
@@ -21,9 +22,13 @@ namespace SapphireEngine
                 number = std::to_string(diffuseNr++);
             else if (name == "mat_specular_tex")
                 number = std::to_string(specularNr++);
+            else if (name == "mat_normal_tex")
+                number = std::to_string(normalNr++);
 
-            program->SetUniformFloat((name + number).c_str(), i);
+            auto loc = glGetUniformLocation(program->get_id(), (name + number).c_str());
             glBindTexture(GL_TEXTURE_2D, this->mesh_->textures[i]->get_id());
+            program->SetUniformInt((name + number).c_str(), i);
+            auto error = glGetError();
         }
         glActiveTexture(GL_TEXTURE0);
 

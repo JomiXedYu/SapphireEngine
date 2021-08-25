@@ -3,6 +3,8 @@
 #include <sstream>
 
 #include "File.h"
+#include <filesystem>
+#include "UString.h"
 
 namespace JxCoreLib
 {
@@ -41,6 +43,10 @@ namespace JxCoreLib
                 }
             }
             return str.substr(last + 1, str.find_last_of('.') - last - 1);
+        }
+        std::string GetFilename(const std::string& path)
+        {
+            return StringUtil::StringCast(std::filesystem::path(path).filename().generic_u8string());
         }
     }
 }

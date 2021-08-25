@@ -3,6 +3,7 @@
 
 #include <string>
 #include <cstdint>
+#include <SapphireEngine/UnitType/Color.h>
 
 namespace SapphireEngine::Private
 {
@@ -16,7 +17,9 @@ namespace SapphireEngine::Private
     }
     namespace RenderInterface
     {
-
+        void Clear(const Color& color);
+        void EnableDepthTest();
+        void DisableDepthTest();
     }
     namespace ResourceInterface
     {

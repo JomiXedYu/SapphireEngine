@@ -1,4 +1,6 @@
 #include <SapphireEngine/Node.h>
+#include <SapphireEngine/Components/Component.h>
+
 using namespace std;
 
 namespace SapphireEngine
@@ -30,7 +32,7 @@ namespace SapphireEngine
             if (_parent != nullptr)
             {
                 _parent->childs_.push_back(this);
-            } 
+            }
         }
         else
         {
@@ -61,13 +63,63 @@ namespace SapphireEngine
         this->set_parent(parent);
     }
 
+    void Node::SendMessage(MessageType_t msg)
+    {
+        switch (msg)
+        {
+        case MessageType::Initialize:
+            this->OnInitialize(); break;
+        case MessageType::Destory:
+            this->OnDestory(); break;
+        [[likely]] case MessageType::Update:
+            this->OnUpdate(); break;
+        }
+    }
+
+    void Node::OnInitialize()
+    {
+        for (auto& item : this->components_)
+        {
+            item->SendMessage(MessageType::Initialize);
+        }
+        for (auto& item : this->childs_)
+        {
+            item->SendMessage(MessageType::Initialize);
+        }
+    }
+
+    void Node::OnDestory()
+    {
+        for (auto& item : this->components_)
+        {
+            item->SendMessage(MessageType::Destory);
+        }
+        for (auto& item : this->childs_)
+        {
+            item->SendMessage(MessageType::Destory);
+        }
+    }
+
+    void Node::OnUpdate()
+    {
+        for (auto& item : this->components_)
+        {
+            item->SendMessage(MessageType::Update);
+        }
+        for (auto& item : this->childs_)
+        {
+            item->SendMessage(MessageType::Update);
+        }
+    }
+
     Component* Node::AddComponent(Type* type)
     {
         Component* com = (Component*)type->CreateInstance();
+        //init
         com->node_ = this;
         this->components_.push_back(com);
-        com->SetManagedParent(this);
-        com->OnInitialize();
+        com->SetManagedParent(this); //managed_ptr
+        com->SendMessage(MessageType::Initialize);
         return com;
     }
     void Node::RemoveComponent(Type* type)

@@ -2,6 +2,7 @@
 #define _SAPPHIREENGINE_ENGINEEXCEPTION_H
 
 #include <CoreLib/CoreLib.h>
+#include <CoreLib/CommonException.h>
 
 namespace SapphireEngine 
 {
@@ -13,12 +14,6 @@ namespace SapphireEngine
         DEF_EXCEPTION_CTOR(EngineException);
     };
 
-    class ShaderCompileException : public EngineException
-    {
-        CORELIB_DEF_TYPE(SapphireEngine::ShaderCompileException, EngineException);
-    public:
-        DEF_EXCEPTION_CTOR(ShaderCompileException);
-    };
 
 }
 

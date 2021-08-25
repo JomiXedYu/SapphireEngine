@@ -2,6 +2,8 @@
 #include <string>
 #include <sstream>
 #include <SapphireEngine/UnitType/Vector3.h>
+#include <SapphireEngine/UnitType/Vector4.h>
+#include <SapphireEngine/Math.h>
 
 namespace SapphireEngine 
 {

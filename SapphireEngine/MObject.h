@@ -15,10 +15,6 @@ namespace SapphireEngine
     public:
         MObject() {}
     public:
-        virtual string ToString() const override
-        {
-            return base::ToString();
-        }
 
     };
 

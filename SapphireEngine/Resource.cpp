@@ -37,12 +37,16 @@ namespace SapphireEngine
     static vector<Texture2D*> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName, const string& dir)
     {
         vector<Texture2D*> textures;
+        auto d = mat->GetTextureCount(aiTextureType::aiTextureType_HEIGHT);
         for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
         {
             aiString str;
             mat->GetTexture(type, i, &str);
             Texture2D* texture = new Texture2D;
-            texture->SetData(str.C_Str(), typeName, LoadBitmap(dir + "/" + str.C_Str()));
+            
+            auto name = StringUtil::Concat(dir, "/", PathUtil::GetFilename(str.C_Str()));
+
+            texture->SetData(str.C_Str(), typeName, LoadBitmap(name));
             //texture.id = TextureFromFile(str.C_Str(), directory);
             //texture.type = typeName;
             //texture.path = str;
@@ -50,7 +54,7 @@ namespace SapphireEngine
         }
         return textures;
     }
-    
+
     static Mesh* processMesh(aiMesh* mesh, const aiScene* scene, const string& dir)
     {
         vector<Vertex> vertices;
@@ -89,9 +93,14 @@ namespace SapphireEngine
             vector<Texture2D*> diffuseMaps = loadMaterialTextures(material,
                 aiTextureType_DIFFUSE, "mat_diffuse_tex", dir);
             textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+
             vector<Texture2D*> specularMaps = loadMaterialTextures(material,
                 aiTextureType_SPECULAR, "mat_specular_tex", dir);
             textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+
+            vector<Texture2D*> normalMaps = loadMaterialTextures(material,
+                aiTextureType_NORMALS, "mat_normal_tex", dir);
+            textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
         }
 
         Mesh* nmesh = new Mesh;
@@ -127,16 +136,16 @@ namespace SapphireEngine
         }
         string directory = path.substr(0, path.find_last_of('/'));
 
-        
+
 
         Node* node = new Node(PathUtil::GetFilenameWithoutExt(path));
-        
+
         vector<Mesh*> meshes;
         processNode(scene->mRootNode, scene, node, directory);
 
         return node;
     }
-    
+
 
 
     MObject* Resource::Load(const string& name, Type* type)

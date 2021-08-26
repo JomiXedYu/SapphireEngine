@@ -17,12 +17,24 @@
 #include <SapphireEngine/_include.h>
 #include <SapphireEngine/Components/MeshRenderer.h>
 #include <SapphireEngine/Components/Camera.h>
+#include <SapphireEngine/Components/FreeCamera.h>
 #include <SapphireEngine/Assets/CubeMap.h>
+#include <CoreLib/DebugTool.h>
 
 using namespace std;
 using namespace SapphireEngine;
 using namespace SapphireEngine::Private;
 using namespace SapphireEngine::InputDevice;
+
+struct StateKeeper
+{
+    std::function<void()> func;
+    StateKeeper(const std::function<void()>& func)
+        : func(func)
+    {
+    }
+
+};
 
 struct VertexArrayObject
 {
@@ -33,8 +45,16 @@ struct VertexArrayObject
     }
     void Use(const std::function<void()>& func)
     {
-        glBindVertexArray(id);
+        Bind();
         func();
+        Unbind();
+    }
+    void Bind()
+    {
+        glBindVertexArray(id);
+    }
+    void Unbind()
+    {
         glBindVertexArray(0);
     }
     ~VertexArrayObject()
@@ -154,7 +174,49 @@ void run() {
         4.0f,  -0.5f, -4.0f,      1.0f, 1.0f, 1.0f, 1.0f,		0.0f, 1.0f,    0.0f, 1.0f, 0.0f,
         -4.0f, -0.5f, -4.0f,     1.0f, 1.0f, 1.0f, 1.0f,		0.0f, 0.0f,    0.0f, 1.0f, 0.0f,
     };
+    float cube_vertices[] = {
+        -0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,
+         0.5f,  0.5f, -0.5f,
+         0.5f,  0.5f, -0.5f,
+        -0.5f,  0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,
 
+        -0.5f, -0.5f,  0.5f,
+         0.5f, -0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,
+        -0.5f, -0.5f,  0.5f,
+
+        -0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,
+
+         0.5f,  0.5f,  0.5f,
+         0.5f,  0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f,
+
+        -0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f,  0.5f,
+         0.5f, -0.5f,  0.5f,
+        -0.5f, -0.5f,  0.5f,
+        -0.5f, -0.5f, -0.5f,
+
+        -0.5f,  0.5f, -0.5f,
+         0.5f,  0.5f, -0.5f,
+         0.5f,  0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f, -0.5f,
+    };
     float vertices[] = {
         -0.5f, -0.5f, -0.5f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f,
          0.5f, -0.5f, -0.5f,    0.0f, 0.0f, -1.0f,    1.0f, 0.0f,
@@ -236,30 +298,6 @@ void run() {
             glEnableVertexAttribArray(2);
         });
 
-    //glBindVertexArray(0);
-
-
-    //uint32_t planeVAO;
-    //glGenVertexArrays(1, &planeVAO);
-    //glBindVertexArray(planeVAO);
-
-    //uint32_t VBO_PLANE;
-    //glGenBuffers(1, &VBO_PLANE);
-    //glBindBuffer(GL_ARRAY_BUFFER, VBO_PLANE);
-    //glBufferData(GL_ARRAY_BUFFER, sizeof(plane), plane, GL_STATIC_DRAW);
-
-
-    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 12 * sizeof(float), (void*)0);
-    //glEnableVertexAttribArray(0);
-    //glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 12 * sizeof(float), (void*)(3 * sizeof(float)));
-    //glEnableVertexAttribArray(1);
-    //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 12 * sizeof(float), (void*)(7 * sizeof(float)));
-    //glEnableVertexAttribArray(2);
-    //glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 12 * sizeof(float), (void*)(9 * sizeof(float)));
-    //glEnableVertexAttribArray(3);
-
-    //glBindVertexArray(0);
-
 #pragma region 着色器
 
     Shader vertexShader = Shader::CreateVetexShader("StandardVertexShader", FileUtil::ReadAllText(shaderPath + "/Standard.vert"));
@@ -325,80 +363,65 @@ void run() {
     lightShader.DeleteShader();
 #pragma endregion
 
-    //RenderCamera camera;
-    //camera.size = Screen::get_size();
-    //camera.fov = 45.0f;
-    //camera.near = 0.1f;
-    //camera.far = 1000.0f;
-    //camera.position = Vector3(0, 0, 3);
-    //camera.rotationEuler = Vector3::Zero();
-    //camera.backgroundColor = Color(42, 42, 42);
-
-    Vector3 modelPos;
-
-
     VertexArrayObject cubeMapVAO;
+    VertexBufferObject cubeMapVBO;
+    cubeMapVAO.Use(
+        [&]() {
+            cubeMapVBO.Bind();
+            glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+            glEnableVertexAttribArray(0);
+        });
+
+    ShaderProgram cmProg{ "cmProg" };
+    Shader cmVert = Shader::CreateVetexShader("CubeMapVert", FileUtil::ReadAllText(shaderPath + "/CubeMap.vert"));
+    Shader cmFrag = Shader::CreateFragmentShader("CubeMapFrag", FileUtil::ReadAllText(shaderPath + "/CubeMap.frag"));
+    cmProg.AttachShader(cmVert);
+    cmProg.AttachShader(cmFrag);
+    cmProg.Link();
 
     CubeMap* cubeMap = Resource::Load<CubeMap>("texture/skybox");
 
     Node* cameraNode = new Node("camera");
+    ANUL(Scene::Current())->AddNode(cameraNode);
     Camera* cam = cameraNode->AddComponent<Camera>();
-    Camera::SetMain(cam);
+    {
+        cam->size = Screen::get_size();
+        cam->fov = 45.f;
+        cam->far = 1000.f;
+        cam->get_transform()->set_position({ 0, 0, 200 });
+        cam->backgroundColor = Color::Gray();
+        cam->SetMain();
+    }
 
-    cam->size = Screen::get_size();
-    cam->fov = 45.f;
-    cam->far = 1000.f;
-    cam->get_transform()->set_position(Vector3(0, 0, 3));
-    cam->backgroundColor = Color(42, 42, 42);
+    scene->AddNode((new Node("FreeCameraCtrl"))->AddComponent<FreeCamera>()->get_node());
 
     while (!Application::IsQuit())
     {
-        float timedelta = Time::DeltaTime();
-
-        RenderInterface::EnableDepthTest();
-        RenderInterface::Clear(Camera::Main()->backgroundColor);
-
-        float hori = Input::GetAxis("horizontal");
-        float vert = Input::GetAxis("vertical");
-
-        cam->get_transform()->Translate(cam->Forward() * vert * 5);
-        cam->get_transform()->Translate(cam->Right() * hori * 5);
-
-        if (Input::GetKey(KeyCode::E))
-        {
-            cam->get_transform()->Translate(Vector3::Up() * timedelta * 500);
-        }
-        else if (Input::GetKey(KeyCode::Q))
-        {
-            cam->get_transform()->Translate(-Vector3::Up() * timedelta * 500);
-        }
-
-        if (Input::GetKey(KeyCode::LeftAlt))
-        {
-            if (Input::GetMouseButton(1))
-            {
-                cam->get_transform()->Translate(cam->Forward() * Input::GetAxis("mouseX") * timedelta * 10);
-            }
-            if (Input::GetMouseButton(2))
-            {
-                cam->get_transform()->Translate(cam->Right() * -Input::GetAxis("mouseX") * timedelta * 10);
-                cam->get_transform()->Translate(Vector3::Up() * Input::GetAxis("mouseY") * timedelta * 10);
-            }
-        }
-        else
-        {
-            if (Input::GetMouseButton(1))
-            {
-                cam->get_transform()->Rotate({ 0, Input::GetAxis("mouseX") * timedelta * 10, 0 });
-                cam->get_transform()->Rotate({ -Input::GetAxis("mouseY") * timedelta * 10 ,0 ,0 });
-            }
-        }
-
-        Matrix model = Matrix::Translate(Matrix::One(), modelPos);
-
         auto projMat = cam->GetProjectionMat();
         auto viewMat = cam->GetViewMat();
 
+        RenderInterface::EnableDepthTest();
+        RenderInterface::Clear(Camera::Main()->backgroundColor);
+        {   //cubemap
+            RenderInterface::DisableDepthTest();
+            glDepthMask(GL_FALSE);
+
+            cubeMapVAO.Bind();
+
+            cmProg.UseProgram();
+            cmProg.SetUniformMatrix4fv("projection", projMat);
+            cmProg.SetUniformMatrix4fv("view", viewMat);
+            cmProg.SetUniformInt("skybox", cubeMap->id);
+
+            glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap->id);
+            glActiveTexture(GL_TEXTURE0);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+            glDepthMask(GL_TRUE);
+            RenderInterface::EnableDepthTest();
+        }
+
+        Matrix model = Matrix::Translate(Matrix::One(), Vector3::Zero());
 
         Matrix lightModel = Matrix::One();
         lightModel = Matrix::Translate(lightModel, Vector3(100.5f, 150.0f, 0.0f));
@@ -426,8 +449,7 @@ void run() {
         shaderProg.SetUniformVector3("light.diffuse", { 0.5f, 0.5f, 0.5f });
         shaderProg.SetUniformVector3("light.specular", { 1.f, 1.f, 1.f });
 
-        youtong->GetChildAt(0)->GetComponent<MeshRenderer>()->OnDraw(&shaderProg);
-        //cube->GetChildAt(0)->GetComponent<MeshRenderer>()->OnDraw(&shaderProg);
+        //youtong->GetChildAt(0)->GetComponent<MeshRenderer>()->OnDraw(&shaderProg);
 
         gridProg.UseProgram();
 

@@ -16,13 +16,16 @@ namespace SapphireEngine
         const std::vector<Node*>& get_nodes() const { return scene_nodes_; }
         static Scene* Current() { return current; }
     public:
-        void AddNode(Node* node);
+        Node* AddNode(Node* node);
         void RemoveNode(Node* node);
         void OnUpdate();
+
+        void SetCurrentState() { current = this; }
     private:
         std::vector<Node*> scene_nodes_;
         static Scene* current;
     };
+    inline Scene* Scene::current = nullptr;
 }
 
 

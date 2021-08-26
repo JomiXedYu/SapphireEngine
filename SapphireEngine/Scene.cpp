@@ -3,9 +3,10 @@
 
 namespace SapphireEngine
 {
-    void Scene::AddNode(Node* node)
+    Node* Scene::AddNode(Node* node)
     {
         this->scene_nodes_.push_back(node);
+        return node;
     }
     void Scene::RemoveNode(Node* node)
     {

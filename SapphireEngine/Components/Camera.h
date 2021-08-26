@@ -19,6 +19,7 @@ namespace SapphireEngine
     public:
         static Camera* Main() { return main; }
         static void SetMain(Camera* cam) { main = cam; }
+        void SetMain() { main = this; }
     public:
         Camera() : fov(0), near(0.1f), far(100.f), cameraMode(CameraMode::Perspective)
         {

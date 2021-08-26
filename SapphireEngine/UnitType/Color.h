@@ -2,9 +2,9 @@
 #define _SAPPHIREENGINE_UNITTYPE_COLOR_H
 #include <string>
 
-namespace SapphireEngine 
+namespace SapphireEngine
 {
-    struct Color 
+    struct Color
     {
     private:
         float r_, g_, b_, a_;
@@ -42,14 +42,15 @@ namespace SapphireEngine
         Color operator*(const Color& target);
         Color operator/(const Color& target);
     public:
-        static Color White();
-        static Color Black();
-        static Color Red();
-        static Color Green();
-        static Color Blue();
-        static Color Purple();
-        static Color Cyan();
-        static Color Yellow();
+        static Color White() { return Color(1.0f, 1.0f, 1.0f); }
+        static Color Black() { return Color(0.0f, 0.0f, 0.0f); }
+        static Color Red() { return Color(1.0f, 0.0f, 0.0f); }
+        static Color Green() { return Color(0.0f, 1.0f, 0.0f); }
+        static Color Blue() { return Color(0.0f, 0.0f, 1.0f); }
+        static Color Purple() { return Color(1.0f, 0.0f, 1.0f); }
+        static Color Cyan() { return Color(0.0f, 1.0f, 1.0f); }
+        static Color Yellow() { return Color(1.0f, 1.0f, 0.0f); }
+        static Color Gray() { return Color(42, 42, 42); }
     };
 
 }

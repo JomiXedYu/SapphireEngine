@@ -11,6 +11,9 @@ namespace SapphireEngine
         CORELIB_DEF_TYPE(SapphireEngine::CubeMap, MObject);
     public:
 
+
+        void OnDraw();
+
         CORELIB_REFL_DECL_FIELD(top);
         string top;
         CORELIB_REFL_DECL_FIELD(left);

@@ -4,11 +4,13 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <filesystem>
 
 namespace JxCoreLib
 {
     namespace FileUtil
     {
+        using namespace std;
         std::string ReadAllText(const std::string& path)
         {
             std::ifstream ifs;
@@ -20,6 +22,12 @@ namespace JxCoreLib
             ss << ifs.rdbuf() << std::endl;
             ifs.close();
             return ss.str();
+        }
+        void WriteAllText(const std::string path, const std::string& content)
+        {
+            ofstream outfile(path, ios::ate);
+            outfile << content;
+            outfile.close();
         }
     }
 

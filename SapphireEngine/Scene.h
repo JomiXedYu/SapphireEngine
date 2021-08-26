@@ -20,7 +20,7 @@ namespace SapphireEngine
         void RemoveNode(Node* node);
         void OnUpdate();
 
-        void SetCurrentState() { current = this; }
+        Scene* SetCurrentState() { current = this; return this; }
     private:
         std::vector<Node*> scene_nodes_;
         static Scene* current;

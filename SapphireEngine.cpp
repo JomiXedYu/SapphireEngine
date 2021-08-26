@@ -346,7 +346,7 @@ void run() {
 
     Node* youtong = Resource::Load<Node>("model/youtong.fbx");
 
-    Scene* scene = new Scene();
+    Scene* scene = (new Scene())->SetCurrentState();
     scene->AddNode(youtong);
 
     //创建着色器程序
@@ -363,15 +363,26 @@ void run() {
     lightShader.DeleteShader();
 #pragma endregion
 
-    VertexArrayObject cubeMapVAO;
-    VertexBufferObject cubeMapVBO;
-    cubeMapVAO.Use(
-        [&]() {
-            cubeMapVBO.Bind();
-            glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-            glEnableVertexAttribArray(0);
-        });
+    //VertexArrayObject cubeMapVAO;
+    //VertexBufferObject cubeMapVBO;
+    //cubeMapVAO.Use(
+    //    [&]() {
+    //        cubeMapVBO.Bind();
+    //        glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
+    //        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    //        glEnableVertexAttribArray(0);
+    //    });
+
+    uint32_t cubeMapVAO;
+    glGenVertexArrays(1, &cubeMapVAO);
+    uint32_t cubeMapVBO;
+    glGenBuffers(1, &cubeMapVBO);
+
+    glBindVertexArray(cubeMapVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, cubeMapVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
 
     ShaderProgram cmProg{ "cmProg" };
     Shader cmVert = Shader::CreateVetexShader("CubeMapVert", FileUtil::ReadAllText(shaderPath + "/CubeMap.vert"));
@@ -382,10 +393,8 @@ void run() {
 
     CubeMap* cubeMap = Resource::Load<CubeMap>("texture/skybox");
 
-    Node* cameraNode = new Node("camera");
-    ANUL(Scene::Current())->AddNode(cameraNode);
-    Camera* cam = cameraNode->AddComponent<Camera>();
-    {
+    Node* cameraNode = Scene::Current()->AddNode(new Node("camera"));
+    Camera* cam = cameraNode->AddComponent<Camera>(); {
         cam->size = Screen::get_size();
         cam->fov = 45.f;
         cam->far = 1000.f;
@@ -406,18 +415,16 @@ void run() {
         {   //cubemap
             RenderInterface::DisableDepthTest();
             glDepthMask(GL_FALSE);
-
-            cubeMapVAO.Bind();
-
             cmProg.UseProgram();
             cmProg.SetUniformMatrix4fv("projection", projMat);
             cmProg.SetUniformMatrix4fv("view", viewMat);
-            cmProg.SetUniformInt("skybox", cubeMap->id);
-
-            glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap->id);
+            cmProg.SetUniformInt("skybox", 0);
+            glBindVertexArray(cubeMapVAO);
             glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap->id);
             glDrawArrays(GL_TRIANGLES, 0, 36);
             glDepthMask(GL_TRUE);
+
             RenderInterface::EnableDepthTest();
         }
 

@@ -39,7 +39,8 @@ namespace SapphireEngine
         Vector3 get_scale() { return scale_; }
         void set_scale(const Vector3& value) { scale_ = value; }
     public:
-
+        void Translate(const Vector3& value) { position_ += value; }
+        void Rotate(const Vector3& value) { rotation_ += value; }
     private:
         Vector3 position_;
         Vector3 rotation_;

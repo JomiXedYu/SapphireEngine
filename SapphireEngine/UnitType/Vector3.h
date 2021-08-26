@@ -43,7 +43,7 @@ namespace SapphireEngine
         Vector3& operator -=(const Vector3& target);
         Vector3& operator *=(const float& scalar);
         Vector3& operator /=(const float& scalar);
-
+        Vector3 operator-();
         operator Vector2() const;
     };
 
@@ -136,6 +136,11 @@ namespace SapphireEngine
         this->y /= scalar;
         this->z /= scalar;
         return *this;
+    }
+
+    inline Vector3 Vector3::operator-()
+    {
+        return Vector3(-x, -y, -z);
     }
 
     inline std::string Vector3::ToString() const

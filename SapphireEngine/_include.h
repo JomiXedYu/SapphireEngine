@@ -12,7 +12,6 @@
 #include "MObject.h"
 #include "Node.h"
 #include "Components/_include.h"
-#include "RenderCamera.h"
 #include "Resource.h"
 #include "Scene.h"
 #include "Shader.h"

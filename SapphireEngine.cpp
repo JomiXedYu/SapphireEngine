@@ -325,74 +325,79 @@ void run() {
     lightShader.DeleteShader();
 #pragma endregion
 
-    RenderCamera camera;
-    camera.size = Screen::get_size();
-    camera.fov = 45.0f;
-    camera.near = 0.1f;
-    camera.far = 1000.0f;
-    camera.position = Vector3(0, 0, 3);
-    camera.rotationEuler = Vector3::Zero();
-    camera.backgroundColor = Color(42, 42, 42);
+    //RenderCamera camera;
+    //camera.size = Screen::get_size();
+    //camera.fov = 45.0f;
+    //camera.near = 0.1f;
+    //camera.far = 1000.0f;
+    //camera.position = Vector3(0, 0, 3);
+    //camera.rotationEuler = Vector3::Zero();
+    //camera.backgroundColor = Color(42, 42, 42);
 
     Vector3 modelPos;
 
 
     VertexArrayObject cubeMapVAO;
-    
+
     CubeMap* cubeMap = Resource::Load<CubeMap>("texture/skybox");
 
     Node* cameraNode = new Node("camera");
     Camera* cam = cameraNode->AddComponent<Camera>();
     Camera::SetMain(cam);
 
-    //渲染循环
+    cam->size = Screen::get_size();
+    cam->fov = 45.f;
+    cam->far = 1000.f;
+    cam->get_transform()->set_position(Vector3(0, 0, 3));
+    cam->backgroundColor = Color(42, 42, 42);
+
     while (!Application::IsQuit())
     {
         float timedelta = Time::DeltaTime();
 
         RenderInterface::EnableDepthTest();
-        RenderInterface::Clear(camera.backgroundColor);
+        RenderInterface::Clear(Camera::Main()->backgroundColor);
 
         float hori = Input::GetAxis("horizontal");
         float vert = Input::GetAxis("vertical");
 
-        camera.position += camera.Forward() * vert * 5;
-        camera.position += camera.Right() * hori * 5;
+        cam->get_transform()->Translate(cam->Forward() * vert * 5);
+        cam->get_transform()->Translate(cam->Right() * hori * 5);
 
         if (Input::GetKey(KeyCode::E))
         {
-            camera.position += Vector3::Up() * timedelta * 500;
+            cam->get_transform()->Translate(Vector3::Up() * timedelta * 500);
         }
         else if (Input::GetKey(KeyCode::Q))
         {
-            camera.position -= Vector3::Up() * timedelta * 500;
+            cam->get_transform()->Translate(-Vector3::Up() * timedelta * 500);
         }
 
         if (Input::GetKey(KeyCode::LeftAlt))
         {
             if (Input::GetMouseButton(1))
             {
-                camera.position += camera.Forward() * Input::GetAxis("mouseX") * timedelta * 10;
+                cam->get_transform()->Translate(cam->Forward() * Input::GetAxis("mouseX") * timedelta * 10);
             }
             if (Input::GetMouseButton(2))
             {
-                camera.position += camera.Right() * -Input::GetAxis("mouseX") * timedelta * 10;
-                camera.position += Vector3::Up() * Input::GetAxis("mouseY") * timedelta * 10;
+                cam->get_transform()->Translate(cam->Right() * -Input::GetAxis("mouseX") * timedelta * 10);
+                cam->get_transform()->Translate(Vector3::Up() * Input::GetAxis("mouseY") * timedelta * 10);
             }
         }
         else
         {
             if (Input::GetMouseButton(1))
             {
-                camera.rotationEuler.y += Input::GetAxis("mouseX") * timedelta * 10;
-                camera.rotationEuler.x += -Input::GetAxis("mouseY") * timedelta * 10;
+                cam->get_transform()->Rotate({ 0, Input::GetAxis("mouseX") * timedelta * 10, 0 });
+                cam->get_transform()->Rotate({ -Input::GetAxis("mouseY") * timedelta * 10 ,0 ,0 });
             }
         }
 
         Matrix model = Matrix::Translate(Matrix::One(), modelPos);
 
-        auto projMat = camera.GetProjectionMat();
-        auto viewMat = camera.GetViewMat();
+        auto projMat = cam->GetProjectionMat();
+        auto viewMat = cam->GetViewMat();
 
 
         Matrix lightModel = Matrix::One();
@@ -412,7 +417,7 @@ void run() {
 
         shaderProg.SetUniformColor("lightColor", Color::Yellow());
         shaderProg.SetUniformVector3("lightPos", (Vector3)Matrix::Translate(lightModel, Vector3::One()).GetColumn(3));
-        shaderProg.SetUniformVector3("viewPos", camera.position);
+        shaderProg.SetUniformVector3("viewPos", cam->get_transform()->get_position());
 
         shaderProg.SetUniformVector3("mat_ambient", { 1.f, 1.f, 1.f });
         shaderProg.SetUniformFloat("mat_shininess", 16.0f);

@@ -28,6 +28,7 @@ namespace SapphireEngine
         bool get_enabled() const { return enabled_; }
         void set_enabled(bool value);
         Node* get_node() { return node_; }
+        Transform* get_transform() { return node_->get_transform(); }
     public:
         virtual void SendMessage(MessageType_t msg);
         virtual void OnInitialize() {}

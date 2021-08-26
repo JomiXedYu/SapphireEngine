@@ -5,7 +5,7 @@
 #include <SapphireEngine/UnitType/Vector4.h>
 #include <SapphireEngine/Math.h>
 
-namespace SapphireEngine 
+namespace SapphireEngine
 {
     Matrix::Matrix()
     {
@@ -38,11 +38,6 @@ namespace SapphireEngine
     }
 
 
-    const float* Matrix::get_value_ptr() const
-    {
-        return std::addressof(this->value[0].x);
-    }
-
     Matrix Matrix::One()
     {
         return Matrix(
@@ -51,6 +46,11 @@ namespace SapphireEngine
             0, 0, 1, 0,
             0, 0, 0, 1
         );
+    }
+
+    Matrix::operator Matrix3()
+    {
+        return Matrix3{ (Vector3)value[0], (Vector3)value[1], (Vector3)value[2] };
     }
 
 
@@ -72,7 +72,7 @@ namespace SapphireEngine
         return mat;
     }
 
-    Vector4& Matrix::operator[](const int &index)
+    Vector4& Matrix::operator[](const int& index)
     {
         return this->value[index];
     }
@@ -93,7 +93,7 @@ namespace SapphireEngine
             for (int c = 0; c < 4; c++)
             {
                 ss.width(10);
-               
+
                 Vector4 vec = this->value[c];
                 ss << vec[r];
             }
@@ -158,4 +158,49 @@ namespace SapphireEngine
         Result[3] = m[0] * v3.x + m[1] * v3.y + m[2] * v3.z + m[3];
         return Result;
     }
+
+    Vector4 Matrix::GetRow(int32_t line) const
+    {
+        Vector4 vec;
+        for (size_t i = 0; i < 4; i++)
+        {
+            vec[i] = this->value[i][0];
+        }
+        return vec;
+    }
+
+    Vector4 Matrix::GetColumn(int32_t line) const
+    {
+        return this->value[line];
+    }
+
+    Matrix3::Matrix3(
+        const float& x1, const float& y1, const float& z1,
+        const float& x2, const float& y2, const float& z2,
+        const float& x3, const float& y3, const float& z3)
+    {
+        this->value[0] = Vector3(x1, x2, x3);
+        this->value[1] = Vector3(y1, y2, y3);
+        this->value[2] = Vector3(z1, z2, z3);
+    }
+
+    Matrix3::Matrix3(const float& v)
+    {
+        this->value[0] = Vector3(v, 0, 0);
+        this->value[1] = Vector3(0, v, 0);
+        this->value[2] = Vector3(0, 0, v);
+    }
+
+    Matrix3::Matrix3(const Vector3& x, const Vector3& y, const Vector3& z)
+    {
+        this->value[0] = x;
+        this->value[1] = y;
+        this->value[2] = z;
+    }
+
+    Matrix3::operator Matrix()
+    {
+        return Matrix{ Vector4(value[0],0), Vector4(value[1],0), Vector4(value[2],0), Vector4(0,0,0,1) };
+    }
+
 }

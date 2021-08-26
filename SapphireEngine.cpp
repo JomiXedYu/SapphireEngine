@@ -26,15 +26,6 @@ using namespace SapphireEngine;
 using namespace SapphireEngine::Private;
 using namespace SapphireEngine::InputDevice;
 
-struct StateKeeper
-{
-    std::function<void()> func;
-    StateKeeper(const std::function<void()>& func)
-        : func(func)
-    {
-    }
-
-};
 
 struct VertexArrayObject
 {
@@ -344,10 +335,10 @@ void run() {
     Texture2D* texture2d = Resource::Load<Texture2D>("texture/p.jpg");
     Texture2D* spec2d = Resource::Load<Texture2D>("texture/specular.jpg");
 
-    Node* youtong = Resource::Load<Node>("model/youtong.fbx");
-
     Scene* scene = (new Scene())->SetCurrentState();
-    scene->AddNode(youtong);
+
+    Node* youtong = scene->AddNode(Resource::Load<Node>("model/youtong.fbx"));
+
 
     //创建着色器程序
     ShaderProgram shaderProg{ "Standard" };
@@ -397,13 +388,12 @@ void run() {
     Camera* cam = cameraNode->AddComponent<Camera>(); {
         cam->size = Screen::get_size();
         cam->fov = 45.f;
-        cam->far = 1000.f;
+        cam->far = 10000.f;
         cam->get_transform()->set_position({ 0, 0, 200 });
         cam->backgroundColor = Color::Gray();
         cam->SetMain();
     }
-
-    scene->AddNode((new Node("FreeCameraCtrl"))->AddComponent<FreeCamera>()->get_node());
+    scene->AddNode(new Node("FreeCameraCtrl"))->AddComponent<FreeCamera>();
 
     while (!Application::IsQuit())
     {
@@ -417,7 +407,7 @@ void run() {
             glDepthMask(GL_FALSE);
             cmProg.UseProgram();
             cmProg.SetUniformMatrix4fv("projection", projMat);
-            cmProg.SetUniformMatrix4fv("view", viewMat);
+            cmProg.SetUniformMatrix4fv("view", (Matrix)(Matrix3)viewMat);
             cmProg.SetUniformInt("skybox", 0);
             glBindVertexArray(cubeMapVAO);
             glActiveTexture(GL_TEXTURE0);
@@ -456,7 +446,7 @@ void run() {
         shaderProg.SetUniformVector3("light.diffuse", { 0.5f, 0.5f, 0.5f });
         shaderProg.SetUniformVector3("light.specular", { 1.f, 1.f, 1.f });
 
-        //youtong->GetChildAt(0)->GetComponent<MeshRenderer>()->OnDraw(&shaderProg);
+        youtong->GetChildAt(0)->GetComponent<MeshRenderer>()->OnDraw(&shaderProg);
 
         gridProg.UseProgram();
 

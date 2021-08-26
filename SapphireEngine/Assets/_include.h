@@ -5,5 +5,6 @@
 #include "Mesh.h"
 #include "Texture2D.h"
 #include "Material.h"
+#include "CubeMap.h"
 
 #endif // !SAPPHIREENGINE_ASSETS_INCLUDE_H

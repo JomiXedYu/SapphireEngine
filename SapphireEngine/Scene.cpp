@@ -16,7 +16,7 @@ namespace SapphireEngine
     {
         for (auto& item : this->scene_nodes_)
         {
-            item->Update();
+            item->SendMessage(MessageType::Update);
         }
     }
 }

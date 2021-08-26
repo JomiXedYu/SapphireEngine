@@ -2,6 +2,7 @@
 #define _SAPPHIREENGINE_MOBJECT_H
 
 #include <CoreLib/CoreLib.h>
+#include <CoreLib/Reflection.h>
 #include <cstdint>
 #include <string>
 

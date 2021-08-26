@@ -11,11 +11,23 @@
 #include <ThirdParty/assimp/Importer.hpp>
 #include <ThirdParty/assimp/scene.h>
 #include <ThirdParty/assimp/postprocess.h>
+#include <ThirdParty/glad/glad.h>
 
 namespace SapphireEngine
 {
     using namespace Private;
     using namespace std;
+
+    static string read_path;
+    void Resource::SetReadPath(const string& path)
+    {
+        read_path = path;
+    }
+
+    string Resource::GetReadPath()
+    {
+        return read_path;
+    }
 
     static map<string, MObject*> cache;
 
@@ -34,6 +46,41 @@ namespace SapphireEngine
         cache[name] = tex;
     }
 
+    static CubeMap* LoadCubeMap(const string& name)
+    {
+        CubeMap* cubeMap = new CubeMap;
+
+        string faces[6] =
+        {
+            name + "/right.jpg",
+            name + "/left.jpg",
+            name + "/top.jpg",
+            name + "/bottom.jpg",
+            name + "/front.jpg",
+            name + "/back.jpg"
+        };
+
+        glGenTextures(1, &cubeMap->id);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap->id);
+
+        for (unsigned int i = 0; i < 6; i++)
+        {
+            Bitmap* bitmap = LoadBitmap(faces[i].c_str());
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+                0, GL_RGB, bitmap->get_width(), bitmap->get_height(), 0, GL_RGB, GL_UNSIGNED_BYTE, bitmap->GetNativeData()
+            );
+            delete bitmap;
+        }
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+        return cubeMap;
+    }
+
+#pragma region LoadModel
     static vector<Texture2D*> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName, const string& dir)
     {
         vector<Texture2D*> textures;
@@ -43,7 +90,7 @@ namespace SapphireEngine
             aiString str;
             mat->GetTexture(type, i, &str);
             Texture2D* texture = new Texture2D;
-            
+
             auto name = StringUtil::Concat(dir, "/", PathUtil::GetFilename(str.C_Str()));
 
             texture->SetData(str.C_Str(), typeName, LoadBitmap(name));
@@ -113,7 +160,7 @@ namespace SapphireEngine
         {
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 
-            Node* n = new Node(mesh->mName.C_Str(), pnode, true);
+            Node* n = new Node(mesh->mName.C_Str(), pnode);
             n->AddComponent<MeshRenderer>()->set_mesh(processMesh(mesh, scene, dir));
 
             //meshes->push_back(processMesh(mesh, scene));
@@ -146,32 +193,40 @@ namespace SapphireEngine
         return node;
     }
 
+#pragma endregion
+
 
 
     MObject* Resource::Load(const string& name, Type* type)
     {
-        if (cache[name] != nullptr)
+        string filename = read_path + "/" + name;
+        if (cache[filename] != nullptr)
         {
-            return cache[name];
+            return cache[filename];
         }
 
         if (type->IsSubclassOf(cltypeof<Texture2D>()))
         {
-            LoadTexture2D(name);
+            LoadTexture2D(filename);
         }
         if (type->IsSubclassOf(cltypeof<Node>()))
         {
-            cache[name] = LoadModel(name);
+            cache[filename] = LoadModel(filename);
+        }
+        if (type->IsSubclassOf(cltypeof<CubeMap>()))
+        {
+            return LoadCubeMap(filename);
         }
 
-        return cache[name];
+        return cache[filename];
     }
 
     void LoadAsync(const string& name, Type* type, Action<MObject*>* callback)
     {
-        if (cache[name] != nullptr)
+        string filename = read_path + "/" + name;
+        if (cache[filename] != nullptr)
         {
-            callback->Invoke(cache[name]);
+            callback->Invoke(cache[filename]);
         }
     }
 }

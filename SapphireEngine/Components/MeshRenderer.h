@@ -18,6 +18,7 @@ namespace SapphireEngine
         void set_mesh(Mesh* mesh) { mesh_ = mesh; }
     public:
         void OnDraw(ShaderProgram*);
+        void OnUpdate() override;
         MeshRenderer() {}
     private:
         Mesh* mesh_ = nullptr;

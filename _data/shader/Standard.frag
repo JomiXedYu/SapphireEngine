@@ -28,7 +28,6 @@ uniform Light light;
 void main()
 {
 
-//	vec3 norm = normalize(normal);
 	vec3 norm = normalize(texture(mat_normal_tex1, texCoord).xyz);
 	vec3 lightDir = normalize(lightPos - fragPos);
 

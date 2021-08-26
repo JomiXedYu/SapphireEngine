@@ -1,9 +1,10 @@
 #version 330 core
 
-in vec4 vertexColor;
 out vec3 FragColor;
+
+uniform vec3 gridColor;
 
 void main()
 {
-	FragColor = vertexColor.xyz;
+	FragColor = gridColor;
 }

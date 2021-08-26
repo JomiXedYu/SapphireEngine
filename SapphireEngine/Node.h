@@ -1,10 +1,12 @@
 #ifndef _SAPPHIREENGINE_NODE_H
 #define _SAPPHIREENGINE_NODE_H
 
-#include <SapphireEngine/MObject.h>
 #include <vector>
 #include <list>
 #include <type_traits>
+
+#include <SapphireEngine/MObject.h>
+#include <SapphireEngine/UnitType/Vector3.h>
 
 namespace SapphireEngine
 {
@@ -25,6 +27,24 @@ namespace SapphireEngine
 
     template<typename T>
     concept baseof_component_concept = std::is_base_of<Component, T>::value;
+
+    class Transform : public MObject
+    {
+        CORELIB_DEF_TYPE(SapphireEngine::Transform, MObject);
+    public:
+        Vector3 get_position() { return position_; }
+        void set_position(const Vector3& value) { position_ = value; }
+        Vector3 get_euler_angle() { return rotation_; }
+        void set_euler_angle(const Vector3& value) { rotation_ = value; }
+        Vector3 get_scale() { return scale_; }
+        void set_scale(const Vector3& value) { scale_ = value; }
+    public:
+
+    private:
+        Vector3 position_;
+        Vector3 rotation_;
+        Vector3 scale_;
+    };
 
     class Node : public MObject
     {
@@ -47,7 +67,11 @@ namespace SapphireEngine
         Node(Node&& r) = delete;
         Node& operator=(const Node& r) = delete;
     public:
-        Node(string name = "Node", Node* parent = nullptr, bool is_active = true);
+        Node(
+            string name = "Node",
+            Node* parent = nullptr,
+            Transform* transform = new Transform,
+            bool is_active = true);
 
     public:
         virtual void SendMessage(MessageType_t msg);

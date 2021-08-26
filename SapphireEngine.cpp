@@ -10,18 +10,131 @@
 
 
 #include <SapphireEngine/Private/BaseInterface.h>
-
-#include<array>
+#include <functional>
+#include <array>
 #include <format>
 #include <CoreLib/CommonException.h>
 #include <SapphireEngine/_include.h>
 #include <SapphireEngine/Components/MeshRenderer.h>
+#include <SapphireEngine/Components/Camera.h>
+#include <SapphireEngine/Assets/CubeMap.h>
 
 using namespace std;
 using namespace SapphireEngine;
 using namespace SapphireEngine::Private;
 using namespace SapphireEngine::InputDevice;
 
+struct VertexArrayObject
+{
+    uint32_t id;
+    VertexArrayObject()
+    {
+        glGenVertexArrays(1, &id);
+    }
+    void Use(const std::function<void()>& func)
+    {
+        glBindVertexArray(id);
+        func();
+        glBindVertexArray(0);
+    }
+    ~VertexArrayObject()
+    {
+        glDeleteVertexArrays(1, &id);
+    }
+};
+struct VertexBufferObject
+{
+    uint32_t id;
+    VertexBufferObject()
+    {
+        glGenBuffers(1, &id);
+    }
+    void Use(const std::function<void()>& func)
+    {
+        Bind();
+        func();
+        Unbind();
+    }
+    void Bind()
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, id);
+    }
+    void Unbind()
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+    ~VertexBufferObject()
+    {
+        glDeleteBuffers(1, &id);
+    }
+};
+
+struct ElementBufferObject
+{
+    uint32_t id;
+    ElementBufferObject()
+    {
+        glGenBuffers(1, &id);
+    }
+    void Use(const std::function<void()>& func)
+    {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
+        func();
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
+    ~ElementBufferObject()
+    {
+        glDeleteBuffers(1, &id);
+    }
+};
+
+auto GetCube()
+{
+    float vertices[] = {
+    -0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f,  0.5f, -0.5f,
+     0.5f,  0.5f, -0.5f,
+    -0.5f,  0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+
+    -0.5f, -0.5f,  0.5f,
+     0.5f, -0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
+    -0.5f, -0.5f,  0.5f,
+
+    -0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
+
+     0.5f,  0.5f,  0.5f,
+     0.5f,  0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+
+    -0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f,  0.5f,
+     0.5f, -0.5f,  0.5f,
+    -0.5f, -0.5f,  0.5f,
+    -0.5f, -0.5f, -0.5f,
+
+    -0.5f,  0.5f, -0.5f,
+     0.5f,  0.5f, -0.5f,
+     0.5f,  0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f, -0.5f,
+    };
+    return vertices;
+}
 
 void run() {
 
@@ -87,86 +200,72 @@ void run() {
     };
 
     //VAO
-    uint32_t VAO;
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
+    VertexArrayObject VAO;
+    VertexBufferObject VBO;
 
-    //创建VBO对象
-    uint32_t VBO;
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    //传送顶点数据至VBO
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    VAO.Use(
+        [&VBO, &vertices]() {
+            VBO.Bind();
+            //传送顶点数据至VBO
+            glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+            //顶点属性指针
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+            glEnableVertexAttribArray(0);
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+            glEnableVertexAttribArray(1);
+            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+            glEnableVertexAttribArray(2);
+        });
 
-    //EBO
-    //uint32_t EBO;
-    //glGenBuffers(1, &EBO);
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-
-    //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    //顶点属性指针
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-
-    //unbind
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
+    Resource::SetReadPath("E:/SapphireEngine/_data");
     string dataPath = "E:/SapphireEngine/_data";
     string texturePath = dataPath + "/texture";
     string shaderPath = dataPath + "/shader";
 
     //Light
-    uint32_t lightVAO;
-    glGenVertexArrays(1, &lightVAO);
-    glBindVertexArray(lightVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    VertexArrayObject lightVAO;
+    lightVAO.Use(
+        [&VBO]() {
+            VBO.Bind();
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+            glEnableVertexAttribArray(0);
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+            glEnableVertexAttribArray(1);
+            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+            glEnableVertexAttribArray(2);
+        });
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-
-
-    glBindVertexArray(0);
-
-
-    uint32_t planeVAO;
-    glGenVertexArrays(1, &planeVAO);
-    glBindVertexArray(planeVAO);
-
-    uint32_t VBO_PLANE;
-    glGenBuffers(1, &VBO_PLANE);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO_PLANE);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(plane), plane, GL_STATIC_DRAW);
+    //glBindVertexArray(0);
 
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 12 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 12 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 12 * sizeof(float), (void*)(7 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 12 * sizeof(float), (void*)(9 * sizeof(float)));
-    glEnableVertexAttribArray(3);
+    //uint32_t planeVAO;
+    //glGenVertexArrays(1, &planeVAO);
+    //glBindVertexArray(planeVAO);
 
-    glBindVertexArray(0);
+    //uint32_t VBO_PLANE;
+    //glGenBuffers(1, &VBO_PLANE);
+    //glBindBuffer(GL_ARRAY_BUFFER, VBO_PLANE);
+    //glBufferData(GL_ARRAY_BUFFER, sizeof(plane), plane, GL_STATIC_DRAW);
+
+
+    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 12 * sizeof(float), (void*)0);
+    //glEnableVertexAttribArray(0);
+    //glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 12 * sizeof(float), (void*)(3 * sizeof(float)));
+    //glEnableVertexAttribArray(1);
+    //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 12 * sizeof(float), (void*)(7 * sizeof(float)));
+    //glEnableVertexAttribArray(2);
+    //glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 12 * sizeof(float), (void*)(9 * sizeof(float)));
+    //glEnableVertexAttribArray(3);
+
+    //glBindVertexArray(0);
 
 #pragma region 着色器
 
     Shader vertexShader = Shader::CreateVetexShader("StandardVertexShader", FileUtil::ReadAllText(shaderPath + "/Standard.vert"));
     Shader fragmentShader = Shader::CreateFragmentShader("StandardFragmentShader", FileUtil::ReadAllText(shaderPath + "/Standard.frag"));
     Shader gridvertShader = Shader::CreateVetexShader("GridVert", FileUtil::ReadAllText(shaderPath + "/Grid.vert"));
-    Shader gridfragShader = Shader::CreateVetexShader("GridFrag", FileUtil::ReadAllText(shaderPath + "/Grid.frag"));
+    Shader gridfragShader = Shader::CreateFragmentShader("GridFrag", FileUtil::ReadAllText(shaderPath + "/Grid.frag"));
 
     ShaderProgram lightShaderProg{ "LightShader" };
     Shader lightShader = Shader::CreateFragmentShader("LightShader", FileUtil::ReadAllText(shaderPath + "/Light.frag"));
@@ -174,16 +273,40 @@ void run() {
     lightShaderProg.AttachShader(lightShader);
     lightShaderProg.Link();
 
-    //ShaderProgram gridProg;
-    //gridProg.AttachShader(gridvertShader);
-    //gridProg.AttachShader(gridfragShader);
-    //gridProg.Link();
 
-    Texture2D* texture2d = Resource::Load<Texture2D>(texturePath + "/p.jpg");
-    Texture2D* spec2d = Resource::Load<Texture2D>(texturePath + "/specular.jpg");
+    std::vector<Vector3> vertices1;
+    std::vector<Vector4> indices1;
+    int slices = 10;
+    for (int j = 0; j <= slices; ++j) {
+        for (int i = 0; i <= slices; ++i) {
+            float x = (float)i / (float)slices;
+            float y = 0;
+            float z = (float)j / (float)slices;
+            vertices1.push_back(Vector3(x, y, z));
+        }
+    }
 
-    Node* youtong = Resource::Load<Node>(dataPath + "/model/youtong.fbx");
-    Node* cube = Resource::Load<Node>(dataPath + "/model/cube2.fbx");
+    for (int j = 0; j < slices; ++j) {
+        for (int i = 0; i < slices; ++i) {
+
+            int row1 = j * (slices + 1);
+            int row2 = (j + 1) * (slices + 1);
+
+            indices1.push_back(Vector4(row1 + i, row1 + i + 1, row1 + i + 1, row2 + i + 1));
+            indices1.push_back(Vector4(row2 + i + 1, row2 + i, row2 + i, row1 + i));
+
+        }
+    }
+
+    ShaderProgram gridProg{ "gridProg" };
+    gridProg.AttachShader(gridvertShader);
+    gridProg.AttachShader(gridfragShader);
+    gridProg.Link();
+
+    Texture2D* texture2d = Resource::Load<Texture2D>("texture/p.jpg");
+    Texture2D* spec2d = Resource::Load<Texture2D>("texture/specular.jpg");
+
+    Node* youtong = Resource::Load<Node>("model/youtong.fbx");
 
     Scene* scene = new Scene();
     scene->AddNode(youtong);
@@ -213,6 +336,14 @@ void run() {
 
     Vector3 modelPos;
 
+
+    VertexArrayObject cubeMapVAO;
+    
+    CubeMap* cubeMap = Resource::Load<CubeMap>("texture/skybox");
+
+    Node* cameraNode = new Node("camera");
+    Camera* cam = cameraNode->AddComponent<Camera>();
+    Camera::SetMain(cam);
 
     //渲染循环
     while (!Application::IsQuit())
@@ -270,10 +401,8 @@ void run() {
         lightShaderProg.SetUniformMatrix4fv("projection", projMat.get_value_ptr());
         lightShaderProg.SetUniformMatrix4fv("view", viewMat.get_value_ptr());
         lightShaderProg.SetUniformMatrix4fv("model", lightModel);
-        glBindVertexArray(lightVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        glBindVertexArray(0);
 
+        lightVAO.Use([]() { glDrawArrays(GL_TRIANGLES, 0, 36); });
 
         shaderProg.UseProgram();
 
@@ -295,13 +424,18 @@ void run() {
         youtong->GetChildAt(0)->GetComponent<MeshRenderer>()->OnDraw(&shaderProg);
         //cube->GetChildAt(0)->GetComponent<MeshRenderer>()->OnDraw(&shaderProg);
 
+        gridProg.UseProgram();
+
         scene->OnUpdate();
         SystemInterface::PollEvents();
         Input::PollEvents();
 
     }
-
+    delete scene;
 }
+
+
+
 
 int main()
 {
@@ -314,7 +448,6 @@ int main()
     }
     catch (std::exception& e)
     {
-        cout << "stdException" << endl;
         cout << e.what() << endl;
     }
 

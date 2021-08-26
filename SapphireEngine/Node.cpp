@@ -57,8 +57,8 @@ namespace SapphireEngine
         return this->childs_.size();
     }
 
-    Node::Node(string name, Node* parent, bool is_active)
-        : name_(name), is_active_(is_active)
+    Node::Node(string name, Node* parent, Transform* transform, bool is_active)
+        : name_(name), transform_(transform), is_active_(is_active)
     {
         this->set_parent(parent);
     }

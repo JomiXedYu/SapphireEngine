@@ -12,6 +12,9 @@ namespace SapphireEngine
 
     namespace Resource
     {
+        void SetReadPath(const string& path);
+        string GetReadPath();
+
         MObject* Load(const string& name, Type* type);
 
         template<baseof_mobject T>

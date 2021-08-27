@@ -1,14 +1,14 @@
 #pragma once
 
 #include<CoreLib/Reflection.h>
-#include <SapphireEngine/MObject.h>
+#include "AssetObject.h"
 
 
 namespace SapphireEngine
 {
-    class CubeMap : public MObject
+    class CubeMap : public AssetObject
     {
-        CORELIB_DEF_TYPE(SapphireEngine::CubeMap, MObject);
+        CORELIB_DEF_TYPE(SapphireEngine::CubeMap, AssetObject);
     public:
 
 

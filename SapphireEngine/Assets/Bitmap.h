@@ -1,13 +1,13 @@
 #ifndef _SAPPHIREENGINE_ASSETS_BITMAP_H
 #define _SAPPHIREENGINE_ASSETS_BITMAP_H
 
-#include <SapphireEngine/MObject.h>
+#include "AssetObject.h"
 
 namespace SapphireEngine
 {
-    class Bitmap : public MObject
+    class Bitmap : public AssetObject
     {
-        CORELIB_DEF_TYPE(SapphireEngine::Bitmap, MObject)
+        CORELIB_DEF_TYPE(SapphireEngine::Bitmap, AssetObject)
     public:
         int32_t get_width() const { return width_; }
         int32_t get_height() const { return height_; }

@@ -6,5 +6,7 @@
 #include "Texture2D.h"
 #include "Material.h"
 #include "CubeMap.h"
+#include "TextAsset.h"
+#include "Model.h"
 
 #endif // !SAPPHIREENGINE_ASSETS_INCLUDE_H

@@ -337,7 +337,7 @@ void run() {
 
     Scene* scene = (new Scene())->SetCurrentState();
 
-    Node* youtong = scene->AddNode(Resource::Load<Node>("model/youtong.fbx"));
+    Node* youtong = scene->AddNode(Resource::Load<Model>("model/youtong.fbx")->Instantiate());
 
 
     //创建着色器程序

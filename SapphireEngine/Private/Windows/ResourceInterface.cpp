@@ -18,9 +18,5 @@ namespace SapphireEngine::Private
         stbi_image_free(data);
     }
 
-    uint32_t ResourceInterface::LoadTexture2D(const string& name)
-    {
-        return 0;
-    }
 }
 

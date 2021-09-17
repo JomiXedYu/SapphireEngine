@@ -36,10 +36,10 @@ SOFTWARE.
 #include "Object.h"
 #include "Type.h"
 #include "CommonException.h"
-#include "DebugTool.h"
+#include "DebugTool.hpp"
 #include "Reflection.h"
 #include "File.h"
-#include "Formater.h"
+#include "Converter.hpp"
 #include "Events.hpp"
 
 #endif // !_CORELIB_OOPCORE_H

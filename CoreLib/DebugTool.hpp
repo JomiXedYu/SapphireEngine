@@ -13,18 +13,11 @@
 
 #define DEBUG_INFO(info) std::format("info: {}; line: {}, file: {};", info, __LINE__, __FILE__)
 
-#define CHECK_NULLPOINTER(ptr) if(ptr == nullptr) throw JxCoreLib::NullPointerException(DEBUG_INFO(#ptr));
 
-template<typename T>
-T* AssertNull(T* v, const std::string& str)
-{
-    if (v == nullptr)
-    {
-        throw JxCoreLib::NullPointerException(str);
-    }
-    return v;
-}
+#define nulable$(ptr) if(ptr != nullptr) ptr
+#define assert_nulptr(ptr) if(ptr == nullptr) throw JxCoreLib::NullPointerException(DEBUG_INFO(#ptr))
 
-#define ANUL(ptr) AssertNull(ptr, DEBUG_INFO(#ptr))
+#define zero$(num) (num == (decltype(num))(0) ? throw JxCoreLib::DivisionByZeroException(DEBUG_INFO(#num)) : num)
+#define assert_zero(num) if(num == 0) throw JxCoreLib::DivisionByZeroException(DEBUG_INFO(#num));
 
 #endif // !_CORELIB_DEBUGTOOL

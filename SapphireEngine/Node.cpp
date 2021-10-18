@@ -63,6 +63,15 @@ namespace SapphireEngine
         this->set_parent(parent);
     }
 
+    void Node::BroadcastSendMessage(MessageType_t msg)
+    {
+        this->SendMessage(msg);
+        for (auto& item : this->childs_)
+        {
+            item->BroadcastSendMessage(msg);
+        }
+    }
+
     void Node::SendMessage(MessageType_t msg)
     {
         switch (msg)
@@ -74,42 +83,26 @@ namespace SapphireEngine
         [[likely]] case MessageType::Update:
             this->OnUpdate(); break;
         }
+
+        for (auto& item : this->components_)
+        {
+            item->SendMessage(msg);
+        }
     }
 
     void Node::OnInitialize()
     {
-        for (auto& item : this->components_)
-        {
-            item->SendMessage(MessageType::Initialize);
-        }
-        for (auto& item : this->childs_)
-        {
-            item->SendMessage(MessageType::Initialize);
-        }
+
     }
 
     void Node::OnDestory()
     {
-        for (auto& item : this->components_)
-        {
-            item->SendMessage(MessageType::Destory);
-        }
-        for (auto& item : this->childs_)
-        {
-            item->SendMessage(MessageType::Destory);
-        }
+
     }
 
     void Node::OnUpdate()
     {
-        for (auto& item : this->components_)
-        {
-            item->SendMessage(MessageType::Update);
-        }
-        for (auto& item : this->childs_)
-        {
-            item->SendMessage(MessageType::Update);
-        }
+
     }
 
     Component* Node::AddComponent(Type* type)
@@ -164,16 +157,6 @@ namespace SapphireEngine
     {
         return this->childs_[index];
     }
-    void Node::Update()
-    {
-        for (auto& com : this->components_)
-        {
-            com->SendMessage(MessageType::Update);
-        }
-        for (auto& item : this->childs_)
-        {
-            item->Update();
-        }
-    }
+
 }
 

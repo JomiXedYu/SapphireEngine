@@ -19,7 +19,7 @@
 #include <SapphireEngine/Components/Camera.h>
 #include <SapphireEngine/Components/FreeCamera.h>
 #include <SapphireEngine/Assets/CubeMap.h>
-#include <CoreLib/DebugTool.h>
+#include <CoreLib/DebugTool.hpp>
 
 using namespace std;
 using namespace SapphireEngine;
@@ -271,8 +271,8 @@ void run() {
             glEnableVertexAttribArray(2);
         });
 
-    Resource::SetReadPath("E:/SapphireEngine/_data");
-    string dataPath = "E:/SapphireEngine/_data";
+    Resource::SetReadPath("F:/SapphireEngine/_data");
+    string dataPath = "F:/SapphireEngine/_data";
     string texturePath = dataPath + "/texture";
     string shaderPath = dataPath + "/shader";
 

@@ -75,6 +75,7 @@ namespace SapphireEngine
             bool is_active = true);
 
     public:
+        void BroadcastSendMessage(MessageType_t msg);
         virtual void SendMessage(MessageType_t msg);
         virtual void OnInitialize();
         virtual void OnDestory();
@@ -110,8 +111,6 @@ namespace SapphireEngine
 
         Node* GetChild(const string& name);
         Node* GetChildAt(int index);
-
-        void Update();
 
     private:
         string name_;

@@ -23,7 +23,7 @@ namespace SapphireEngine
     public:
         void Initialize() override
         {
-            Application::Initialize("test", Vector2(800.0f, 800.0f));
+            Application::Initialize("test", Vector2(1280.0f, 720.0f));
 
             using namespace SapphireEngine::InputDevice;
             Input::AddDeivce(new KeyAxisDevice("horizontal", 0.08f, KeyCode::D, KeyCode::A));

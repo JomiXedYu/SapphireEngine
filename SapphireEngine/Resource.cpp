@@ -33,15 +33,27 @@ namespace SapphireEngine
     {
         int width, height, channel;
         unsigned char* data = ResourceInterface::LoadBitmap(name, &width, &height, &channel);
+
+        if (data == nullptr)
+        {
+            return nullptr;
+        }
+
         Bitmap* bitmap = new Bitmap();
         bitmap->SetData(data, width, height, channel);
         return bitmap;
     }
-    static void LoadTexture2D(const string& name)
+    static Texture2D* LoadTexture2D(const string& name)
     {
+        auto bitmap = LoadBitmap(name);
+        if (bitmap == nullptr)
+        {
+            return nullptr;
+        }
+
         Texture2D* tex = new Texture2D();
-        tex->SetData(name, "", LoadBitmap(name));
-        cache[name] = tex;
+        tex->SetData(name, "", bitmap);
+        return tex;
     }
 
     static CubeMap* LoadCubeMap(const string& name)
@@ -104,7 +116,8 @@ namespace SapphireEngine
 
         if (type->IsSubclassOf(cltypeof<Texture2D>()))
         {
-            LoadTexture2D(filename);
+            auto tex = LoadTexture2D(filename);
+            cache[filename] = tex;
         }
         if (type->IsSubclassOf(cltypeof<Model>()))
         {

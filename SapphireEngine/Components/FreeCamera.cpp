@@ -15,16 +15,16 @@ namespace SapphireEngine
 
         auto cam = Camera::Main();
 
-        cam->get_transform()->Translate(cam->Forward() * vert * 5);
-        cam->get_transform()->Translate(cam->Right() * hori * 5);
+        cam->get_transform()->Translate(cam->Forward() * vert * this->speed_);
+        cam->get_transform()->Translate(cam->Right() * hori * this->speed_);
 
         if (Input::GetKey(KeyCode::E))
         {
-            cam->get_transform()->Translate(Vector3::Up() * timedelta * 500);
+            cam->get_transform()->Translate(Vector3::Up() * timedelta * 500 * this->speed_);
         }
         else if (Input::GetKey(KeyCode::Q))
         {
-            cam->get_transform()->Translate(-Vector3::Up() * timedelta * 500);
+            cam->get_transform()->Translate(-Vector3::Up() * timedelta * 500 * this->speed_);
         }
 
         if (Input::GetKey(KeyCode::LeftAlt))

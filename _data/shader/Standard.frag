@@ -43,5 +43,6 @@ void main()
 	vec3 ambient = light.ambient * vec3(texture(mat_diffuse_tex1, texCoord));
 
 	vec3 result = (ambient + diffuse + specular);
+
 	FragColor = vec4(result, 1);
 }

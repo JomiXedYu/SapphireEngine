@@ -51,6 +51,7 @@ namespace SapphireEngine
         static Color Cyan() { return Color(0.0f, 1.0f, 1.0f); }
         static Color Yellow() { return Color(1.0f, 1.0f, 0.0f); }
         static Color Gray() { return Color(42, 42, 42); }
+        static Color DeepGray() { return Color(26, 26, 26); }
     };
 
 }

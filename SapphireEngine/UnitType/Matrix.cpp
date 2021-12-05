@@ -38,6 +38,16 @@ namespace SapphireEngine
     }
 
 
+    Matrix Matrix::Scale(const Vector3& v3)
+    {
+        return Matrix(
+            v3.x, 0, 0, 0,
+            0, v3.y, 0, 0,
+            0, 0, v3.z, 0,
+            0, 0, 0, 1
+        );
+    }
+
     Matrix Matrix::One()
     {
         return Matrix(

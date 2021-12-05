@@ -22,7 +22,7 @@ namespace SapphireEngine
         Matrix3(const float& v);
         Matrix3(const Vector3& x, const Vector3& y, const Vector3& z);
     public:
-        const float* get_value_ptr() const { std::addressof(this->value[0].x); }
+        const float* get_value_ptr() const { return std::addressof(this->value[0].x); }
         operator Matrix();
     };
 

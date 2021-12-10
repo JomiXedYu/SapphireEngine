@@ -7,13 +7,13 @@
 
 namespace JxCoreLib
 {
-    DEF_EXCEPTION_DYN(ExceptionBase);
-    DEF_EXCEPTION_DYN(RangeOutException);
-    DEF_EXCEPTION_DYN(ArgumentException);
-    DEF_EXCEPTION_DYN(ArgumentNullException);
-    DEF_EXCEPTION_DYN(NotImplementException);
-    DEF_EXCEPTION_DYN(NullPointerException);
-    DEF_EXCEPTION_DYN(DivisionByZeroException);
+    //DEF_EXCEPTION_DYN(ExceptionBase);
+    //DEF_EXCEPTION_DYN(RangeOutException);
+    //DEF_EXCEPTION_DYN(ArgumentException);
+    //DEF_EXCEPTION_DYN(ArgumentNullException);
+    //DEF_EXCEPTION_DYN(NotImplementException);
+    //DEF_EXCEPTION_DYN(NullPointerException);
+    //DEF_EXCEPTION_DYN(DivisionByZeroException);
 
 
 }

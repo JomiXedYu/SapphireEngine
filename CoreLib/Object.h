@@ -17,6 +17,16 @@ namespace JxCoreLib
 {
     class Type;
 
+    struct GlobalIniter
+    {
+        GlobalIniter(void(*f)())
+        {
+            f();
+        }
+        GlobalIniter(const GlobalIniter&) = delete;
+        GlobalIniter(GlobalIniter&&) = delete;
+    };
+
     class Object
     {
     private:

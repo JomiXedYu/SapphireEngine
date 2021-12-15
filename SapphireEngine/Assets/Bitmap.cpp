@@ -21,7 +21,7 @@ namespace SapphireEngine
         this->is_sealed_ = true;
     }
 
-    Bitmap::Bitmap() : base(), data_(nullptr), width_(0), height_(0), channel_(0), is_sealed_(false) {}
+    Bitmap::Bitmap() : data_(nullptr), width_(0), height_(0), channel_(0), is_sealed_(false) {}
 
     Bitmap::~Bitmap()
     {

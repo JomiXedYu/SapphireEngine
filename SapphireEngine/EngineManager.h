@@ -30,6 +30,9 @@ namespace SapphireEngine
             Input::AddDeivce(new KeyAxisDevice("vertical", 0.08f, KeyCode::W, KeyCode::S));
             Input::AddDeivce(new MouseAxisDevice("mouseX", 0.0f, MouseAxisCode::MouseX));
             Input::AddDeivce(new MouseAxisDevice("mouseY", 0.0f, MouseAxisCode::MouseY));
+
+
+            
         }
         void Terminate() override
         {

@@ -10,7 +10,7 @@
 #include <ThirdParty/assimp/Importer.hpp>
 #include <ThirdParty/assimp/scene.h>
 #include <ThirdParty/assimp/postprocess.h>
-
+#include <SapphireEngine/Resource.h>
 
 namespace SapphireEngine
 {
@@ -28,7 +28,11 @@ namespace SapphireEngine
 
             auto name = StringUtil::Concat(dir, "/", PathUtil::GetFilename(str.C_Str()));
 
-            texture->SetData(str.C_Str(), typeName, Resource::Load<Bitmap>(name, true));
+            //TODO: 临时修改
+            //texture->SetData(str.C_Str(), typeName, Resource::Load<Bitmap>(name, true));
+            //Texture2D* texture = Resource::Load<Texture2D>(name);
+
+
             //texture.id = TextureFromFile(str.C_Str(), directory);
             //texture.type = typeName;
             //texture.path = str;
@@ -132,4 +136,13 @@ namespace SapphireEngine
     {
         return LoadModel(this->ref_name_);
     }
+
+
+    AssetObject* ModelImporter::OnImport(const AssetImporterContext& ctx, Type* type)
+    {
+        Model* model = new Model;
+        model->ref_name_ = ctx.get_assetpath();
+        return model;
+    }
+
 }

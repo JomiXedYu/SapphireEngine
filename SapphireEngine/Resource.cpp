@@ -2,14 +2,20 @@
 #include <SapphireEngine/Private/BaseInterface.h>
 #include <CoreLib/File.h>
 #include <map>
+#include <string_view>
+#include <iostream>
+#include <fstream>
 
 #include <SapphireEngine/Node.h>
 
 #include <SapphireEngine/Assets/_include.h>
 #include <SapphireEngine/Components/MeshRenderer.h>
 
-
+#include <SapphireEngine/Assets/AssetImporter.h>
+#include <SapphireEngine/Assets/ScriptableAsset.h>
 #include <ThirdParty/glad/glad.h>
+
+#include <CoreLib.Serializer/JsonSerializer.h>
 
 namespace SapphireEngine
 {
@@ -17,124 +23,66 @@ namespace SapphireEngine
     using namespace std;
 
     static string read_path;
-    void Resource::SetReadPath(const string& path)
+    void Resource::SetLocalPath(const string& path)
     {
         read_path = path;
     }
 
-    string Resource::GetReadPath()
+    const string& Resource::GetLocalPath()
     {
         return read_path;
     }
 
     static map<string, AssetObject*> cache;
 
-    static Bitmap* LoadBitmap(const string& name)
+
+    AssetObject* Resource::Load(string_view path, Type* type)
     {
-        int width, height, channel;
-        unsigned char* data = ResourceInterface::LoadBitmap(name, &width, &height, &channel);
-
-        if (data == nullptr)
-        {
-            return nullptr;
-        }
-
-        Bitmap* bitmap = new Bitmap();
-        bitmap->SetData(data, width, height, channel);
-        return bitmap;
-    }
-    static Texture2D* LoadTexture2D(const string& name)
-    {
-        auto bitmap = LoadBitmap(name);
-        if (bitmap == nullptr)
-        {
-            return nullptr;
-        }
-
-        Texture2D* tex = new Texture2D();
-        tex->SetData(name, "", bitmap);
-        return tex;
-    }
-
-    static CubeMap* LoadCubeMap(const string& name)
-    {
-        CubeMap* cubeMap = new CubeMap;
-
-        string faces[6] =
-        {
-            name + "/right.jpg",
-            name + "/left.jpg",
-            name + "/top.jpg",
-            name + "/bottom.jpg",
-            name + "/front.jpg",
-            name + "/back.jpg"
-        };
-
-        glGenTextures(1, &cubeMap->id);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap->id);
-
-        for (unsigned int i = 0; i < 6; i++)
-        {
-            Bitmap* bitmap = LoadBitmap(faces[i].c_str());
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-                0, GL_RGB, bitmap->get_width(), bitmap->get_height(), 0, GL_RGB, GL_UNSIGNED_BYTE, bitmap->GetNativeData()
-            );
-            //delete bitmap;
-        }
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-        return cubeMap;
-    }
-
-#pragma region LoadModel
-
-
-#pragma endregion
-
-
-
-    AssetObject* Resource::Load(const string& name, Type* type, bool is_full_path)
-    {
-        string filename;
-        if (is_full_path)
-        {
-            filename = name;
-        }
-        else
-        {
-            filename = read_path + "/" + name;
-        }
+        string filename{ path };
 
         if (cache[filename] != nullptr)
         {
             return cache[filename];
         }
 
-        if (type->IsSubclassOf(cltypeof<Texture2D>()))
+        AssetImporter* importer = AssetImporter::GetAssetImporter(type);
+        
+        if (importer == nullptr)
         {
-            auto tex = LoadTexture2D(filename);
-            cache[filename] = tex;
+            if (type->IsSubclassOf(cltypeof<ScriptableAsset>()))
+            {
+                importer = AssetImporter::GetAssetImporter(cltypeof<ScriptableAsset>());
+            }
         }
-        if (type->IsSubclassOf(cltypeof<Model>()))
-        {
-            Model* model = new Model;
-            String fn{ filename };
-            cltypeof<Model>()->get_fieldinfo("ref_name_")->SetValue(model, &fn);
-            cache[filename] = model;
-        }
-        if (type->IsSubclassOf(cltypeof<CubeMap>()))
-        {
-            return LoadCubeMap(filename);
-        }
-        if (type->IsSubclassOf(cltypeof<Bitmap>()))
-        {
-            return LoadBitmap(filename);
-        }
-        return cache[filename];
+
+        auto obj = importer->OnImport(filename, type);
+
+
+        cache[filename] = obj;
+        return obj;
+
+
+        //AssetObject* assetobj = nullptr;
+
+        //if (type->IsSubclassOf(cltypeof<Texture2D>()))
+        //{
+        //    auto tex = LoadTexture2D(filename);
+        //    cache[filename] = tex;
+        //}
+        //if (type->IsSubclassOf(cltypeof<Model>()))
+        //{
+        //    Model* model = new Model;
+        //    String fn{ filename };
+        //    cltypeof<Model>()->get_fieldinfo("ref_name_")->SetValue(model, &fn);
+        //    cache[filename] = model;
+        //}
+        //if (type->IsSubclassOf(cltypeof<CubeMap>()))
+        //{
+        //    return LoadCubeMap(filename);
+        //}
+        //return cache[filename];
     }
+
+    
 
 }

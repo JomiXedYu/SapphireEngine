@@ -51,10 +51,13 @@ namespace SapphireEngine
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, 1);
 
-        this->mesh_;
     }
     void MeshRenderer::OnUpdate()
     {
 
     }
+    void MeshRenderer::Render()
+    {
+    }
+
 }

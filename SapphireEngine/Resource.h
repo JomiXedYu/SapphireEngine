@@ -3,6 +3,8 @@
 
 #include <SapphireEngine/Assets/AssetObject.h>
 #include <functional>
+#include <string_view>
+#include <iostream>
 
 namespace SapphireEngine
 {
@@ -12,13 +14,29 @@ namespace SapphireEngine
 
     namespace Resource
     {
-        void SetReadPath(const string& path);
-        string GetReadPath();
+        void SetLocalPath(const string& path);
+        const string& GetLocalPath();
 
-        AssetObject* Load(const string& name, Type* type, bool is_full_path = false);
+        //AssetObject* Load(std::istream& stream);
+        AssetObject* Load(std::string_view path, Type* type);
 
         template<baseof_assetobject T>
-        T* Load(const string& name, bool is_full_path = false) { return static_cast<T*>(Load(name, cltypeof<T>(), is_full_path)); }
+        T* Load(std::string_view path)
+        {
+            return static_cast<T*>(Load(path, cltypeof<T>()));
+        }
+
+        inline AssetObject* LoadLocal(std::string_view name, Type* type)
+        {
+            return Load(StringUtil::Concat(GetLocalPath(), "/", name), type);
+        }
+
+        template<baseof_assetobject T>
+        T* LoadLocal(std::string_view name)
+        {
+            return static_cast<T*>(LoadLocal(name, cltypeof<T>()));
+        }
+
 
     }
 

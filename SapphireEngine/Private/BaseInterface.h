@@ -2,12 +2,14 @@
 #define _SAPPHIREENGINE_PRIVATE_BASEINTERFACE_H
 
 #include <string>
+#include <string_view>
 #include <cstdint>
 #include <SapphireEngine/UnitType/Color.h>
 
 namespace SapphireEngine
 {
     class Bitmap;
+    class Texture2D;
 
     namespace Private
     {
@@ -24,11 +26,13 @@ namespace SapphireEngine
             void EnableDepthTest();
             void DisableDepthTest();
 
-            void LoadTexture2D(Bitmap* bitmap, uint32_t* out_id);
+            void LoadTexture2D(Texture2D* tex, uint32_t* out_id);
+            void UnloadTexture2D(uint32_t id);
+            void UnloadTexture2Ds(uint32_t id[], int32_t length);
         }
         namespace ResourceInterface
         {
-            unsigned char* LoadBitmap(const std::string& name, int* out_width, int* out_height, int* out_channel);
+            unsigned char* LoadBitmap(std::string_view name, int* out_width, int* out_height, int* out_channel);
             void FreeBitmap(unsigned char* data);
         }
         namespace SystemInterface

@@ -1,25 +1,6 @@
 ﻿#pragma once
-#include <ThirdParty/glad/glad.h>
-#include <ThirdParty/glfw/include/GLFW/glfw3.h>
+#include "SapphireEngine.h"
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
-#include <CoreLib/File.h>
-
-
-#include <SapphireEngine/Private/BaseInterface.h>
-#include <functional>
-#include <array>
-#include <format>
-#include <CoreLib/CommonException.h>
-#include <SapphireEngine/_include.h>
-#include <SapphireEngine/Components/MeshRenderer.h>
-#include <SapphireEngine/Components/Camera.h>
-#include <SapphireEngine/Components/FreeCamera.h>
-#include <SapphireEngine/Assets/CubeMap.h>
-#include <CoreLib/DebugTool.hpp>
 
 using namespace std;
 using namespace SapphireEngine;
@@ -111,6 +92,13 @@ void run() {
     //Shader::CreateFragmentShader("PBR", FileUtil::ReadAllText(Resource::GetReadPath() + "/shader/PBR.frag"));
 
 
+    {
+        /*auto js = FileUtil::ReadAllText(Resource::GetReadPath() + "/model/rustediron2_ao.asset");
+        Texture2D* tex2d_ = JxCoreLib::Serializer::JsonSerializer::Deserialize<Texture2D>(js);*/
+        //auto tex = Resource::LoadLocal<Texture2D>("model/rustediron2_ao.asset");
+    }
+    auto pbr = Resource::LoadLocal<PBRPiplepine::PBRTexture>("model/rustediron2.pbrtex");
+
     auto cube_vertices = Mesh::CreateCube();
     auto vertices = Mesh::CreateStdLayoutCube();
 
@@ -194,12 +182,12 @@ void run() {
     gridProg.AttachShader(gridfragShader);
     gridProg.Link();
 
-    Texture2D* texture2d = Resource::Load<Texture2D>("texture/p.jpg");
-    Texture2D* spec2d = Resource::Load<Texture2D>("texture/specular.jpg");
+    Texture2D* texture2d = Resource::LoadLocal<Texture2D>("texture/p.jpg");
+    Texture2D* spec2d = Resource::LoadLocal<Texture2D>("texture/specular.jpg");
 
     Scene* scene = (new Scene())->SetCurrentState();
 
-    Node* youtong = scene->AddNode(Resource::Load<Model>("model/youtong.fbx")->Instantiate());
+    //Node* youtong = scene->AddNode(Resource::LoadLocal<Model>("model/youtong.fbx")->Instantiate());
 
 
     //创建着色器程序
@@ -207,8 +195,6 @@ void run() {
     shaderProg.AttachShader(vertexShader);
     shaderProg.AttachShader(fragmentShader);
     shaderProg.Link();
-    //shaderProg.AddTexture(texture2d);
-    //shaderProg.AddTexture(spec2d);
     shaderProg.UseProgram();
 
     vertexShader.DeleteShader();
@@ -250,7 +236,8 @@ void run() {
     pbrProg.AttachShader(pbrFrag);
     pbrProg.Link();
 
-    CubeMap* cubeMap = Resource::Load<CubeMap>("texture/skybox");
+    CubeMap* cubeMap = Resource::LoadLocal<CubeMap>("texture/skybox/skycube.asset");
+
 
     Node* cameraNode = Scene::Current()->AddNode(new Node("camera"));
     Camera* cam = cameraNode->AddComponent<Camera>(); {
@@ -263,29 +250,30 @@ void run() {
     }
     scene->AddNode(new Node("FreeCameraCtrl"))->AddComponent<FreeCamera>();
 
-    auto t_albedo = Resource::Load<Texture2D>("model/rustediron2_basecolor.png");
-    auto t_normal = Resource::Load<Texture2D>("model/rustediron2_normal.png");
-    auto t_metallic = Resource::Load<Texture2D>("model/rustediron2_metallic.png");
-    auto t_roughness = Resource::Load<Texture2D>("model/rustediron2_roughness.png");
-    auto t_ao = Resource::Load<Texture2D>("model/rustediron2_ao.jpg");
+    auto rustediron2 = Resource::LoadLocal<PBRPiplepine::PBRTexture>("model/rustediron2.pbrtex");
 
-    auto m1_albedo = Resource::Load<Texture2D>("model/mat1/sphere_lambert1_BaseColor.png");
-    auto m1_normal = Resource::Load<Texture2D>("model/mat1/sphere_lambert1_Normal.png");
-    auto m1_metallic = Resource::Load<Texture2D>("model/mat1/sphere_lambert1_Metallic.png");
-    auto m1_roughness = Resource::Load<Texture2D>("model/mat1/sphere_lambert1_Roughness.png");
-    auto m1_ao = Resource::Load<Texture2D>("model/rustediron2_ao.jpg");
+    auto t_albedo = Resource::LoadLocal<Texture2D>("model/rustediron2_basecolor.png");
+    auto t_normal = Resource::LoadLocal<Texture2D>("model/rustediron2_normal.png");
+    auto t_metallic = Resource::LoadLocal<Texture2D>("model/rustediron2_metallic.png");
+    auto t_roughness = Resource::LoadLocal<Texture2D>("model/rustediron2_roughness.png");
+    auto t_ao = Resource::LoadLocal<Texture2D>("model/rustediron2_ao.jpg");
 
-    auto m2_albedo = Resource::Load<Texture2D>("model/mat2/sphere_lambert1_BaseColor.png");
-    auto m2_normal = Resource::Load<Texture2D>("model/mat2/sphere_lambert1_Normal.png");
-    auto m2_metallic = Resource::Load<Texture2D>("model/mat2/sphere_lambert1_Metallic.png");
-    auto m2_roughness = Resource::Load<Texture2D>("model/mat2/sphere_lambert1_Roughness.png");
-    auto m2_ao = Resource::Load<Texture2D>("model/rustediron2_ao.jpg");
+    auto m1_albedo = Resource::LoadLocal<Texture2D>("model/mat1/sphere_lambert1_BaseColor.png");
+    auto m1_normal = Resource::LoadLocal<Texture2D>("model/mat1/sphere_lambert1_Normal.png");
+    auto m1_metallic = Resource::LoadLocal<Texture2D>("model/mat1/sphere_lambert1_Metallic.png");
+    auto m1_roughness = Resource::LoadLocal<Texture2D>("model/mat1/sphere_lambert1_Roughness.png");
+    auto m1_ao = Resource::LoadLocal<Texture2D>("model/rustediron2_ao.jpg");
 
-    Mesh* sphere = Mesh::CreateSphere(64, 64);
+    auto m2_albedo = Resource::LoadLocal<Texture2D>("model/mat2/sphere_lambert1_BaseColor.png");
+    auto m2_normal = Resource::LoadLocal<Texture2D>("model/mat2/sphere_lambert1_Normal.png");
+    auto m2_metallic = Resource::LoadLocal<Texture2D>("model/mat2/sphere_lambert1_Metallic.png");
+    auto m2_roughness = Resource::LoadLocal<Texture2D>("model/mat2/sphere_lambert1_Roughness.png");
+    auto m2_ao = Resource::LoadLocal<Texture2D>("model/rustediron2_ao.jpg");
 
-    Node* sphereNode = scene->AddNode(Resource::Load<Model>("model/sphere.fbx")->Instantiate());
-    Node* sphereNode2 = scene->AddNode(Resource::Load<Model>("model/sphere.fbx")->Instantiate());
-    Node* sphereNode3 = scene->AddNode(Resource::Load<Model>("model/sphere.fbx")->Instantiate());
+
+    Node* sphereNode = scene->AddNode(Resource::LoadLocal<Model>("model/sphere.fbx")->Instantiate());
+    Node* sphereNode2 = scene->AddNode(Resource::LoadLocal<Model>("model/sphere.fbx")->Instantiate());
+    Node* sphereNode3 = scene->AddNode(Resource::LoadLocal<Model>("model/sphere.fbx")->Instantiate());
 
     while (!Application::IsQuit())
     {
@@ -345,6 +333,13 @@ void run() {
             }
 
 
+            auto pbrrender = PBRPiplepine::PBRRenderer();
+            pbrrender.set_program(&pbrProg);
+            pbrrender.tex = rustediron2;
+            pbrrender.Render();
+
+            PBRPiplepine::PBRRenderer().set_program(&pbrProg);
+
             glActiveTexture(GL_TEXTURE1);
             glBindTexture(GL_TEXTURE_2D, m1_albedo->get_id());
 
@@ -370,7 +365,7 @@ void run() {
             glBindVertexArray(0);
 
 
-            pbrProg.SetUniformMatrix4fv("model", Matrix::Translate(Matrix::One(), {2.3,0,}));
+            pbrProg.SetUniformMatrix4fv("model", Matrix::Translate(Matrix::One(), { 2.3,0, }));
             glActiveTexture(GL_TEXTURE1);
             glBindTexture(GL_TEXTURE_2D, t_albedo->get_id());
 
@@ -393,6 +388,7 @@ void run() {
             glBindVertexArray(vao);
             glDrawElements(GL_TRIANGLES, mesh_render2->get_mesh()->indices.size(), GL_UNSIGNED_INT, 0);
             glBindVertexArray(0);
+
 
             //pbrProg.SetUniformMatrix4fv("model", Matrix::Translate(Matrix::One(), { -2.3,0,0 }));
             //glActiveTexture(GL_TEXTURE1);
@@ -456,20 +452,12 @@ void run() {
 }
 
 
-template<typename _Ty, int _N>
-struct Struct
-{
-    _Ty Values[_N];
-};
-
 int main()
 {
     EngineDefaultLauncher launcher;
     launcher.Initialize();
 
-    Resource::SetReadPath("F:/SapphireEngine/_data");
-
-
+    Resource::SetLocalPath("F:/SapphireEngine/_data");
 
 
     try

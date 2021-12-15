@@ -1,6 +1,6 @@
 #include <SapphireEngine/Private/BaseInterface.h>
 #include <ThirdParty/glad/glad.h>
-#include <SapphireEngine/Assets/Bitmap.h>
+#include <SapphireEngine/Assets/Texture2D.h>
 
 namespace SapphireEngine::Private
 {
@@ -21,7 +21,7 @@ namespace SapphireEngine::Private
             glDisable(GL_DEPTH_TEST);
         }
 
-        void LoadTexture2D(Bitmap* bitmap, uint32_t* out_id)
+        void LoadTexture2D(Texture2D* tex, uint32_t* out_id)
         {
             glGenTextures(1, out_id);
             glBindTexture(GL_TEXTURE_2D, *out_id);
@@ -30,7 +30,7 @@ namespace SapphireEngine::Private
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
             auto img_type = GL_RGB;
-            switch (bitmap->get_channel_count())
+            switch (tex->get_channel_count())
             {
             case 3:
                 img_type = GL_RGB;
@@ -45,12 +45,20 @@ namespace SapphireEngine::Private
                 break;
             }
 
-            glTexImage2D(GL_TEXTURE_2D, 0, img_type, bitmap->get_width(), bitmap->get_height(), 0, img_type, GL_UNSIGNED_BYTE, bitmap->GetNativeData());
+            glTexImage2D(GL_TEXTURE_2D, 0, img_type, tex->get_width(), tex->get_height(), 0, img_type, GL_UNSIGNED_BYTE, tex->GetNativeData());
             glGenerateMipmap(GL_TEXTURE_2D);
 
             glBindTexture(GL_TEXTURE_2D, 0);
 
         }
+        void UnloadTexture2D(uint32_t id)
+        {
+            glDeleteTextures(1, &id);
+        }
 
+        void UnloadTexture2Ds(uint32_t id[], int32_t length)
+        {
+            glDeleteTextures(length, id);
+        }
     }
 }

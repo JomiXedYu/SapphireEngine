@@ -5,9 +5,8 @@
 
 namespace SapphireEngine
 {
-    class Bitmap : public AssetObject
+    class Bitmap
     {
-        CORELIB_DEF_TYPE(SapphireEngine::Bitmap, AssetObject)
     public:
         int32_t get_width() const { return width_; }
         int32_t get_height() const { return height_; }
@@ -18,7 +17,7 @@ namespace SapphireEngine
         void SetData(uint8_t* data, int32_t width, int32_t height, int32_t channel_count);
     public:
         Bitmap();
-        ~Bitmap() override;
+        ~Bitmap();
     private:
         uint8_t* data_;
         int32_t width_;

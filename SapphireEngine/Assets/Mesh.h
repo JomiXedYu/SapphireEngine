@@ -32,10 +32,7 @@ namespace SapphireEngine
         std::vector<Texture2D*> textures;
 
     public:
-        static std::array<float, 8 * 6> CreateStdLayoutPlane();
-        static std::array<float, 3 * 6 * 6> CreateCube();
-        static std::array<float, 8 * 6 * 6> CreateStdLayoutCube();
-        static Mesh* CreateSphere(uint32_t x_seg, uint32_t y_seg);
+
     };
 
 

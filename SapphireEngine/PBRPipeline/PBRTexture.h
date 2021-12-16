@@ -3,7 +3,7 @@
 #include <SapphireEngine/Assets/Texture2D.h>
 #include <SapphireEngine/Assets/AssetImporter.h>
 
-namespace SapphireEngine::PBRPiplepine
+namespace SapphireEngine::PBRPipeline
 {
     using namespace SapphireEngine;
 
@@ -11,7 +11,7 @@ namespace SapphireEngine::PBRPiplepine
 
     class PBRTexture : public AssetObject
     {
-        CORELIB_DEF_TYPE(SapphireEngine::PBRPiplepine::PBRTexture, AssetObject);
+        CORELIB_DEF_TYPE(SapphireEngine::PBRPipeline::PBRTexture, AssetObject);
         friend class PBRTextureImporter;
     public:
         inline Texture2D* get_albedo() { return this->albedo_; }
@@ -38,7 +38,7 @@ namespace SapphireEngine::PBRPiplepine
 
     class PBRTextureImporter : public AssetImporter
     {
-        CORELIB_DEF_TYPE(SapphireEngine::PBRPiplepine::PBRTextureImporter, AssetImporter);
+        CORELIB_DEF_TYPE(SapphireEngine::PBRPipeline::PBRTextureImporter, AssetImporter);
         ENGINE_ASSETIMPORTER();
     public:
         virtual AssetObject* OnImport(const AssetImporterContext& ctx, Type* type) override;

@@ -4,7 +4,7 @@
 //#include <SapphireEngine/ShaderProgram.h>
 //#include <SapphireEngine/Components/MeshContainer.h>
 //
-//namespace SapphireEngine::PBRPiplepine
+//namespace SapphireEngine::PBRPipeline
 //{
 //    void PBRRenderer::Render()
 //    {

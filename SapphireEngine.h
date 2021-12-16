@@ -32,8 +32,10 @@
 #include <SapphireEngine/Components/Camera.h>
 #include <SapphireEngine/Components/FreeCamera.h>
 #include <SapphireEngine/Assets/CubeMap.h>
-#include <SapphireEngine/PBRPipleline/PBRTexture.h>
-#include <SapphireEngine/PBRPipleline/PBRRenderer.h>
+#include <SapphireEngine/PBRPipeline/PBRTexture.h>
+#include <SapphireEngine/PBRPipeline/PBRRenderer.h>
 #include <SapphireEngine/Assets/ScriptableAsset.h>
 #include <SapphireEngine/Utility/MeshBuilder.h>
+
+#include <SapphireEngine/RenderPipelines/ScriptablePipeline.h>
 // TODO: 在此处引用程序需要的其他标头。

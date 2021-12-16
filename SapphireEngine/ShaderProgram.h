@@ -4,6 +4,7 @@
 #include <SapphireEngine/MObject.h>
 #include <SapphireEngine/Shader.h>
 #include <vector>
+#include <string_view>
 
 namespace SapphireEngine
 {
@@ -30,16 +31,16 @@ namespace SapphireEngine
 
         void AddTexture(Texture2D* tex);
 
-        int32_t GetUniformLocaltion(const string& name);
-        void SetUniformInt(const string& name, const int32_t& i);
-        void SetUniformFloat(const string& name, const float& f);
-        void SetUniformMatrix4fv(const string& name, const float* value);
-        void SetUniformMatrix4fv(const string& name, const Matrix& mat);
-        void SetUniformVector3(const string& name, const Vector3& value);
-        void SetUniformColor(const string& name, const Color& value);
-        void SetUniformColor(const string& name, const Vector3& value);
+        int32_t GetUniformLocaltion(std::string_view name);
+        void SetUniformInt(std::string_view name, const int32_t& i);
+        void SetUniformFloat(std::string_view name, const float& f);
+        void SetUniformMatrix4fv(std::string_view name, const float* value);
+        void SetUniformMatrix4fv(std::string_view name, const Matrix& mat);
+        void SetUniformVector3(std::string_view name, const Vector3& value);
+        void SetUniformColor(std::string_view name, const Color& value);
+        void SetUniformColor(std::string_view name, const Vector3& value);
 
-        void SetUniformTexture2D(const string& name, const string& tex_name);
+        void SetUniformTexture2D(std::string_view name, const string& tex_name);
 
     protected:
         string name_;

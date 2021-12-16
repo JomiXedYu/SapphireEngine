@@ -1,9 +1,9 @@
-#include <SapphireEngine/PBRPipleline/PBRTexture.h>
+#include <SapphireEngine/PBRPipeline/PBRTexture.h>
 #include <SapphireEngine/Resource.h>
 #include <CoreLib/File.h>
 #include <CoreLib.Serializer/JsonSerializer.h>
 
-namespace SapphireEngine::PBRPiplepine
+namespace SapphireEngine::PBRPipeline
 {
     using namespace JxCoreLib;
     using namespace JxCoreLib::Serializer;
@@ -11,7 +11,7 @@ namespace SapphireEngine::PBRPiplepine
 
     class PBRTextureTextureAsset : public MObject
     {
-        CORELIB_DEF_TYPE(SapphireEngine::PBRPiplepine::PBRTextureTextureAsset, MObject);
+        CORELIB_DEF_TYPE(SapphireEngine::PBRPipeline::PBRTextureTextureAsset, MObject);
     public:
         CORELIB_REFL_DECL_FIELD(AlbedoMap);
         string AlbedoMap;

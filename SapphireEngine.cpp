@@ -81,20 +81,10 @@ struct ElementBufferObject
 };
 
 void run() {
-
-
     //设置窗口回调
     //glfwSetFramebufferSizeCallback(window, frameBuffer_Changed);
-    //Shader::CreateFragmentShader("PBR", FileUtil::ReadAllText(Resource::GetReadPath() + "/shader/PBR.frag"));
 
-
-    {
-        /*auto js = FileUtil::ReadAllText(Resource::GetReadPath() + "/model/rustediron2_ao.asset");
-        Texture2D* tex2d_ = JxCoreLib::Serializer::JsonSerializer::Deserialize<Texture2D>(js);*/
-        //auto tex = Resource::LoadLocal<Texture2D>("model/rustediron2_ao.asset");
-    }
-
-    auto pbr = Resource::LoadLocal<PBRPiplepine::PBRTexture>("model/rustediron2.pbrtex");
+    auto pbr = Resource::LoadLocal<PBRPipeline::PBRTexture>("model/rustediron2.pbrtex");
 
     auto cube_vertices = Utility::MeshBuilder::CreateCube();
     auto vertices = Utility::MeshBuilder::CreateStdLayoutCube();
@@ -247,13 +237,7 @@ void run() {
     }
     scene->AddNode(new Node("FreeCameraCtrl"))->AddComponent<FreeCamera>();
 
-    auto rustediron2 = Resource::LoadLocal<PBRPiplepine::PBRTexture>("model/rustediron2.pbrtex");
-
-    auto t_albedo = Resource::LoadLocal<Texture2D>("model/rustediron2_basecolor.png");
-    auto t_normal = Resource::LoadLocal<Texture2D>("model/rustediron2_normal.png");
-    auto t_metallic = Resource::LoadLocal<Texture2D>("model/rustediron2_metallic.png");
-    auto t_roughness = Resource::LoadLocal<Texture2D>("model/rustediron2_roughness.png");
-    auto t_ao = Resource::LoadLocal<Texture2D>("model/rustediron2_ao.jpg");
+    auto rustediron2 = Resource::LoadLocal<PBRPipeline::PBRTexture>("model/rustediron2.pbrtex");
 
     //auto m1_albedo = Resource::LoadLocal<Texture2D>("model/mat1/sphere_lambert1_BaseColor.png");
     //auto m1_normal = Resource::LoadLocal<Texture2D>("model/mat1/sphere_lambert1_Normal.png");
@@ -282,6 +266,8 @@ void run() {
     //Node* sphereNode2 = scene->AddNode(Resource::LoadLocal<Model>("model/sphere.fbx")->Instantiate());
     //Node* sphereNode3 = scene->AddNode(Resource::LoadLocal<Model>("model/sphere.fbx")->Instantiate());
 
+    auto rp = RenderPipelines::ScriptablePipeline();
+
     while (!Application::IsQuit())
     {
         auto projMat = cam->GetProjectionMat();
@@ -294,8 +280,9 @@ void run() {
             RenderInterface::DisableDepthTest();
             glDepthMask(GL_FALSE);
             cmProg.UseProgram();
-            cmProg.SetUniformMatrix4fv("projection", projMat);
-            cmProg.SetUniformMatrix4fv("view", (Matrix)(Matrix3)viewMat);
+
+            rp.SetMVP(&cmProg, projMat, (Matrix)(Matrix3)viewMat, Matrix::One() );
+
             cmProg.SetUniformInt("skybox", 0);
             glBindVertexArray(cubeMapVAO);
             glActiveTexture(GL_TEXTURE0);
@@ -311,17 +298,12 @@ void run() {
         Matrix lightModel = Matrix::One();
         lightModel = Matrix::Translate(lightModel, Vector3(100.5f, 150.0f, 0.0f));
         lightShaderProg.UseProgram();
-        lightShaderProg.SetUniformMatrix4fv("projection", projMat.get_value_ptr());
-        lightShaderProg.SetUniformMatrix4fv("view", viewMat.get_value_ptr());
-        lightShaderProg.SetUniformMatrix4fv("model", lightModel);
+        rp.SetMVP(&lightShaderProg, projMat, viewMat, lightModel);
 
         lightVAO.Use([]() { glDrawArrays(GL_TRIANGLES, 0, 36); });
 
         pbrProg.UseProgram();
-        pbrProg.SetUniformMatrix4fv("projection", projMat);
-        pbrProg.SetUniformMatrix4fv("view", viewMat);
-        //pbrProg.SetUniformMatrix4fv("model", Matrix::Scale(Vector3{20,20,20}));
-        pbrProg.SetUniformMatrix4fv("model", model);
+        rp.SetMVP(&pbrProg, projMat, viewMat, model);
         pbrProg.SetUniformVector3("camPos", cam->get_transform()->get_position());
 
         [&]() {
@@ -338,80 +320,10 @@ void run() {
             sphereNode->GetChildAt(0)->GetComponent<MeshRenderer>()->Render();
 
 
-            //glActiveTexture(GL_TEXTURE1);
-            //glBindTexture(GL_TEXTURE_2D, m1_albedo->get_id());
-
-            //glActiveTexture(GL_TEXTURE2);
-            //glBindTexture(GL_TEXTURE_2D, m1_normal->get_id());
-
-            //glActiveTexture(GL_TEXTURE3);
-            //glBindTexture(GL_TEXTURE_2D, m1_metallic->get_id());
-
-            //glActiveTexture(GL_TEXTURE4);
-            //glBindTexture(GL_TEXTURE_2D, m1_roughness->get_id());
-
-            //glActiveTexture(GL_TEXTURE5);
-            //glBindTexture(GL_TEXTURE_2D, m1_ao->get_id());
-
-            //glActiveTexture(GL_TEXTURE0);
-
-
-            //auto mesh_render = sphereNode->GetChildAt(0)->GetComponent<MeshRenderer>();
-            //auto vao = mesh_render->get_mesh()->VAO;
-            //glBindVertexArray(vao);
-            //glDrawElements(GL_TRIANGLES, mesh_render->get_mesh()->indices.size(), GL_UNSIGNED_INT, 0);
-            //glBindVertexArray(0);
-
-
-            //pbrProg.SetUniformMatrix4fv("model", Matrix::Translate(Matrix::One(), { 2.3,0, }));
-            //glActiveTexture(GL_TEXTURE1);
-            //glBindTexture(GL_TEXTURE_2D, t_albedo->get_id());
-
-            //glActiveTexture(GL_TEXTURE2);
-            //glBindTexture(GL_TEXTURE_2D, t_normal->get_id());
-
-            //glActiveTexture(GL_TEXTURE3);
-            //glBindTexture(GL_TEXTURE_2D, t_metallic->get_id());
-
-            //glActiveTexture(GL_TEXTURE4);
-            //glBindTexture(GL_TEXTURE_2D, t_roughness->get_id());
-
-            //glActiveTexture(GL_TEXTURE5);
-            //glBindTexture(GL_TEXTURE_2D, t_ao->get_id());
-
-            //glActiveTexture(GL_TEXTURE0);
-
-            //auto mesh_render2 = sphereNode2->GetChildAt(0)->GetComponent<MeshRenderer>();
-            //auto vao2 = mesh_render->get_mesh()->VAO;
-            //glBindVertexArray(vao);
-            //glDrawElements(GL_TRIANGLES, mesh_render2->get_mesh()->indices.size(), GL_UNSIGNED_INT, 0);
-            //glBindVertexArray(0);
 
         }();
 
-        [&]() {
-            shaderProg.UseProgram();
-            shaderProg.SetUniformMatrix4fv("projection", projMat);
-            shaderProg.SetUniformMatrix4fv("view", viewMat);
-            shaderProg.SetUniformMatrix4fv("model", model);
-
-            shaderProg.SetUniformColor("lightColor", Color::Yellow());
-            shaderProg.SetUniformVector3("lightPos", (Vector3)Matrix::Translate(lightModel, Vector3::One()).GetColumn(3));
-            shaderProg.SetUniformVector3("viewPos", cam->get_transform()->get_position());
-
-            shaderProg.SetUniformVector3("mat_ambient", { 1.f, 1.f, 1.f });
-            shaderProg.SetUniformFloat("mat_shininess", 16.0f);
-
-            shaderProg.SetUniformVector3("light.ambient", { 0.2f, 0.2f, 0.2f });
-            shaderProg.SetUniformVector3("light.diffuse", { 0.5f, 0.5f, 0.5f });
-            shaderProg.SetUniformVector3("light.specular", { 1.f, 1.f, 1.f });
-        };
-
-
-
-        //youtong->GetChildAt(0)->GetComponent<MeshRenderer>()->OnDraw(&pbrProg);
-
-        gridProg.UseProgram();
+        //gridProg.UseProgram();
 
         scene->OnUpdate();
         SystemInterface::PollEvents();

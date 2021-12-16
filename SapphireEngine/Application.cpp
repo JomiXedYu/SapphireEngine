@@ -1,10 +1,11 @@
 ﻿#include <SapphireEngine/Application.h>
 #include <SapphireEngine/Screen.h>
-#include <SapphireEngine/Private/BaseInterface.h>
+#include <SapphireEngine/Private/SystemInterface.h>
+#include <SapphireEngine/Private/RenderInterface.h>
 #include <vector>
 #include <filesystem>
 #include <CoreLib/UString.h>
-
+#include <SapphireEngine/Logger.h>
 
 namespace SapphireEngine 
 {
@@ -24,17 +25,24 @@ namespace SapphireEngine
     }
     static void quitting()
     {
-        SystemInterface::Log("Application is quitting");
+        Logger::Info() << "application is quitting" << endl;
+
         //通知程序即将关闭
         Application::QuittingEvents.Invoke();
     }
     void Application::Initialize(const std::string& title, const Vector2& size)
     {
+        Logger::Info() << "application initialize" << endl;
+
         Screen::set_size(size);
         SystemInterface::InitializeWindow(title, (int)Screen::get_size().x, (int)Screen::get_size().y);
 
         SystemInterface::SetRequestQuitCallBack(RequestQuit);
         SystemInterface::SetQuitCallBack(quitting);
+
+        RenderInterface::SetViewport(0, 0, (int)size.x, (int)size.y);
+
+
     }
 
     void Application::Terminate()

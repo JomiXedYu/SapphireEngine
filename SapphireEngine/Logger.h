@@ -6,16 +6,12 @@
 
 namespace SapphireEngine
 {
-    class Logger
+    namespace Logger
     {
-    public:
-        static void PrintInfo(const std::string& log);
-        static void PrintWarning(const std::string& log);
-        static void PrintError(const std::string& log);
-
-        static std::ostream& Info();
-        static std::ostream& Warning();
-        static std::ostream& Error();
+        using std::endl;
+        std::ostream& Info();
+        std::ostream& Warning();
+        std::ostream& Error();
     };
 
 }

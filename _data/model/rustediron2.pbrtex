@@ -1,7 +1,7 @@
 {
-  "Albedo": "rustediron2_basecolor.png",
-  "Normal": "rustediron2_normal.png",
-  "Metallic": "rustediron2_metallic.png",
-  "Roughness": "rustediron2_roughness.png",
-  "AO": "rustediron2_ao.jpg"
+  "AlbedoMap": "rustediron2_basecolor.png",
+  "NormalMap": "rustediron2_normal.png",
+  "MetallicMap": "rustediron2_metallic.png",
+  "RoughnessMap": "rustediron2_roughness.png",
+  "AoMap": "rustediron2_ao.jpg"
 }

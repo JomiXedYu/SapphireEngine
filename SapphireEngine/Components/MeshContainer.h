@@ -8,6 +8,9 @@ namespace SapphireEngine
     {
         CORELIB_DEF_TYPE(SapphireEngine::MeshContainer, Component);
     public:
-        Mesh* mesh;
+        void set_mesh(Mesh* value) { this->mesh_ = value; }
+        Mesh* get_mesh() { return this->mesh_; }
+    private:
+        Mesh* mesh_;
     };
 }

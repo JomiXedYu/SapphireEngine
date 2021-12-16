@@ -13,16 +13,16 @@ namespace SapphireEngine::PBRPiplepine
     {
         CORELIB_DEF_TYPE(SapphireEngine::PBRPiplepine::PBRTextureTextureAsset, MObject);
     public:
-        CORELIB_REFL_DECL_FIELD(Albedo);
-        string Albedo;
-        CORELIB_REFL_DECL_FIELD(Normal);
-        string Normal;
-        CORELIB_REFL_DECL_FIELD(Metallic);
-        string Metallic;
-        CORELIB_REFL_DECL_FIELD(Roughness);
-        string Roughness;
-        CORELIB_REFL_DECL_FIELD(AO);
-        string AO;
+        CORELIB_REFL_DECL_FIELD(AlbedoMap);
+        string AlbedoMap;
+        CORELIB_REFL_DECL_FIELD(NormalMap);
+        string NormalMap;
+        CORELIB_REFL_DECL_FIELD(MetallicMap);
+        string MetallicMap;
+        CORELIB_REFL_DECL_FIELD(RoughnessMap);
+        string RoughnessMap;
+        CORELIB_REFL_DECL_FIELD(AoMap);
+        string AoMap;
     };
 
     AssetObject* PBRTextureImporter::OnImport(const AssetImporterContext& ctx, Type* type)
@@ -34,11 +34,11 @@ namespace SapphireEngine::PBRPiplepine
         auto tex_importer = GetAssetImporter(cltypeof<Texture2D>());
         const string& dir = ctx.get_directory();
 
-        auto albedo_tex = tex_importer->OnImport(AssetImporterContext{ StringUtil::Concat(dir, "/", asset->Albedo) }, type);
-        auto normal_tex = tex_importer->OnImport(AssetImporterContext{ StringUtil::Concat(dir, "/", asset->Normal) }, type);
-        auto metal_tex = tex_importer->OnImport(AssetImporterContext{ StringUtil::Concat(dir, "/", asset->Metallic) }, type);
-        auto roughness_tex = tex_importer->OnImport(AssetImporterContext{ StringUtil::Concat(dir, "/", asset->Roughness) }, type);
-        auto ao_tex = tex_importer->OnImport(AssetImporterContext{ StringUtil::Concat(dir, "/", asset->AO) }, type);
+        auto albedo_tex = tex_importer->OnImport(AssetImporterContext{ StringUtil::Concat(dir, "/", asset->AlbedoMap) }, type);
+        auto normal_tex = tex_importer->OnImport(AssetImporterContext{ StringUtil::Concat(dir, "/", asset->NormalMap) }, type);
+        auto metal_tex = tex_importer->OnImport(AssetImporterContext{ StringUtil::Concat(dir, "/", asset->MetallicMap) }, type);
+        auto roughness_tex = tex_importer->OnImport(AssetImporterContext{ StringUtil::Concat(dir, "/", asset->RoughnessMap) }, type);
+        auto ao_tex = tex_importer->OnImport(AssetImporterContext{ StringUtil::Concat(dir, "/", asset->AoMap) }, type);
 
         PBRTexture* pbrtex = new PBRTexture;
         pbrtex->albedo_ = static_cast<Texture2D*>(albedo_tex);

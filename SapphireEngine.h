@@ -22,7 +22,12 @@
 #include <CoreLib.Serializer/JsonSerializer.h>
 
 #include <SapphireEngine/_include.h>
-#include <SapphireEngine/Private/BaseInterface.h>
+
+#include <SapphireEngine/Private/RenderInterface.h>
+#include <SapphireEngine/Private/InputInterface.h>
+#include <SapphireEngine/Private/SystemInterface.h>
+#include <SapphireEngine/Private/ResourceInterface.h>
+
 #include <SapphireEngine/Components/MeshRenderer.h>
 #include <SapphireEngine/Components/Camera.h>
 #include <SapphireEngine/Components/FreeCamera.h>
@@ -30,5 +35,5 @@
 #include <SapphireEngine/PBRPipleline/PBRTexture.h>
 #include <SapphireEngine/PBRPipleline/PBRRenderer.h>
 #include <SapphireEngine/Assets/ScriptableAsset.h>
-
+#include <SapphireEngine/Utility/MeshBuilder.h>
 // TODO: 在此处引用程序需要的其他标头。

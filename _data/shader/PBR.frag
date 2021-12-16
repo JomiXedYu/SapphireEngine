@@ -5,11 +5,11 @@ in vec3 WorldPos;
 in vec3 Normal;
 
 // material parameters
-uniform sampler2D albedoMap;
-uniform sampler2D normalMap;
-uniform sampler2D metallicMap;
-uniform sampler2D roughnessMap;
-uniform sampler2D aoMap;
+uniform sampler2D AlbedoMap;
+uniform sampler2D NormalMap;
+uniform sampler2D MetallicMap;
+uniform sampler2D RoughnessMap;
+uniform sampler2D AoMap;
 
 // lights
 uniform vec3 lightPositions[4];
@@ -57,7 +57,7 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 }
 vec3 getNormalFromMap()
 {
-    vec3 tangentNormal = texture(normalMap, TexCoords).xyz * 2.0 - 1.0;
+    vec3 tangentNormal = texture(NormalMap, TexCoords).xyz * 2.0 - 1.0;
 
     vec3 Q1  = dFdx(WorldPos);
     vec3 Q2  = dFdy(WorldPos);
@@ -74,12 +74,12 @@ vec3 getNormalFromMap()
 
 void main()
 {       
-    vec3 albedo     = pow(texture(albedoMap, TexCoords).rgb, vec3(2.2));
+    vec3 albedo     = pow(texture(AlbedoMap, TexCoords).rgb, vec3(2.2));
 
     vec3 normal     = getNormalFromMap();
-    float metallic  = texture(metallicMap, TexCoords).r;
-    float roughness = texture(roughnessMap, TexCoords).r;
-    float ao        = texture(aoMap, TexCoords).r;
+    float metallic  = texture(MetallicMap, TexCoords).r;
+    float roughness = texture(RoughnessMap, TexCoords).r;
+    float ao        = texture(AoMap, TexCoords).r;
 
     vec3 N = normalize(Normal);
     vec3 V = normalize(camPos - WorldPos);

@@ -16,17 +16,13 @@ namespace SapphireEngine
     {
         CORELIB_DEF_TYPE(SapphireEngine::MeshRenderer, Renderer)
     public:
-        Mesh* get_mesh() const { return this->mesh_; }
-        void set_mesh(Mesh* value) { this->mesh_ = value; }
-        ShaderProgram* get_program() const { return this->program_; }
-        void set_program(ShaderProgram* value) { this->program_ = value; }
+        void set_material(Material* value) { this->material_ = value; }
+        Material* get_material() { return this->material_; }
     public:
-        void OnDraw(ShaderProgram*);
+        virtual void OnInitialize() override;
         virtual void Render() override;
 
-        void OnUpdate() override;
     private:
-        Mesh* mesh_ = nullptr;
-        std::vector<Material*> materials_;
+        Material* material_;
     };
 }

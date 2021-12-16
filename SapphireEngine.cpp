@@ -82,11 +82,7 @@ struct ElementBufferObject
 
 void run() {
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        Logger::PrintInfo("Failed to initialize glad");
-        return;
-    }
-    glViewport(0, 0, (int)Screen::get_size().x, (int)Screen::get_size().y);
+
     //设置窗口回调
     //glfwSetFramebufferSizeCallback(window, frameBuffer_Changed);
     //Shader::CreateFragmentShader("PBR", FileUtil::ReadAllText(Resource::GetReadPath() + "/shader/PBR.frag"));
@@ -97,10 +93,11 @@ void run() {
         Texture2D* tex2d_ = JxCoreLib::Serializer::JsonSerializer::Deserialize<Texture2D>(js);*/
         //auto tex = Resource::LoadLocal<Texture2D>("model/rustediron2_ao.asset");
     }
+
     auto pbr = Resource::LoadLocal<PBRPiplepine::PBRTexture>("model/rustediron2.pbrtex");
 
-    auto cube_vertices = Mesh::CreateCube();
-    auto vertices = Mesh::CreateStdLayoutCube();
+    auto cube_vertices = Utility::MeshBuilder::CreateCube();
+    auto vertices = Utility::MeshBuilder::CreateStdLayoutCube();
 
     //VAO
     VertexArrayObject VAO;
@@ -258,22 +255,32 @@ void run() {
     auto t_roughness = Resource::LoadLocal<Texture2D>("model/rustediron2_roughness.png");
     auto t_ao = Resource::LoadLocal<Texture2D>("model/rustediron2_ao.jpg");
 
-    auto m1_albedo = Resource::LoadLocal<Texture2D>("model/mat1/sphere_lambert1_BaseColor.png");
-    auto m1_normal = Resource::LoadLocal<Texture2D>("model/mat1/sphere_lambert1_Normal.png");
-    auto m1_metallic = Resource::LoadLocal<Texture2D>("model/mat1/sphere_lambert1_Metallic.png");
-    auto m1_roughness = Resource::LoadLocal<Texture2D>("model/mat1/sphere_lambert1_Roughness.png");
-    auto m1_ao = Resource::LoadLocal<Texture2D>("model/rustediron2_ao.jpg");
+    //auto m1_albedo = Resource::LoadLocal<Texture2D>("model/mat1/sphere_lambert1_BaseColor.png");
+    //auto m1_normal = Resource::LoadLocal<Texture2D>("model/mat1/sphere_lambert1_Normal.png");
+    //auto m1_metallic = Resource::LoadLocal<Texture2D>("model/mat1/sphere_lambert1_Metallic.png");
+    //auto m1_roughness = Resource::LoadLocal<Texture2D>("model/mat1/sphere_lambert1_Roughness.png");
+    //auto m1_ao = Resource::LoadLocal<Texture2D>("model/rustediron2_ao.jpg");
 
-    auto m2_albedo = Resource::LoadLocal<Texture2D>("model/mat2/sphere_lambert1_BaseColor.png");
-    auto m2_normal = Resource::LoadLocal<Texture2D>("model/mat2/sphere_lambert1_Normal.png");
-    auto m2_metallic = Resource::LoadLocal<Texture2D>("model/mat2/sphere_lambert1_Metallic.png");
-    auto m2_roughness = Resource::LoadLocal<Texture2D>("model/mat2/sphere_lambert1_Roughness.png");
-    auto m2_ao = Resource::LoadLocal<Texture2D>("model/rustediron2_ao.jpg");
+    //auto m2_albedo = Resource::LoadLocal<Texture2D>("model/mat2/sphere_lambert1_BaseColor.png");
+    //auto m2_normal = Resource::LoadLocal<Texture2D>("model/mat2/sphere_lambert1_Normal.png");
+    //auto m2_metallic = Resource::LoadLocal<Texture2D>("model/mat2/sphere_lambert1_Metallic.png");
+    //auto m2_roughness = Resource::LoadLocal<Texture2D>("model/mat2/sphere_lambert1_Roughness.png");
+    //auto m2_ao = Resource::LoadLocal<Texture2D>("model/rustediron2_ao.jpg");
 
 
     Node* sphereNode = scene->AddNode(Resource::LoadLocal<Model>("model/sphere.fbx")->Instantiate());
-    Node* sphereNode2 = scene->AddNode(Resource::LoadLocal<Model>("model/sphere.fbx")->Instantiate());
-    Node* sphereNode3 = scene->AddNode(Resource::LoadLocal<Model>("model/sphere.fbx")->Instantiate());
+    Material* sphere_mat1 = new Material;
+    sphere_mat1->textures.insert({ "AlbedoMap", rustediron2->get_albedo() });
+    sphere_mat1->textures.insert({ "NormalMap",rustediron2->get_normal() });
+    sphere_mat1->textures.insert({ "MetallicMap", rustediron2->get_metallic() });
+    sphere_mat1->textures.insert({ "RoughnessMap",rustediron2->get_roughness() });
+    sphere_mat1->textures.insert({ "AoMap",rustediron2->get_ao() });
+    sphere_mat1->program = &pbrProg;
+    sphere_mat1->Bind();
+    sphereNode->GetChildAt(0)->GetComponent<MeshRenderer>()->set_material(sphere_mat1);
+
+    //Node* sphereNode2 = scene->AddNode(Resource::LoadLocal<Model>("model/sphere.fbx")->Instantiate());
+    //Node* sphereNode3 = scene->AddNode(Resource::LoadLocal<Model>("model/sphere.fbx")->Instantiate());
 
     while (!Application::IsQuit())
     {
@@ -318,11 +325,6 @@ void run() {
         pbrProg.SetUniformVector3("camPos", cam->get_transform()->get_position());
 
         [&]() {
-            pbrProg.SetUniformInt("albedoMap", 1);
-            pbrProg.SetUniformInt("normalMap", 2);
-            pbrProg.SetUniformInt("metallicMap", 3);
-            pbrProg.SetUniformInt("roughnessMap", 4);
-            pbrProg.SetUniformInt("aoMap", 5);
 
             Vector3 lights_pos[] = { {1.5,1.5,0}, {0,-1,9}, {-1,0.5,1} };
             Vector3 lights_color[] = { {1,1,1}, {0.7,0.7,0.7},{0.5,0.5,0.5} };
@@ -333,90 +335,58 @@ void run() {
             }
 
 
-            auto pbrrender = PBRPiplepine::PBRRenderer();
-            pbrrender.set_program(&pbrProg);
-            pbrrender.tex = rustediron2;
-            pbrrender.Render();
-
-            PBRPiplepine::PBRRenderer().set_program(&pbrProg);
-
-            glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, m1_albedo->get_id());
-
-            glActiveTexture(GL_TEXTURE2);
-            glBindTexture(GL_TEXTURE_2D, m1_normal->get_id());
-
-            glActiveTexture(GL_TEXTURE3);
-            glBindTexture(GL_TEXTURE_2D, m1_metallic->get_id());
-
-            glActiveTexture(GL_TEXTURE4);
-            glBindTexture(GL_TEXTURE_2D, m1_roughness->get_id());
-
-            glActiveTexture(GL_TEXTURE5);
-            glBindTexture(GL_TEXTURE_2D, m1_ao->get_id());
-
-            glActiveTexture(GL_TEXTURE0);
+            sphereNode->GetChildAt(0)->GetComponent<MeshRenderer>()->Render();
 
 
-            auto mesh_render = sphereNode->GetChildAt(0)->GetComponent<MeshRenderer>();
-            auto vao = mesh_render->get_mesh()->VAO;
-            glBindVertexArray(vao);
-            glDrawElements(GL_TRIANGLES, mesh_render->get_mesh()->indices.size(), GL_UNSIGNED_INT, 0);
-            glBindVertexArray(0);
-
-
-            pbrProg.SetUniformMatrix4fv("model", Matrix::Translate(Matrix::One(), { 2.3,0, }));
-            glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, t_albedo->get_id());
-
-            glActiveTexture(GL_TEXTURE2);
-            glBindTexture(GL_TEXTURE_2D, t_normal->get_id());
-
-            glActiveTexture(GL_TEXTURE3);
-            glBindTexture(GL_TEXTURE_2D, t_metallic->get_id());
-
-            glActiveTexture(GL_TEXTURE4);
-            glBindTexture(GL_TEXTURE_2D, t_roughness->get_id());
-
-            glActiveTexture(GL_TEXTURE5);
-            glBindTexture(GL_TEXTURE_2D, t_ao->get_id());
-
-            glActiveTexture(GL_TEXTURE0);
-
-            auto mesh_render2 = sphereNode2->GetChildAt(0)->GetComponent<MeshRenderer>();
-            auto vao2 = mesh_render->get_mesh()->VAO;
-            glBindVertexArray(vao);
-            glDrawElements(GL_TRIANGLES, mesh_render2->get_mesh()->indices.size(), GL_UNSIGNED_INT, 0);
-            glBindVertexArray(0);
-
-
-            //pbrProg.SetUniformMatrix4fv("model", Matrix::Translate(Matrix::One(), { -2.3,0,0 }));
             //glActiveTexture(GL_TEXTURE1);
-            //glBindTexture(GL_TEXTURE_2D, m2_albedo->get_id());
+            //glBindTexture(GL_TEXTURE_2D, m1_albedo->get_id());
 
             //glActiveTexture(GL_TEXTURE2);
-            //glBindTexture(GL_TEXTURE_2D, m2_normal->get_id());
+            //glBindTexture(GL_TEXTURE_2D, m1_normal->get_id());
 
             //glActiveTexture(GL_TEXTURE3);
-            //glBindTexture(GL_TEXTURE_2D, m2_metallic->get_id());
+            //glBindTexture(GL_TEXTURE_2D, m1_metallic->get_id());
 
             //glActiveTexture(GL_TEXTURE4);
-            //glBindTexture(GL_TEXTURE_2D, m2_roughness->get_id());
+            //glBindTexture(GL_TEXTURE_2D, m1_roughness->get_id());
 
             //glActiveTexture(GL_TEXTURE5);
-            //glBindTexture(GL_TEXTURE_2D, m2_ao->get_id());
+            //glBindTexture(GL_TEXTURE_2D, m1_ao->get_id());
 
             //glActiveTexture(GL_TEXTURE0);
 
-            //auto mesh_render3 = sphereNode3->GetChildAt(0)->GetComponent<MeshRenderer>();
-            //auto vao3 = mesh_render->get_mesh()->VAO;
+
+            //auto mesh_render = sphereNode->GetChildAt(0)->GetComponent<MeshRenderer>();
+            //auto vao = mesh_render->get_mesh()->VAO;
             //glBindVertexArray(vao);
-            //glDrawElements(GL_TRIANGLES, mesh_render3->get_mesh()->indices.size(), GL_UNSIGNED_INT, 0);
+            //glDrawElements(GL_TRIANGLES, mesh_render->get_mesh()->indices.size(), GL_UNSIGNED_INT, 0);
             //glBindVertexArray(0);
 
-            //glBindVertexArray(sphere->VAO);
-            //glDrawElements(GL_TRIANGLES, sphere->indices.size(), GL_UNSIGNED_INT, 0);
+
+            //pbrProg.SetUniformMatrix4fv("model", Matrix::Translate(Matrix::One(), { 2.3,0, }));
+            //glActiveTexture(GL_TEXTURE1);
+            //glBindTexture(GL_TEXTURE_2D, t_albedo->get_id());
+
+            //glActiveTexture(GL_TEXTURE2);
+            //glBindTexture(GL_TEXTURE_2D, t_normal->get_id());
+
+            //glActiveTexture(GL_TEXTURE3);
+            //glBindTexture(GL_TEXTURE_2D, t_metallic->get_id());
+
+            //glActiveTexture(GL_TEXTURE4);
+            //glBindTexture(GL_TEXTURE_2D, t_roughness->get_id());
+
+            //glActiveTexture(GL_TEXTURE5);
+            //glBindTexture(GL_TEXTURE_2D, t_ao->get_id());
+
+            //glActiveTexture(GL_TEXTURE0);
+
+            //auto mesh_render2 = sphereNode2->GetChildAt(0)->GetComponent<MeshRenderer>();
+            //auto vao2 = mesh_render->get_mesh()->VAO;
+            //glBindVertexArray(vao);
+            //glDrawElements(GL_TRIANGLES, mesh_render2->get_mesh()->indices.size(), GL_UNSIGNED_INT, 0);
             //glBindVertexArray(0);
+
         }();
 
         [&]() {
@@ -458,7 +428,6 @@ int main()
     launcher.Initialize();
 
     Resource::SetLocalPath("F:/SapphireEngine/_data");
-
 
     try
     {

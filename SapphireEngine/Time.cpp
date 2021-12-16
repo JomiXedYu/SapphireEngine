@@ -1,5 +1,5 @@
 #include <SapphireEngine/Time.h>
-#include <SapphireEngine/Private/BaseInterface.h>
+#include <SapphireEngine/Private/SystemInterface.h>
 
 namespace SapphireEngine 
 {

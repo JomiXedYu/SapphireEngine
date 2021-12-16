@@ -1,5 +1,5 @@
 #include <SapphireEngine/InputDevice/Input.h>
-#include <SapphireEngine/Private/BaseInterface.h>
+#include <SapphireEngine/Private/InputInterface.h>
 #include <SapphireEngine/Screen.h>
 #include <SapphireEngine/UnitType/Vector2.h>
 

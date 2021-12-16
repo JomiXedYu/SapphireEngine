@@ -15,10 +15,10 @@ namespace SapphireEngine
     class ShaderProgram : public MObject
     {
         CORELIB_DEF_TYPE(SapphireEngine::ShaderProgram, MObject);
-
+    
     public:
-        uint32_t get_id() const;
-
+        uint32_t get_id() const { return this->id_; }
+        bool get_isused() const { return this->id_ == current_use_id; }
     public:
         explicit ShaderProgram(const string& name);
         virtual ~ShaderProgram() override;
@@ -45,6 +45,8 @@ namespace SapphireEngine
         string name_;
         uint32_t id_;
         std::vector<Texture2D*> textures_;
+    private:
+        inline static uint32_t current_use_id = 0;
     };
 
 

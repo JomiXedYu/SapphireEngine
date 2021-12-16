@@ -1,10 +1,10 @@
 ﻿#include <SapphireEngine/Assets/Model.h>
 #include <SapphireEngine/Assets/Texture2D.h>
 #include <SapphireEngine/Assets/Mesh.h>
-#include <SapphireEngine/Assets/Bitmap.h>
 #include <SapphireEngine/Resource.h>
 #include <SapphireEngine/Node.h>
 #include <SapphireEngine/Components/MeshRenderer.h>
+#include <SapphireEngine/Components/MeshContainer.h>
 #include <vector>
 #include <CoreLib/File.h>
 #include <ThirdParty/assimp/Importer.hpp>
@@ -100,8 +100,8 @@ namespace SapphireEngine
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 
             Node* n = new Node(mesh->mName.C_Str(), pnode);
-            n->AddComponent<MeshRenderer>()->set_mesh(processMesh(mesh, scene, dir));
-
+            n->AddComponent<MeshContainer>()->set_mesh(processMesh(mesh, scene, dir));
+            n->AddComponent<MeshRenderer>();
             //meshes->push_back(processMesh(mesh, scene));
         }
         for (unsigned int i = 0; i < node->mNumChildren; i++)

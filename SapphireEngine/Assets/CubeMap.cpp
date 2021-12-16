@@ -1,6 +1,6 @@
 #include <SapphireEngine/Assets/CubeMap.h>
 #include <ThirdParty/glad/glad.h>
-#include <SapphireEngine/Private/BaseInterface.h>
+#include <SapphireEngine/Private/ResourceInterface.h>
 #include <CoreLib/File.h>
 #include <CoreLib.Serializer/JsonSerializer.h>
 

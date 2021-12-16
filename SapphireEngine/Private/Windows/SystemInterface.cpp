@@ -1,7 +1,9 @@
-﻿#include <SapphireEngine/Private/BaseInterface.h>
+﻿#include <SapphireEngine/Private/SystemInterface.h>
+#include <SapphireEngine/Logger.h>
 
+#include <ThirdParty/glad/glad.h>
 #include <ThirdParty/glfw/include/GLFW/glfw3.h>
-
+#include <CoreLib/DebugTool.hpp>
 #include <vector>
 #include <iostream>
 
@@ -15,18 +17,24 @@ namespace SapphireEngine::Private
 
     GLFWwindow* _glfw_window_instance;
 
-    bool SystemInterface::InitializeWindow(const std::string& title, int width, int height)
+    bool SystemInterface::InitializeWindow(std::string_view title, int width, int height)
     {
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        _glfw_window_instance = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+        _glfw_window_instance = glfwCreateWindow(width, height, title.data(), nullptr, nullptr);
         if (_glfw_window_instance == nullptr) {
             return false;
         }
         glfwMakeContextCurrent(_glfw_window_instance);
+
+        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+            Logger::Info() << "glad: Failed to initialize glad" << endl;
+            
+            return false;
+        }
 
         return true;
     }
@@ -124,10 +132,6 @@ namespace SapphireEngine::Private
         quitCallBackPtr = funcptr;
     }
 
-    void SystemInterface::Log(const char* str)
-    {
-        cout << "[SYSTEM]: " << str << endl;
-    }
 
 }
 

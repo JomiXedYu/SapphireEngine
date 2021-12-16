@@ -1,7 +1,7 @@
 #ifndef _SAPPHIREENGINE_INPUTDEVICE_KEYAXISDEVICE_H
 #define _SAPPHIREENGINE_INPUTDEVICE_KEYAXISDEVICE_H
 
-#include <SapphireEngine/Private/BaseInterface.h>
+#include <SapphireEngine/Private/InputInterface.h>
 #include "KeyCode.h"
 #include "AxisDeviceBase.h"
 

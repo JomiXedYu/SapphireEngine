@@ -1,4 +1,5 @@
 #include <SapphireEngine/Screen.h>
+#include <SapphireEngine/Logger.h>
 
 namespace SapphireEngine
 {
@@ -11,6 +12,7 @@ namespace SapphireEngine
 
 	void Screen::set_size(const Vector2& value)
 	{
+		Logger::Info() << "screen size: " << value.ToString() << std::endl;
 		size = value;
 	}
 

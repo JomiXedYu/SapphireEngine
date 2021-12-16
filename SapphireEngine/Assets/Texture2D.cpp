@@ -1,5 +1,6 @@
 #include <SapphireEngine/Assets/Texture2D.h>
-#include <SapphireEngine/Private/BaseInterface.h>
+#include <SapphireEngine/Private/RenderInterface.h>
+#include <SapphireEngine/Private/ResourceInterface.h>
 #include <CoreLib/File.h>
 #include <SapphireEngine/Resource.h>
 

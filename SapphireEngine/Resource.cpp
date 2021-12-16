@@ -1,5 +1,5 @@
 ﻿#include <SapphireEngine/Resource.h>
-#include <SapphireEngine/Private/BaseInterface.h>
+#include <SapphireEngine/Private/ResourceInterface.h>
 #include <CoreLib/File.h>
 #include <map>
 #include <string_view>
@@ -16,6 +16,7 @@
 #include <ThirdParty/glad/glad.h>
 
 #include <CoreLib.Serializer/JsonSerializer.h>
+#include <SapphireEngine/Logger.h>
 
 namespace SapphireEngine
 {
@@ -25,6 +26,8 @@ namespace SapphireEngine
     static string read_path;
     void Resource::SetLocalPath(const string& path)
     {
+        Logger::Info() << "Resource: local path: " << path << endl;
+
         read_path = path;
     }
 
@@ -60,27 +63,6 @@ namespace SapphireEngine
 
         cache[filename] = obj;
         return obj;
-
-
-        //AssetObject* assetobj = nullptr;
-
-        //if (type->IsSubclassOf(cltypeof<Texture2D>()))
-        //{
-        //    auto tex = LoadTexture2D(filename);
-        //    cache[filename] = tex;
-        //}
-        //if (type->IsSubclassOf(cltypeof<Model>()))
-        //{
-        //    Model* model = new Model;
-        //    String fn{ filename };
-        //    cltypeof<Model>()->get_fieldinfo("ref_name_")->SetValue(model, &fn);
-        //    cache[filename] = model;
-        //}
-        //if (type->IsSubclassOf(cltypeof<CubeMap>()))
-        //{
-        //    return LoadCubeMap(filename);
-        //}
-        //return cache[filename];
     }
 
     

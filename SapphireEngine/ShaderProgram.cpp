@@ -7,10 +7,6 @@ namespace SapphireEngine
 {
     using namespace std;
 
-    uint32_t ShaderProgram::get_id() const
-    {
-        return this->id_;
-    }
 
     ShaderProgram::ShaderProgram(const string& name)
     {
@@ -37,7 +33,12 @@ namespace SapphireEngine
 
     void ShaderProgram::UseProgram()
     {
+        if (this->get_isused())
+        {
+            return;
+        }
         glUseProgram(this->id_);
+        current_use_id = this->id_;
     }
 
     void ShaderProgram::AttachShader(const Shader& shaderId)

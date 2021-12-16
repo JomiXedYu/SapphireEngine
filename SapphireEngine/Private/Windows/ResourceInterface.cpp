@@ -1,4 +1,4 @@
-#include <SapphireEngine/Private/BaseInterface.h>
+#include <SapphireEngine/Private/ResourceInterface.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <ThirdParty/stb_image.h>

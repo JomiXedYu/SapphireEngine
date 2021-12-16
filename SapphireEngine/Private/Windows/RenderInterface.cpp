@@ -1,4 +1,4 @@
-#include <SapphireEngine/Private/BaseInterface.h>
+#include <SapphireEngine/Private/RenderInterface.h>
 #include <ThirdParty/glad/glad.h>
 #include <SapphireEngine/Assets/Texture2D.h>
 
@@ -19,6 +19,12 @@ namespace SapphireEngine::Private
         void DisableDepthTest()
         {
             glDisable(GL_DEPTH_TEST);
+        }
+        
+
+        void SetViewport(int32_t x, int32_t y, int32_t width, int32_t height)
+        {
+            glViewport(x, y, width, height);
         }
 
         void LoadTexture2D(Texture2D* tex, uint32_t* out_id)

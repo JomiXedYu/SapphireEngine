@@ -1,4 +1,4 @@
-#include <SapphireEngine/Private/BaseInterface.h>
+#include <SapphireEngine/Private/InputInterface.h>
 #include <ThirdParty/glfw/include/GLFW/glfw3.h>
 //#include <Windows.h>
 

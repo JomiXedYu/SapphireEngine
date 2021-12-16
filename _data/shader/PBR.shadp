@@ -1,5 +1,9 @@
 {
-  "vert": "PBR.vert",
-  "frag": "PBR.frag",
-  ""
+  "pass" : [
+	{
+	  "mode": "forward",
+	  "vert": "PBR.vert",
+	  "frag": "PBR.frag"
+	}
+  ]
 }

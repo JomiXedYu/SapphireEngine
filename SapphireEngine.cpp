@@ -7,6 +7,7 @@ using namespace SapphireEngine;
 using namespace SapphireEngine::Private;
 using namespace SapphireEngine::InputDevice;
 
+#define ENGINE_EDITOR 1
 
 struct VertexArrayObject
 {
@@ -109,7 +110,7 @@ void run() {
         });
 
 
-    string dataPath = "F:/SapphireEngine/_data";
+    string dataPath = Resource::GetLocalPath();
     string texturePath = dataPath + "/texture";
     string shaderPath = dataPath + "/shader";
 
@@ -231,7 +232,7 @@ void run() {
         cam->size = Screen::get_size();
         cam->fov = 45.f;
         cam->far = 10000.f;
-        cam->get_transform()->set_position({ 0, 0, 200 });
+        cam->get_transform()->set_position({ 0, 0, 5 });
         cam->backgroundColor = Color::Black();
         cam->SetMain();
     }
@@ -270,6 +271,11 @@ void run() {
 
     while (!Application::IsQuit())
     {
+
+#if ENGINE_EDITOR
+        
+#endif
+
         auto projMat = cam->GetProjectionMat();
         auto viewMat = cam->GetViewMat();
 
@@ -339,7 +345,7 @@ int main()
     EngineDefaultLauncher launcher;
     launcher.Initialize();
 
-    Resource::SetLocalPath("F:/SapphireEngine/_data");
+    Resource::SetLocalPath("E:/SapphireEngine/_data");
 
     try
     {

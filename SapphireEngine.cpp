@@ -345,7 +345,7 @@ int main()
     EngineDefaultLauncher launcher;
     launcher.Initialize();
 
-    Resource::SetLocalPath("E:/SapphireEngine/_data");
+    Resource::SetLocalPath("D:/Codes/SapphireEngine/_data");
 
     try
     {

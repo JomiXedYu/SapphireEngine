@@ -2,7 +2,7 @@
 cmake_minimum_required (VERSION 3.8)
 
 project ("SapphireEngineTest")
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 	add_compile_options("/utf-8")

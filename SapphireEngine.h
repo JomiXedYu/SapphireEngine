@@ -1,4 +1,4 @@
-﻿// SapphireEngine.h: 标准系统包含文件的包含文件
+﻿// Sapphire.h: 标准系统包含文件的包含文件
 // 或项目特定的包含文件。
 
 #pragma once
@@ -21,21 +21,24 @@
 #include <CoreLib/CommonException.h>
 #include <CoreLib.Serializer/JsonSerializer.h>
 
-#include <SapphireEngine/_include.h>
+#include <Sapphire/_include.h>
 
-#include <SapphireEngine/Private/RenderInterface.h>
-#include <SapphireEngine/Private/InputInterface.h>
-#include <SapphireEngine/Private/SystemInterface.h>
-#include <SapphireEngine/Private/ResourceInterface.h>
+#include <Sapphire/Private/RenderInterface.h>
+#include <Sapphire/Private/InputInterface.h>
+#include <Sapphire/Private/SystemInterface.h>
+#include <Sapphire/Private/ResourceInterface.h>
 
-#include <SapphireEngine/Components/MeshRenderer.h>
-#include <SapphireEngine/Components/Camera.h>
-#include <SapphireEngine/Components/FreeCamera.h>
-#include <SapphireEngine/Assets/CubeMap.h>
-#include <SapphireEngine/PBRPipeline/PBRTexture.h>
-#include <SapphireEngine/PBRPipeline/PBRRenderer.h>
-#include <SapphireEngine/Assets/ScriptableAsset.h>
-#include <SapphireEngine/Utility/MeshBuilder.h>
+#include <Sapphire/Components/MeshRenderer.h>
+#include <Sapphire/Components/Camera.h>
+#include <Sapphire/Components/FreeCamera.h>
+#include <Sapphire/Assets/CubeMap.h>
+#include <Sapphire/PBRPipeline/PBRTexture.h>
+#include <Sapphire/PBRPipeline/PBRRenderer.h>
+#include <Sapphire/Assets/ScriptableAsset.h>
+#include <Sapphire/Utility/MeshBuilder.h>
 
-#include <SapphireEngine/RenderPipelines/ScriptablePipeline.h>
+#include <Sapphire/RenderPipelines/ScriptablePipeline.h>
 // TODO: 在此处引用程序需要的其他标头。
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>

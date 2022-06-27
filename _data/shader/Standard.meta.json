@@ -1,10 +1,10 @@
 {
-  "$type": "SapphireEngine::Material",
+  "$type": "Sapphire::Material",
   "vert": "shader/Standard.vert",
   "frag": "shader/Standard.frag",
   "param": [
     {
-      "$type": "SapphireEngine::Texture2D",
+      "$type": "Sapphire::Texture2D",
       "ref": "texture/p.jpg"
     }
   ]

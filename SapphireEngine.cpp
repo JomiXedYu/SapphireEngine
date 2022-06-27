@@ -3,9 +3,9 @@
 
 
 using namespace std;
-using namespace SapphireEngine;
-using namespace SapphireEngine::Private;
-using namespace SapphireEngine::InputDevice;
+using namespace Sapphire;
+using namespace Sapphire::Private;
+using namespace Sapphire::InputDevice;
 
 #define ENGINE_EDITOR 1
 
@@ -269,12 +269,31 @@ void run() {
 
     auto rp = RenderPipelines::ScriptablePipeline();
 
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+
+    //设置颜色风格
+    ImGui::StyleColorsDark();
+
+    
+    // Setup Platform/Renderer bindings
+    ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)SystemInterface::GetWindow(), true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+
     while (!Application::IsQuit())
     {
 
 #if ENGINE_EDITOR
         
 #endif
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+
+        ImGui::NewFrame();
+        ImGui::Begin("hello");
+        ImGui::Text("abab");
+        ImGui::End();
 
         auto projMat = cam->GetProjectionMat();
         auto viewMat = cam->GetViewMat();
@@ -332,13 +351,15 @@ void run() {
         //gridProg.UseProgram();
 
         scene->OnUpdate();
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
         SystemInterface::PollEvents();
         Input::PollEvents();
 
     }
     delete scene;
 }
-
 
 int main()
 {
@@ -357,6 +378,6 @@ int main()
     }
 
     launcher.Terminate();
-
+    
     return 0;
 }

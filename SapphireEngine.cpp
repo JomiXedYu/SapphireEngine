@@ -336,80 +336,17 @@ void run() {
     }
     delete scene;
 }
-namespace SapphireEditor
-{
-    class EditorWindow : public MObject
-    {
-        CORELIB_DEF_TYPE(EditorWindow, Sapphire::MObject);
-    public:
-        virtual void OnDrawImGui() {}
-        virtual string_view GetWindowName() const { return this->GetType()->get_name(); }
-    };
-    class PropertiesWindow : public EditorWindow
-    {
-        CORELIB_DEF_TYPE(PropertiesWindow, Sapphire::MObject);
-        virtual string_view GetWindowName() const override { return "Properties"; }
 
-        virtual void OnDrawImGui() override
-        {
-            ImGui::Text("name:");
-            
-        }
-    };
-    class OutlinerWindow : public EditorWindow
-    {
-        CORELIB_DEF_TYPE(OutlinerWindow, Sapphire::MObject);
-        virtual string_view GetWindowName() const override { return "Outliner"; }
-        virtual void OnDrawImGui() override
-        {
-            ImGui::Text("name:");
-
-        }
-    };
-    class SceneWindow : public EditorWindow
-    {
-        CORELIB_DEF_TYPE(SceneWindow, Sapphire::MObject);
-        virtual string_view GetWindowName() const override { return "Scene"; }
-        virtual void OnDrawImGui() override
-        {
-            ImGui::Text("name:");
-
-        }
-    };
-    class ConsoleWindow : public EditorWindow
-    {
-        CORELIB_DEF_TYPE(ConsoleWindow, Sapphire::MObject);
-        virtual string_view GetWindowName() const override { return "Console"; }
-        virtual void OnDrawImGui() override
-        {
-            ImGui::Text("name:");
-
-        }
-    };
-    class ProjectWindow : public EditorWindow
-    {
-        CORELIB_DEF_TYPE(ProjectWindow, Sapphire::MObject);
-        virtual string_view GetWindowName() const override { return "Project"; }
-
-        virtual void OnDrawImGui() override
-        {
-            ImGui::Text("name:");
-
-        }
-    };
-}
-class CustomAppInstance : public EngineAppInstance
+class EditorAppInstance : public EngineAppInstance
 {
     bool b = true;
-
-    std::vector<sptr<SapphireEditor::EditorWindow>> windows;
 
     virtual void OnRender() override
     {
         RenderInterface::Clear(Color::Black());
         ImGui_Engine_NewFrame();
 
-        for (const auto& window : windows)
+        for (const auto& window : SapphireEditor::EditorWindowManager::GetInstance()->windows)
         {
             ImGui::Begin(window->GetWindowName().data());
             window->OnDrawImGui();
@@ -434,12 +371,7 @@ class CustomAppInstance : public EngineAppInstance
 
         Resource::SetLocalPath("D:/Codes/SapphireEngine/_data");
 
-        using namespace SapphireEditor;
-        windows.push_back(msptr(new PropertiesWindow));
-        windows.push_back(msptr(new OutlinerWindow));
-        windows.push_back(msptr(new SceneWindow));
-        windows.push_back(msptr(new ConsoleWindow));
-        windows.push_back(msptr(new ProjectWindow));
+        SapphireEditor::EditorWindowManager::GetInstance()->Reset();
 
         ImGui_Engine_Initialize();
 
@@ -455,6 +387,6 @@ class CustomAppInstance : public EngineAppInstance
 
 int main()
 {
-    Application::AddAppInstanceAndSetCurrent(msptr(new CustomAppInstance));
+    Application::AddAppInstanceAndSetCurrent(msptr(new EditorAppInstance));
     return Application::Exec();
 }

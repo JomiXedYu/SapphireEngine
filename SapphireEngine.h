@@ -42,3 +42,4 @@
 #include <Sapphire/ImGuiImpl.h>
 #include <Sapphire/EngineAppInstance.h>
 #include <imgui/imgui.h>
+#include <SapphireEditor/Windows/EditorWindowsManager.h>

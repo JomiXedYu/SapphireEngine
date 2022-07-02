@@ -1,7 +1,7 @@
-#ifndef MIRRACLEENGINE_INPUTDEVICE_MOUSEAXISDEVICE_H
-#define MIRRACLEENGINE_INPUTDEVICE_MOUSEAXISDEVICE_H
+#pragma once
 
 #include "AxisDeviceBase.h"
+#include <Sapphire/Private/InputInterface.h>
 
 namespace Sapphire::InputDevice
 {
@@ -27,7 +27,7 @@ namespace Sapphire::InputDevice
     public:
         void PollEvents() override {
             int x, y;
-            Private::InputInterface::GetCursorPosition(&x, &y);
+            ::Sapphire::Private::InputInterface::GetCursorPosition(&x, &y);
             this->x_v = x - this->x;
             this->y_v = y - this->y;
             this->x = x;
@@ -44,5 +44,3 @@ namespace Sapphire::InputDevice
         }
     };
 }
-
-#endif // !MIRRACLEENGINE_INPUTDEVICE_MOUSEAXISDEVICE_H

@@ -2,7 +2,6 @@
 #include "SapphireEngine.h"
 
 
-using namespace std;
 using namespace Sapphire;
 using namespace Sapphire::Private;
 using namespace Sapphire::InputDevice;
@@ -269,31 +268,13 @@ void run() {
 
     auto rp = RenderPipelines::ScriptablePipeline();
 
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-
-
-    //设置颜色风格
-    ImGui::StyleColorsDark();
-
-    
-    // Setup Platform/Renderer bindings
-    ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)SystemInterface::GetWindow(), true);
-    ImGui_ImplOpenGL3_Init("#version 330");
 
     while (!Application::IsQuit())
     {
 
 #if ENGINE_EDITOR
-        
-#endif
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
 
-        ImGui::NewFrame();
-        ImGui::Begin("hello");
-        ImGui::Text("abab");
-        ImGui::End();
+#endif
 
         auto projMat = cam->GetProjectionMat();
         auto viewMat = cam->GetViewMat();
@@ -306,7 +287,7 @@ void run() {
             glDepthMask(GL_FALSE);
             cmProg.UseProgram();
 
-            rp.SetMVP(&cmProg, projMat, (Matrix)(Matrix3)viewMat, Matrix::One() );
+            rp.SetMVP(&cmProg, projMat, (Matrix)(Matrix3)viewMat, Matrix::One());
 
             cmProg.SetUniformInt("skybox", 0);
             glBindVertexArray(cubeMapVAO);
@@ -351,33 +332,129 @@ void run() {
         //gridProg.UseProgram();
 
         scene->OnUpdate();
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        SystemInterface::PollEvents();
-        Input::PollEvents();
 
     }
     delete scene;
 }
+namespace SapphireEditor
+{
+    class EditorWindow : public MObject
+    {
+        CORELIB_DEF_TYPE(EditorWindow, Sapphire::MObject);
+    public:
+        virtual void OnDrawImGui() {}
+        virtual string_view GetWindowName() const { return this->GetType()->get_name(); }
+    };
+    class PropertiesWindow : public EditorWindow
+    {
+        CORELIB_DEF_TYPE(PropertiesWindow, Sapphire::MObject);
+        virtual string_view GetWindowName() const override { return "Properties"; }
+
+        virtual void OnDrawImGui() override
+        {
+            ImGui::Text("name:");
+            
+        }
+    };
+    class OutlinerWindow : public EditorWindow
+    {
+        CORELIB_DEF_TYPE(OutlinerWindow, Sapphire::MObject);
+        virtual string_view GetWindowName() const override { return "Outliner"; }
+        virtual void OnDrawImGui() override
+        {
+            ImGui::Text("name:");
+
+        }
+    };
+    class SceneWindow : public EditorWindow
+    {
+        CORELIB_DEF_TYPE(SceneWindow, Sapphire::MObject);
+        virtual string_view GetWindowName() const override { return "Scene"; }
+        virtual void OnDrawImGui() override
+        {
+            ImGui::Text("name:");
+
+        }
+    };
+    class ConsoleWindow : public EditorWindow
+    {
+        CORELIB_DEF_TYPE(ConsoleWindow, Sapphire::MObject);
+        virtual string_view GetWindowName() const override { return "Console"; }
+        virtual void OnDrawImGui() override
+        {
+            ImGui::Text("name:");
+
+        }
+    };
+    class ProjectWindow : public EditorWindow
+    {
+        CORELIB_DEF_TYPE(ProjectWindow, Sapphire::MObject);
+        virtual string_view GetWindowName() const override { return "Project"; }
+
+        virtual void OnDrawImGui() override
+        {
+            ImGui::Text("name:");
+
+        }
+    };
+}
+class CustomAppInstance : public EngineAppInstance
+{
+    bool b = true;
+
+    std::vector<sptr<SapphireEditor::EditorWindow>> windows;
+
+    virtual void OnRender() override
+    {
+        RenderInterface::Clear(Color::Black());
+        ImGui_Engine_NewFrame();
+
+        for (const auto& window : windows)
+        {
+            ImGui::Begin(window->GetWindowName().data());
+            window->OnDrawImGui();
+            ImGui::End();
+        }
+
+        ImGui_Engine_EndFrame();
+
+        RenderInterface::Render();
+        SystemInterface::PollEvents();
+        InputDevice::Input::PollEvents();
+    }
+    virtual void OnInitialize() override
+    {
+        Application::Initialize("SapphireEngine Editor alpha v1.1", Vector2(1920.0f, 1080.0f));
+
+        using namespace Sapphire::InputDevice;
+        Input::AddDeivce(new KeyAxisDevice("horizontal", 0.08f, KeyCode::D, KeyCode::A));
+        Input::AddDeivce(new KeyAxisDevice("vertical", 0.08f, KeyCode::W, KeyCode::S));
+        Input::AddDeivce(new MouseAxisDevice("mouseX", 0.0f, MouseAxisCode::MouseX));
+        Input::AddDeivce(new MouseAxisDevice("mouseY", 0.0f, MouseAxisCode::MouseY));
+
+        Resource::SetLocalPath("D:/Codes/SapphireEngine/_data");
+
+        using namespace SapphireEditor;
+        windows.push_back(msptr(new PropertiesWindow));
+        windows.push_back(msptr(new OutlinerWindow));
+        windows.push_back(msptr(new SceneWindow));
+        windows.push_back(msptr(new ConsoleWindow));
+        windows.push_back(msptr(new ProjectWindow));
+
+        ImGui_Engine_Initialize();
+
+    }
+    virtual void OnTerminate() override
+    {
+        InputDevice::Input::Terminate();
+        ImGui_Engine_Terminate();
+        Application::Terminate();
+    }
+};
+
 
 int main()
 {
-    EngineDefaultLauncher launcher;
-    launcher.Initialize();
-
-    Resource::SetLocalPath("D:/Codes/SapphireEngine/_data");
-
-    try
-    {
-        run();
-    }
-    catch (std::exception& e)
-    {
-        cout << e.what() << endl;
-    }
-
-    launcher.Terminate();
-    
-    return 0;
+    Application::AddAppInstanceAndSetCurrent(msptr(new CustomAppInstance));
+    return Application::Exec();
 }

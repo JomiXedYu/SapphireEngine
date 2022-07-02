@@ -1,7 +1,7 @@
-#ifndef _Sapphire_INPUTDEVICE_AXISDEVICEBASE_H
-#define _Sapphire_INPUTDEVICE_AXISDEVICEBASE_H
+#pragma once
 
 #include <string>
+#include <Sapphire/MObject.h>
 
 namespace Sapphire::InputDevice
 {
@@ -24,4 +24,3 @@ namespace Sapphire::InputDevice
         virtual float Value() = 0;
     };
 }
-#endif // !Sapphire_INPUTDEVICE_AXISDEVICEBASE_H

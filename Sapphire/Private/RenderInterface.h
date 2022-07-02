@@ -16,6 +16,12 @@ namespace Sapphire
         void LoadTexture2D(Texture2D* tex, uint32_t* out_id);
         void UnloadTexture2D(uint32_t id);
         void UnloadTexture2Ds(uint32_t id[], int32_t length);
+
+
+        double GetTime();
+        float GetDeltaTime();
+        uint32_t GetFrameCount();
+        void Render();
     }
 
 }

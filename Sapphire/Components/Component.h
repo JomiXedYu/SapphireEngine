@@ -29,6 +29,8 @@ namespace Sapphire
         void set_enabled(bool value);
         Node* get_node() { return node_; }
         Transform* get_transform() { return node_->get_transform(); }
+		
+		virtual bool EqualsType(Type* type);
     public:
         virtual void SendMessage(MessageType_t msg);
         virtual void OnInitialize() {}

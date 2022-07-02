@@ -11,9 +11,7 @@ using namespace std;
 
 namespace Sapphire::Private
 {
-    static uint32_t _frameCount = 0;
-    static double lastTime = 0;
-    static float deltaTime = 0;
+
 
     GLFWwindow* _glfw_window_instance;
 
@@ -57,19 +55,6 @@ namespace Sapphire::Private
 
     }
 
-    double SystemInterface::GetTime()
-    {
-        return glfwGetTime();
-    }
-    float SystemInterface::GetDeltaTime()
-    {
-        return deltaTime;
-    }
-
-    uint32_t SystemInterface::GetFrameCount()
-    {
-        return _frameCount;
-    }
 
     static bool isQuit = false;
     static bool(*requestQuitCallBackPtr)() = nullptr;
@@ -87,14 +72,6 @@ namespace Sapphire::Private
 
     void SystemInterface::PollEvents()
     {
-        if (isQuit) return;
-
-        glfwSwapBuffers(_glfw_window_instance);
-        _frameCount++;
-
-        double curTime = GetTime();
-        deltaTime = curTime - lastTime;
-        lastTime = curTime;
 
         if (!isQuit) {
             if (glfwWindowShouldClose(_glfw_window_instance)) {

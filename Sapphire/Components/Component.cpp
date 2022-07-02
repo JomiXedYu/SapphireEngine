@@ -12,6 +12,12 @@ namespace Sapphire
         else
             this->SendMessage(MessageType::Disabled);
     }
+	
+	bool Component::EqualsType(Type* type)
+	{
+		return GetType() == type;
+	}
+	
     void Component::SendMessage(MessageType_t msg)
     {
         switch (msg)

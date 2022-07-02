@@ -1,12 +1,12 @@
-project(imgui VERSION 1.88)
+project(imgui VERSION 1.89)
 
 set(_imgui_Sources
     imconfig.h
     imgui.cpp
     imgui.h
-    imgui.natvis
     imgui_draw.cpp
     imgui_internal.h
+    imgui_tables.cpp
     imgui_widgets.cpp
     imstb_rectpack.h
     imstb_textedit.h
@@ -21,5 +21,4 @@ set(_imgui_Sources
 include_directories("../glfw/include")
 
 add_library(${PROJECT_NAME} STATIC ${_imgui_Sources})
-
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+#target_include_directories(${PROJECT_NAME} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})

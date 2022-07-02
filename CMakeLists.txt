@@ -11,9 +11,8 @@ endif()
 include_directories(".")
 include_directories("./ThirdParty")
 
-
-link_directories("ThirdParty/glfw/libvc2019")
 link_directories("ThirdParty")
+link_directories("ThirdParty/glfw")
 
 add_subdirectory("./CoreLib")
 add_subdirectory("./CoreLib.Serializer")
@@ -28,9 +27,9 @@ target_link_libraries(${PROJECT_NAME} JxCode.CoreLib)
 target_link_libraries(${PROJECT_NAME} JxCode.CoreLib.Serializer)
 target_link_libraries(${PROJECT_NAME} Sapphire)
 target_link_libraries(${PROJECT_NAME} glad)
-target_link_libraries(${PROJECT_NAME} glfw3)
+target_link_libraries(${PROJECT_NAME} glfw3_mt)
 target_link_libraries(${PROJECT_NAME} imgui)
-target_link_libraries(${PROJECT_NAME} assimp-vc142-mt)
+target_link_libraries(${PROJECT_NAME} assimp-vc143-mt)
 
 
 #target_link_directories(${PROJECT_NAME} PUBLIC "include")

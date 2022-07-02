@@ -1,4 +1,6 @@
-﻿#include <Sapphire/Application.h>
+﻿#include "Application.h"
+#include "Application.h"
+#include <Sapphire/Application.h>
 #include <Sapphire/Screen.h>
 #include <Sapphire/Private/SystemInterface.h>
 #include <Sapphire/Private/RenderInterface.h>
@@ -6,6 +8,9 @@
 #include <filesystem>
 #include <CoreLib/UString.h>
 #include <Sapphire/Logger.h>
+#include <Sapphire/ImGuiImpl.h>
+#include <Sapphire/InputDevice/Input.h>
+#include <Sapphire/Resource.h>
 
 namespace Sapphire 
 {
@@ -30,7 +35,7 @@ namespace Sapphire
         //通知程序即将关闭
         Application::QuittingEvents.Invoke();
     }
-    void Application::Initialize(const std::string& title, const Vector2& size)
+    void Application::Initialize(string_view title, const Vector2& size)
     {
         Logger::Info() << "application initialize" << endl;
 
@@ -43,6 +48,17 @@ namespace Sapphire
         RenderInterface::SetViewport(0, 0, (int)size.x, (int)size.y);
 
 
+    }
+
+    int Application::Exec()
+    {
+        CurrentAppInstance->OnInitialize();
+        while (!Application::IsQuit())
+        {
+            CurrentAppInstance->OnRender();
+        }
+        CurrentAppInstance->OnTerminate();
+        return 0;
     }
 
     void Application::Terminate()

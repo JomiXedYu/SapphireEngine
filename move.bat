@@ -1,2 +1,3 @@
-copy .\ThirdParty\assimp-vc142-mt.dll .\out\build\x86-Debug
+copy .\ThirdParty\assimp-vc143-mt.dll .\out\build\x64-Debug
+copy DroidSans.ttf .\out\build\x64-Debug
 pause

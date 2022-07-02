@@ -10,11 +10,19 @@
 #define _CORELIB_OBJECT_H
 
 #include <vector>
+#include <memory>
 #include <type_traits>
 #include "UString.h"
 
 namespace JxCoreLib
 {
+    template<typename T>
+    using sptr = std::shared_ptr<T>;
+
+    template<typename T>
+    sptr<T> msptr(T* t) { return sptr<T>(t); }
+
+
     class Type;
 
     struct GlobalIniter

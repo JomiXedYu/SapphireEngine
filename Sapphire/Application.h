@@ -1,8 +1,8 @@
-#ifndef _Sapphire_APPLICATION_H
-#define _Sapphire_APPLICATION_H
+#pragma once
 
 #include <CoreLib/Events.hpp>
-#include <string>
+#include <Sapphire/MObject.h>
+#include <Sapphire/AppInstance.h>
 
 namespace Sapphire
 {
@@ -13,18 +13,28 @@ namespace Sapphire
     private:
         Application() = delete;
     public:
-        static void Initialize(const std::string& title, const Vector2& size);
+        static void Initialize(string_view title, const Vector2& size);
         static void Terminate();
         static bool IsQuit();
         static void Quit();
 
-        static std::string AppPath();
-        static std::string DataFolder();
+        static string AppPath();
+        static string DataFolder();
         
         static JxCoreLib::Action<> QuittingEvents;
         static JxCoreLib::Function<bool> RequestQuitEvents;
+
+        static inline sptr<AppInstance> CurrentAppInstance;
+        static inline std::vector<sptr<AppInstance>> AppInstances;
+
+        static inline sptr<AppInstance> AddAppInstanceAndSetCurrent(sptr<AppInstance> ptr)
+        {
+            AppInstances.push_back(ptr);
+            CurrentAppInstance = ptr;
+            return ptr;
+        }
+
+        static int Exec();
     };
 
 }
-
-#endif // !Sapphire_APPLICATION_H

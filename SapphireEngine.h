@@ -39,6 +39,6 @@
 
 #include <Sapphire/RenderPipelines/ScriptablePipeline.h>
 // TODO: 在此处引用程序需要的其他标头。
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
+#include <Sapphire/ImGuiImpl.h>
+#include <Sapphire/EngineAppInstance.h>
+#include <imgui/imgui.h>

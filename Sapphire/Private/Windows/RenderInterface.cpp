@@ -1,11 +1,19 @@
+#include "..\RenderInterface.h"
+#include "..\RenderInterface.h"
+#include "..\RenderInterface.h"
 #include <Sapphire/Private/RenderInterface.h>
 #include <ThirdParty/glad/glad.h>
 #include <Sapphire/Assets/Texture2D.h>
+#include <ThirdParty/glfw/include/GLFW/glfw3.h>
 
 namespace Sapphire::Private
 {
+    extern GLFWwindow* _glfw_window_instance;
+
     namespace RenderInterface
     {
+
+
         void Clear(const Color& color)
         {
             glClearColor(color.r(), color.g(), color.b(), color.a());
@@ -65,6 +73,35 @@ namespace Sapphire::Private
         void UnloadTexture2Ds(uint32_t id[], int32_t length)
         {
             glDeleteTextures(length, id);
+        }
+
+        static uint32_t _frameCount = 0;
+        static double lastTime = 0;
+        static float deltaTime = 0;
+
+        double GetTime()
+        {
+            return glfwGetTime();
+        }
+
+        float GetDeltaTime()
+        {
+            return deltaTime;
+        }
+
+        uint32_t GetFrameCount()
+        {
+            return _frameCount;
+        }
+
+        void Render()
+        {
+            glfwSwapBuffers(_glfw_window_instance);
+            _frameCount++;
+
+            double curTime = GetTime();
+            deltaTime = curTime - lastTime;
+            lastTime = curTime;
         }
     }
 }

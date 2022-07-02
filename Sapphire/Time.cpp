@@ -1,23 +1,24 @@
 #include <Sapphire/Time.h>
-#include <Sapphire/Private/SystemInterface.h>
+#include <Sapphire/Private/RenderInterface.h>
 
 namespace Sapphire 
 {
     using namespace Private;
+    using namespace RenderInterface;
 
     uint32_t Time::FrameCount()
     {
-        return SystemInterface::GetFrameCount();
+        return GetFrameCount();
     }
 
     float Time::TimeCount()
     {
-        return SystemInterface::GetTime();
+        return GetTime();
     }
 
     float Time::DeltaTime()
     {
-        return SystemInterface::GetDeltaTime();
+        return GetDeltaTime();
     }
 
 }

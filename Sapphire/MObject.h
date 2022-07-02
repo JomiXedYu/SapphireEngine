@@ -17,6 +17,11 @@ namespace Sapphire
         MObject() {}
     public:
 
+
+	public:
+		bool get_is_destoryed() const { return this->isDestoryed; }
+	private:
+		bool isDestoryed;
     };
 
     template<typename T>

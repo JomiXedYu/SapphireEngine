@@ -15,8 +15,12 @@ namespace SapphireEditor
             return instance;
         }
 
+        void Reset();
+
+        void Draw();
+
+    private:
         std::vector<sptr<EditorWindow>> windows;
 
-        void Reset();
     };
 }

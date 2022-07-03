@@ -4,6 +4,15 @@ namespace SapphireEditor
 {
     void OutlinerWindow::OnDrawImGui()
     {
-        ImGui::Text("name: 1");
+        if (ImGui::TreeNode("SceneRoot"))
+        {
+            if (ImGui::TreeNode("GameObject"))
+            {
+
+                ImGui::TreePop();
+            }
+
+            ImGui::TreePop();
+        }
     }
 }

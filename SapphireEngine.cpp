@@ -582,9 +582,12 @@ class EditorAppInstance : public EngineAppInstance
 
         Resource::SetLocalPath("D:/Codes/SapphireEngine/_data");
 
-        SapphireEditor::EditorWindowManager::GetInstance()->Reset();
 
         ImGui_Engine_Initialize();
+
+        SapphireEditor::EditorWindowManager::GetInstance()->Reset();
+
+
         pbrscene_obj.Init();
     }
     virtual void OnTerminate() override

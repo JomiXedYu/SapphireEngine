@@ -560,10 +560,11 @@ class EditorAppInstance : public EngineAppInstance
     virtual void OnRender() override
     {
         RenderInterface::Clear(Color::Black());
+
         ImGui_Engine_NewFrame();
 
         SapphireEditor::EditorWindowManager::GetInstance()->Draw();
-
+        //pbrscene_obj.Render();
         ImGui_Engine_EndFrame();
 
         RenderInterface::Render();
@@ -584,7 +585,6 @@ class EditorAppInstance : public EngineAppInstance
 
 
         ImGui_Engine_Initialize();
-
         SapphireEditor::EditorWindowManager::GetInstance()->Reset();
 
 
@@ -601,6 +601,6 @@ class EditorAppInstance : public EngineAppInstance
 
 int main()
 {
-    Application::AddAppInstanceAndSetCurrent(msptr(new EditorAppInstance));
+    Application::AddAppInstanceAndSetCurrent(mksptr(new EditorAppInstance));
     return Application::Exec();
 }

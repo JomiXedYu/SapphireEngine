@@ -3,6 +3,8 @@
 #include <glfw/include/GLFW/glfw3.h>
 #include <Sapphire/ShaderProgram.h>
 #include <Sapphire/Resource.h>
+#include <Sapphire/Screen.h>
+
 extern void pbr_render();
 namespace SapphireEditor
 {
@@ -47,8 +49,8 @@ namespace SapphireEditor
         string texturePath = dataPath + "/texture";
         string shaderPath = dataPath + "/shader";
 
-        Shader vert = Shader::CreateVetexShader("Unlit", FileUtil::ReadAllText(shaderPath + "/Unlit.vert"));
-        Shader frag = Shader::CreateFragmentShader("Unlit", FileUtil::ReadAllText(shaderPath + "/Unlit.vert"));
+        Shader vert = Shader::CreateVetexShader("UnlitVert", FileUtil::ReadAllText(shaderPath + "/Unlit.vert"));
+        Shader frag = Shader::CreateFragmentShader("UnlitFrag", FileUtil::ReadAllText(shaderPath + "/Unlit.frag"));
         screenShader = new ShaderProgram{"Unlit"};
         screenShader->AttachShader(vert);
         screenShader->AttachShader(frag);
@@ -65,6 +67,17 @@ namespace SapphireEditor
         glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+
+    void SceneWindow::OnOpen()
+    {
+    }
+
+    void SceneWindow::OnClose()
+    {
     }
 
     void SceneWindow::OnDrawImGui()
@@ -98,6 +111,9 @@ namespace SapphireEditor
         glDisable(GL_DEPTH_TEST);
         glBindTexture(GL_TEXTURE_2D, tex);
         glDrawArrays(GL_TRIANGLES, 0, 6);
-        //ImGui::GetWindowDrawList()->AddImage(tex, { 300,300 }, { 500,500 });
+        
+        ImVec2 wsize = ImGui::GetWindowSize();
+        Screen::set_size({ wsize.x, wsize.y });
+        ImGui::Image((ImTextureID)tex, wsize, ImVec2(0, 1), ImVec2(1, 0));
     }
 }

@@ -12,18 +12,18 @@ namespace SapphireEditor
 {
     void EditorWindowManager::Reset()
     {
-        this->windows.push_back(msptr(new DockspaceWindow));
-        this->windows.push_back(msptr(new SceneWindow));
-        this->windows.push_back(msptr(new ProjectWindow));
-        this->windows.push_back(msptr(new PropertiesWindow));
-        this->windows.push_back(msptr(new ConsoleWindow));
-        this->windows.push_back(msptr(new OutlinerWindow));
-        this->windows.push_back(msptr(new OutputWindow));
-        this->windows.push_back(msptr(new MainMenuBarWindow));
+        this->windows.push_back(mksptr(new DockspaceWindow));
+        this->windows.push_back(mksptr(new MainMenuBarWindow));
+        this->windows.push_back(mksptr(new ProjectWindow));
+        this->windows.push_back(mksptr(new PropertiesWindow));
+        this->windows.push_back(mksptr(new ConsoleWindow));
+        this->windows.push_back(mksptr(new OutlinerWindow));
+        this->windows.push_back(mksptr(new SceneWindow));
+        this->windows.push_back(mksptr(new OutputWindow));
 
         for (auto window : this->windows)
         {
-            window->set_is_opened(true);
+            window->Open();
         }
     }
     void EditorWindowManager::Draw()

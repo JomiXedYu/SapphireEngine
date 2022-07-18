@@ -12,12 +12,14 @@ namespace SapphireEditor
         virtual void DrawImGui();
     protected:
         virtual void OnDrawImGui();
-
+        virtual void OnOpen() {}
+        virtual void OnClose() {}
     public:
         bool get_is_opened() const { return is_opened; }
-        void set_is_opened(bool v) { is_opened = v; }
+        void Open();
+        void Close();
     protected:
-        bool is_opened;
+        bool is_opened = false;
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
     };
 }

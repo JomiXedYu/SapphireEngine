@@ -10,6 +10,9 @@ namespace Sapphire
 {
     using namespace JxCoreLib;
 
+    template<typename T>
+    using Array = std::vector<T>;
+
     class MObject : public Object
     {
         CORELIB_DEF_TYPE(Sapphire::MObject, Object);

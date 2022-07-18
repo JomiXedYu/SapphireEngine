@@ -1,4 +1,6 @@
 #include "EditorWindow.h"
+#include "EditorWindow.h"
+#include "EditorWindow.h"
 #include <SapphireEditor/Windows/EditorWindow.h>
 
 namespace SapphireEditor
@@ -18,5 +20,17 @@ namespace SapphireEditor
     void EditorWindow::OnDrawImGui()
     {
 
+    }
+    void EditorWindow::Open()
+    {
+        if (this->is_opened) return;
+        this->is_opened = true;
+        this->OnOpen();
+    }
+    void EditorWindow::Close()
+    {
+        if (!this->is_opened) return;
+        this->is_opened = false;
+        this->OnClose();
     }
 }

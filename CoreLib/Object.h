@@ -20,7 +20,7 @@ namespace JxCoreLib
     using sptr = std::shared_ptr<T>;
 
     template<typename T>
-    sptr<T> msptr(T* t) { return sptr<T>(t); }
+    sptr<T> mksptr(T* t) { return sptr<T>(t); }
 
 
     class Type;

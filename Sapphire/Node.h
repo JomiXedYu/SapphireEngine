@@ -6,7 +6,7 @@
 #include <type_traits>
 
 #include <Sapphire/MObject.h>
-#include <Sapphire/UnitType/Vector3.h>
+#include <Sapphire/Math/Vector3.h>
 
 namespace Sapphire
 {

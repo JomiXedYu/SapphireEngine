@@ -5,8 +5,8 @@
 #include <array>
 
 #include "AssetObject.h"
-#include <Sapphire/UnitType/Vector3.h>
-#include <Sapphire/UnitType/Vertex.h>
+#include <Sapphire/Math/Vector3.h>
+#include <Sapphire/Math/Vertex.h>
 #include <Sapphire/Assets/Material.h>
 
 namespace Sapphire

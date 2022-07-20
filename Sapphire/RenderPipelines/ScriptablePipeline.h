@@ -1,7 +1,7 @@
 #pragma once
 #include <Sapphire/MObject.h>
 #include <Sapphire/ShaderProgram.h>
-#include <Sapphire/UnitType/Matrix.h>
+#include <Sapphire/Math/Matrix.h>
 
 namespace Sapphire::RenderPipelines
 {

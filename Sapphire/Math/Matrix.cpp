@@ -1,8 +1,8 @@
-#include <Sapphire/UnitType/Matrix.h>
+#include <Sapphire/Math/Matrix.h>
 #include <string>
 #include <sstream>
-#include <Sapphire/UnitType/Vector3.h>
-#include <Sapphire/UnitType/Vector4.h>
+#include <Sapphire/Math/Vector3.h>
+#include <Sapphire/Math/Vector4.h>
 #include <Sapphire/Math.h>
 
 namespace Sapphire

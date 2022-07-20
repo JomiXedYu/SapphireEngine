@@ -1,8 +1,8 @@
 #pragma once
 
 #include <Sapphire/MObject.h>
-#include <Sapphire/UnitType/Color.h>
-#include <Sapphire/UnitType/Matrix.h>
+#include <Sapphire/Math/Color.h>
+#include <Sapphire/Math/Matrix.h>
 #include "Component.h"
 
 namespace Sapphire

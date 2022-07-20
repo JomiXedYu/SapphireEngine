@@ -5,6 +5,7 @@ namespace Sapphire
 {
     class AppInstance : public Object
     {
+        CORELIB_DEF_TYPE(Sapphire::AppInstance, Object)
     public:
         virtual void OnInitialize() {}
         virtual void OnTerminate() {}

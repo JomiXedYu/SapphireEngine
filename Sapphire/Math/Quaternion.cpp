@@ -1,7 +1,7 @@
-#include <Sapphire/UnitType/Quaternion.h>
+#include <Sapphire/Math/Quaternion.h>
 
-#include <Sapphire/UnitType/Vector3.h>
-#include <Sapphire/UnitType/Matrix.h>
+#include <Sapphire/Math/Vector3.h>
+#include <Sapphire/Math/Matrix.h>
 #include <Sapphire/Math.h>
 #include <format>
 

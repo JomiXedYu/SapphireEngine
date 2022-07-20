@@ -5,7 +5,7 @@
 #include <map>
 #include <string>
 
-#include <Sapphire/UnitType/Vector2.h>
+#include <Sapphire/Math/Vector2.h>
 
 #include "AxisDeviceBase.h"
 #include "KeyCode.h"

@@ -1,7 +1,7 @@
 #include <Sapphire/InputDevice/Input.h>
 #include <Sapphire/Private/InputInterface.h>
 #include <Sapphire/Screen.h>
-#include <Sapphire/UnitType/Vector2.h>
+#include <Sapphire/Math/Vector2.h>
 
 namespace Sapphire::InputDevice
 {

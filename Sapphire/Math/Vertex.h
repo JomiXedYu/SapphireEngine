@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Sapphire/UnitType/Vector2.h>
-#include <Sapphire/UnitType/Vector3.h>
+#include <Sapphire/Math/Vector2.h>
+#include <Sapphire/Math/Vector3.h>
 
 namespace Sapphire
 {

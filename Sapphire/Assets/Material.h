@@ -3,7 +3,7 @@
 
 #include "AssetObject.h"
 #include <CoreLib/CoreLib.h>
-#include <Sapphire/UnitType/Vector3.h>
+#include <Sapphire/Math/Vector3.h>
 #include <vector>
 #include "Texture2D.h"
 #include <Sapphire/ShaderProgram.h>

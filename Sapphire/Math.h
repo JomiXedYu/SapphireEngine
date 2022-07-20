@@ -1,9 +1,9 @@
 #ifndef _Sapphire_MATH_H
 #define _Sapphire_MATH_H
 #include <cmath>
-#include "UnitType/Vector2.h"
-#include "UnitType/Vector3.h"
-#include "UnitType/Vector4.h"
+#include "Math/Vector2.h"
+#include "Math/Vector3.h"
+#include "Math/Vector4.h"
 
 namespace Sapphire::Math
 {

@@ -1,7 +1,7 @@
 #ifndef _Sapphire_SCREEN_H
 #define _Sapphire_SCREEN_H
 
-#include <Sapphire/UnitType/Vector2.h>
+#include <Sapphire/Math/Vector2.h>
 
 namespace Sapphire 
 {

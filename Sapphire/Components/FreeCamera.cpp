@@ -9,6 +9,7 @@ namespace Sapphire
 
     void FreeCamera::OnUpdate()
     {
+        
         float timedelta = Time::DeltaTime();
         float hori = Input::GetAxis("horizontal");
         float vert = Input::GetAxis("vertical");
